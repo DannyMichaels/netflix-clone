@@ -1,4 +1,4 @@
-import Row from '../../components/Row';
+import Row from '../../components/Row/Row';
 import { movieRows } from './home.utils';
 
 function Home() {
