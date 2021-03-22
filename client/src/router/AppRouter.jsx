@@ -1,7 +1,7 @@
 import { Switch, Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import { ROUTES } from '../utils/navigation';
-import Home from '../pages/Home';
+import Home from '../pages/Home/Home';
 
 const AppRouter = () => (
   <BrowserRouter>

@@ -6,9 +6,9 @@ export default function Row({ title, fetchUrl }) {
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
-    console.log(movieData);
-    setMovies(movieData);
+    return setMovies(movieData);
   }, [fetchUrl]);
+  console.log({ movies });
 
   return (
     <div>
