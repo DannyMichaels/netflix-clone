@@ -1,16 +1,23 @@
-import { Children } from 'react';
-import Row from '../../components/Row/Row';
+import { Children } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
+import Banner from '../../components/MovieComponents/Banner/Banner';
+import Row from '../../components/MovieComponents/Row/MovieRow';
 import { movieRows } from './home.utils';
 
 function Home() {
-  // give everything it's own unique key prop without using index or some id generator by using React.Children.
   const ROWS = Children.toArray(
-    movieRows.map(({ title, fetchUrl }) => (
-      <Row title={title} fetchUrl={fetchUrl} />
+    movieRows.map((row, index) => (
+      <Row title={row.title} fetchUrl={row.fetchUrl} isLargeRow={index === 0} />
     ))
   );
 
-  return <div>{ROWS}</div>;
+  return (
+    <>
+      <div>
+        <Banner />
+      </div>
+      <div>{ROWS}</div>
+    </>
+  );
 }
 
 export default Home;
