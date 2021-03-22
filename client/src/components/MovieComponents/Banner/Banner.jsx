@@ -1,14 +1,13 @@
 import { useState, useMemo } from 'react';
+
+// services and utils
 import { getOneRandomMovie } from '../../../services/movies';
-import styled from 'styled-components';
+import { truncate } from '../../../utils/truncate';
 
-const StyledHeader = styled.header`
-  background-size: cover;
-  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
-  background-position: center center;
-`;
+//styles
+import { StyledBanner } from './banner.styles';
 
-function Banner() {
+export default function Banner() {
   const [movie, setMovie] = useState(null);
 
   useMemo(async () => {
@@ -17,20 +16,21 @@ function Banner() {
   }, []);
 
   return (
-    <StyledHeader
+    <StyledBanner
       aria-label="banner"
       imgUrl={`https://image.tmdb.org/t/p/original/${movie?.backdrop_path}`}
     >
       <div className="banner__contents">
-        <h1>{movie?.title || movie?.name || movie?.original_name}</h1>
+        <h1 className="banner__title">
+          {movie?.title || movie?.name || movie?.original_name}
+        </h1>
+        <div className="banner__buttons">
+          <button className="banner__button">Play</button>
+          <button className="banner__button">My List</button>
 
-        <div className="banner_buttons">
-          <button className="banner_button">Play</button>
-          <button className="banner_button">My List</button>
+          <h1 className="banner__description">{truncate(movie?.overview)}</h1>
         </div>
       </div>
-    </StyledHeader>
+    </StyledBanner>
   );
 }
-
-export default Banner;
