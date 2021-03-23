@@ -1,4 +1,4 @@
-import { MOVIE_REQUESTS as REQUESTS } from '../utils/movieUrls';
+import { MOVIE_REQUESTS as REQUESTS } from '../utils/movieRequests';
 import { TMDB_API as api } from './apiConfig';
 
 export const getAllMovies = async (fetchUrl) => {
