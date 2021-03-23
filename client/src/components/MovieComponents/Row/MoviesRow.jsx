@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 
 // services and utils
 import { getAllMovies, getYoutubeVideo } from '../../../services/movies';
@@ -30,10 +30,11 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     },
   };
 
-  const handleClick = (movie) => {
-    if (trailerUrl) {
-      setTrailerUrl('');
-    } else {
+  const handleClick = useCallback(
+    (movie) => {
+      if (trailerUrl) {
+        setTrailerUrl(trailerUrl);
+      }
       if (movie?.media_type) {
         setMediaType(movie.media_type);
       } else if (movie?.first_air_date) {
@@ -47,8 +48,9 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
         setTrailerUrl(fetchedUrl);
       };
       getTrailer();
-    }
-  };
+    },
+    [mediaType, trailerUrl]
+  );
 
   const CARDS = movies.map((movie) => (
     <MovieCard
