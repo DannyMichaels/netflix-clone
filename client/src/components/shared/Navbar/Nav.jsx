@@ -9,7 +9,7 @@ const StyledNav = styled.nav`
   height: 30px;
   display: flex;
   justify-content: space-between;
-  z-index: 1;
+  z-index: 9999;
   background-color: ${({ isShowing }) => isShowing && '#111'};
 
   transition-timing-function: ease-in;

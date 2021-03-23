@@ -2,25 +2,28 @@ import { Children } from 'react'; // give everything without an id it's own uniq
 
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
-import Row from '../../components/MovieComponents/Row/MoviesRow';
-import Nav from '../../components/shared/Navbar/Nav';
+import Row from '../../components/MovieComponents/Row/Row';
+import Layout from '../../components/shared/Layout/Layout';
 
 // utils
 import { movieRows } from './home.utils';
 
 function Home() {
   const ROWS = Children.toArray(
-    movieRows.map((row, index) => (
-      <Row title={row.title} fetchUrl={row.fetchUrl} isLargeRow={index === 0} />
+    movieRows.map(({ title, fetchUrl }) => (
+      <Row
+        title={title}
+        fetchUrl={fetchUrl}
+        isLargeRow={title.match(/^netflix originals$/i)}
+      />
     ))
   );
 
   return (
-    <>
-      <Nav />
+    <Layout>
       <Banner />
       {ROWS}
-    </>
+    </Layout>
   );
 }
 
