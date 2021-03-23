@@ -1,8 +1,7 @@
 import { useState, useMemo } from 'react';
 
 // services and utils
-import { getAllMovies } from '../../../services/movies';
-import movieTrailer from 'movie-trailer';
+import { getAllMovies, getYoutubeVideo } from '../../../services/movies';
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
@@ -16,13 +15,13 @@ const baseUrl = 'https://image.tmdb.org/t/p/original';
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState('');
+  const [mediaType, setMediaType] = useState('');
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
     setMovies(movieData);
   }, [fetchUrl]);
 
-  
   const OPTIONS = {
     height: '390',
     width: '100%',
@@ -30,17 +29,24 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       autoplay: 1,
     },
   };
-  
+
   const handleClick = (movie) => {
     if (trailerUrl) {
       setTrailerUrl('');
     } else {
-      movieTrailer(movie?.name ?? '')
-      .then((url) => {
-        const { get } = new URLSearchParams(new URL(url).search);
-        setTrailerUrl(get('v'));
-      })
-      .catch((err) => console.error(err.message));
+      if (movie?.media_type) {
+        setMediaType(movie.media_type);
+      } else if (movie?.first_air_date) {
+        setMediaType('tv');
+      } else {
+        setMediaType('movie');
+      }
+
+      const getTrailer = async () => {
+        const fetchedUrl = await getYoutubeVideo(mediaType, movie.id);
+        setTrailerUrl(fetchedUrl);
+      };
+      getTrailer();
     }
   };
 
@@ -53,7 +59,6 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
     />
   ));
-
 
   return (
     <StyledRow aria-label="movies row">

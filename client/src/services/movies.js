@@ -20,3 +20,16 @@ export const getOneRandomMovie = async () => {
     throw error;
   }
 };
+
+export const getYoutubeVideo = async (mediaType, id) => {
+  try {
+    if (mediaType) {
+      const { data } = await api.get(
+        `https://api.themoviedb.org/3/${mediaType}/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&append_to_response=videos`
+      );
+      return data?.videos?.results[0]?.key;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
