@@ -2,7 +2,7 @@ import { MOVIE_REQUESTS as REQUESTS } from '../../utils/movieUrls';
 
 export const movieRows = [
   {
-    title: 'NETFLIX ORIGINALS',
+    title: 'Netflix Originals',
     fetchUrl: REQUESTS.FETCH_NETFLIX_ORIGINALS,
   },
   {

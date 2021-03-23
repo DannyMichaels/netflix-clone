@@ -12,6 +12,9 @@ const StyledNav = styled.nav`
   z-index: 1;
   background-color: ${({ isShowing }) => isShowing && '#111'};
 
+  transition-timing-function: ease-in;
+  transition: all 0.5s;
+
   .nav__logo {
     position: fixed;
     left: 20px;
