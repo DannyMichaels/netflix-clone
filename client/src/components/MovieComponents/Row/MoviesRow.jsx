@@ -8,7 +8,7 @@ import MovieCard from '../MovieCard/MovieCard';
 import Youtube from 'react-youtube';
 
 // styles
-import { StyledRow } from './movieRow.styles';
+import { StyledRow } from './moviesRow.styles';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
