@@ -28,9 +28,12 @@ export default function Banner() {
           <button className="banner__button">Play</button>
           <button className="banner__button">My List</button>
 
-          <h1 className="banner__description">{truncate(movie?.overview)}</h1>
+          <h1 className="banner__description">
+            {truncate(movie?.overview, 250)}
+          </h1>
         </div>
       </div>
+      <div className="banner--fadeBottom"></div>
     </StyledBanner>
   );
 }

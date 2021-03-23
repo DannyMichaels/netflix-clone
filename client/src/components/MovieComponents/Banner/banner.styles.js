@@ -43,4 +43,20 @@ export const StyledBanner = styled.header`
     margin-right: 1rem;
     background-color: rgba(51, 51, 51, 0.5);
   }
+
+  .banner__button:hover {
+    color: #000;
+    background-color: #e6e6e6;
+    transition: all 0.2s;
+  }
+
+  .banner--fadeBottom {
+    height: 7.4rem;
+    background-image: linear-gradient(
+      180deg,
+      transparent,
+      rgba(37, 37, 37, 0.61),
+      #111
+    );
+  }
 `;

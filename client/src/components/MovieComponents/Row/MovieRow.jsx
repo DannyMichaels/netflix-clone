@@ -23,8 +23,8 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   ));
 
   return (
-    <StyledRow aria-label="movie-row">
-      <h2>{title}</h2>
+    <StyledRow aria-label="movies row">
+      <h2 className="row__title">{title}</h2>
 
       <div className="row__posters">{CARDS}</div>
     </StyledRow>

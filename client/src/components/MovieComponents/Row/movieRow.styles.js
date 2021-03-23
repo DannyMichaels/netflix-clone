@@ -3,6 +3,10 @@ import styled from 'styled-components';
 export const StyledRow = styled.div`
   margin-left: 20px;
 
+  .row__title {
+    color: #fff;
+  }
+
   .row__posters {
     display: flex;
     overflow-y: hidden;

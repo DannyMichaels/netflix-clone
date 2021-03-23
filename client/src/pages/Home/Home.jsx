@@ -3,6 +3,7 @@ import { Children } from 'react'; // give everything without an id it's own uniq
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
 import Row from '../../components/MovieComponents/Row/MovieRow';
+import Nav from '../../components/shared/Navbar/Nav';
 
 // utils
 import { movieRows } from './home.utils';
@@ -16,10 +17,9 @@ function Home() {
 
   return (
     <>
-      <div>
-        <Banner />
-      </div>
-      <div>{ROWS}</div>
+      <Nav />
+      <Banner />
+      {ROWS}
     </>
   );
 }

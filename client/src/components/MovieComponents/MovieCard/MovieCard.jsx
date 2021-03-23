@@ -3,11 +3,7 @@
 // therefore we give it a flexible className as props.
 
 const MovieCard = ({ src, alt, className }) => (
-  <img
-    src={src}
-    alt={alt ?? 'movie-image'}
-    className={className ?? 'movie-card'}
-  />
+  <img src={src} alt={alt ?? ''} className={className ?? 'movie-card'} />
 );
 
 export default MovieCard;
