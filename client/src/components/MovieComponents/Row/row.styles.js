@@ -1,13 +1,14 @@
 import styled from 'styled-components';
 
 export const StyledRow = styled.div`
-  /* margin: 3vw 0; */
-
   &:not(:last-of-type) {
     margin: 3vw 0;
   }
+
   &:last-of-type {
-    padding-bottom: 3vw;
+    padding-bottom: 50px;
+    overflow: hidden;
+    z-index: 0;
   }
 
   .row__title {
