@@ -28,7 +28,7 @@ export const StyledFooter = styled.footer`
     margin-bottom: 1em;
   }
 
-  ul {
+  .footer__member-links {
     font-size: 13px;
     display: -webkit-box;
     display: -webkit-flex;
@@ -52,11 +52,19 @@ export const StyledFooter = styled.footer`
     align-items: flex-start;
     margin: 0 0 14px 0;
     padding: 0;
-    list-style: none;
-  }
 
-  li {
-    flex-basis: 25%;
+    li {
+      list-style-type: none;
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 50%;
+      -moz-box-flex: 0;
+      -ms-flex: 0 0 50%;
+      flex: 0 0 50%;
+      margin-bottom: 16px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
   }
 
   .footer__service-code {

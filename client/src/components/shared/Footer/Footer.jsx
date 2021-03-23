@@ -1,5 +1,5 @@
 import { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 // icons
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
@@ -10,7 +10,7 @@ import { getServiceCode } from '../../../utils/serviceCode';
 // styles
 import { StyledFooter } from './footer.styles';
 
-const links = [
+const socialLinks = [
   {
     url: 'https://github.com/dannymichaels',
     icon: <GitHubIcon fontSize="large" />,
@@ -20,6 +20,20 @@ const links = [
     icon: <LinkedInIcon fontSize="large" />,
   },
 ];
+
+const bottomFooterLinks = `Audio and Subtitles,
+Audio Description,
+Help Center,
+Gift Cards,
+Media Center,
+Investor Relations,
+Jobs,
+Terms of Use,
+Privacy,
+Legal Notices,
+Cookie Preferences,
+Corporate Information,
+Contact Us`;
 
 export default function Footer() {
   const [serviceCode, setServiceCode] = useState('');
@@ -40,7 +54,7 @@ export default function Footer() {
     <StyledFooter>
       <div className="footer__content">
         <div className="footer__social-links">
-          {links.map((link) => (
+          {socialLinks.map((link) => (
             <a
               href={link.url}
               className="footer__link"
@@ -53,11 +67,13 @@ export default function Footer() {
         </div>
 
         <ul className="footer__member-links">
-          <li>
-            <a className="footer__link" href="/">
-              test
-            </a>
-          </li>
+          {bottomFooterLinks.split(',').map((link) => (
+            <li>
+              <Link className="footer__link" href="/">
+                {link}
+              </Link>
+            </li>
+          ))}
         </ul>
 
         <div className="footer__service">
@@ -70,10 +86,7 @@ export default function Footer() {
         </div>
 
         <div className="footer__copyright">
-          <span>
-            © 1997-2021 Fakeflix, Inc.
-            {/*  */}‎ ‎&lrm;
-          </span>
+          <span>© 1997-2021 Fakeflix, Inc. ‎&lrm;</span>
         </div>
       </div>
     </StyledFooter>
