@@ -5,7 +5,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 
 // utils
-import { getServiceCode } from '../../../utils/serviceCode';
+import { getServiceCode } from '../../../utils/getServiceCode';
 
 // styles
 import { StyledFooter } from './footer.styles';
