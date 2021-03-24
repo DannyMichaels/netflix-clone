@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 // services and utils
 import { getAllMovies, getYoutubeVideo } from '../../../services/movies';
@@ -12,15 +12,18 @@ import { StyledRow } from './row.styles';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
-export default function Row({ title, fetchUrl, isLargeRow }) {
+export default function Row({ title, fetchUrl, isLargeRow, isSearching }) {
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState('');
   const [mediaType, setMediaType] = useState('');
 
-  useMemo(async () => {
-    const movieData = await getAllMovies(fetchUrl);
-    setMovies(movieData);
-  }, [fetchUrl]);
+  useEffect(() => {
+    const fetchMovies = async () => {
+      const movieData = await getAllMovies(fetchUrl);
+      setMovies(movieData);
+    };
+    fetchMovies();
+  }, [fetchUrl, isSearching]);
 
   const OPTIONS = {
     height: '390',
@@ -52,7 +55,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     [mediaType, trailerUrl]
   );
 
-  const CARDS = movies.map((movie) => (
+  const CARDS = movies?.map((movie) => (
     <MovieCard
       onClick={() => handleClick(movie)}
       src={`${baseUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
@@ -64,7 +67,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
 
   return (
     <StyledRow aria-label="movies row">
-      <h2 className="row__title">{title}</h2>
+      <h2 className="row__title">{!isSearching && title}</h2>
 
       <div className="row__posters">{CARDS}</div>
       {trailerUrl && <Youtube videoId={trailerUrl} opts={OPTIONS} />}

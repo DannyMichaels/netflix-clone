@@ -1,9 +1,9 @@
 import Footer from '../Footer/Footer';
 import Nav from '../Navbar/Nav';
 
-const Layout = ({ children }) => (
+const Layout = ({ children, handleSearch }) => (
   <div className="layout">
-    <Nav />
+    <Nav handleSearch={handleSearch} />
     <div className="layout__children">{children}</div>
     <Footer />
   </div>
