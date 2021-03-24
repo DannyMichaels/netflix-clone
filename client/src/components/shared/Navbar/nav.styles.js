@@ -50,6 +50,12 @@ export const StyledNav = styled.nav`
     cursor: pointer;
   }
 
+  .nav__icon.search {
+    &:hover {
+      cursor: ${({ isSearching }) => isSearching && 'inherit'};
+    }
+  }
+
   .nav__icon.arrow {
     transform: rotate(180deg); // facing downward
     transition: transform 0.2s ease-in-out;

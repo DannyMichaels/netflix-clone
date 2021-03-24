@@ -67,7 +67,7 @@ function Home() {
   const moviesJSX = !search ? ROWS : RESULTS;
 
   return (
-    <Layout setSearch={setSearch} handleSearch={handleSearch}>
+    <Layout handleSearch={handleSearch} isSearching={search}>
       <Banner />
       {moviesJSX}
     </Layout>

@@ -11,7 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 // styles
 import { StyledNav } from './nav.styles';
 
-export default function Nav({ handleSearch }) {
+export default function Nav({ handleSearch, isSearching }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
 
@@ -32,11 +32,18 @@ export default function Nav({ handleSearch }) {
     setSearchMode(!searchMode);
   };
 
+  const handleClickAway = () => {
+    if (!searchMode) {
+      return isSearching && setSearchMode(!searchMode);
+    }
+  };
+
   return (
     <StyledNav
       aria-label="navbar"
       isShowing={isBackgroundShowing}
       searchMode={searchMode}
+      isSearching={isSearching}
     >
       <div className="nav__innerColumn">
         <img
@@ -45,9 +52,7 @@ export default function Nav({ handleSearch }) {
           alt="Netflix Logo"
         />
         <div className="nav__secondaryNavigation">
-          <ClickAwayListener
-            onClickAway={() => searchMode && toggleSearchMode()}
-          >
+          <ClickAwayListener onClickAway={handleClickAway}>
             <div className="nav__searchContainer">
               <SearchIcon
                 className="nav__icon search"
