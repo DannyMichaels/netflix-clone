@@ -12,11 +12,12 @@ import {
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import BellIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
 
 // styles
 import { StyledNav } from './nav.styles';
 
-export default function Nav({ handleSearch, isSearching }) {
+export default function Nav({ handleSearch, isSearching, setSearch }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
 
@@ -37,10 +38,12 @@ export default function Nav({ handleSearch, isSearching }) {
     setSearchMode(!searchMode);
   };
 
+  const onSearchClear = () => {
+    setSearch('');
+  };
+
   const handleClickAway = () => {
-    if (!searchMode) {
-      return isSearching && setSearchMode(!searchMode);
-    }
+    !isSearching && toggleSearchMode();
   };
 
   return (
@@ -48,7 +51,6 @@ export default function Nav({ handleSearch, isSearching }) {
       aria-label="navbar"
       isShowing={isBackgroundShowing}
       searchMode={searchMode}
-      isSearching={isSearching}
     >
       <div className="nav__innerColumn">
         <img
@@ -67,12 +69,26 @@ export default function Nav({ handleSearch, isSearching }) {
               )}
               <Input
                 onChange={handleSearch}
+                value={isSearching}
                 placeholder="Titles, people, genres"
                 className="nav__searchInput"
+                disableUnderline
                 startAdornment={
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
+                  <Box marginLeft={1}>
+                    <InputAdornment position="start">
+                      <SearchIcon className="nav__icon search" />
+                    </InputAdornment>
+                  </Box>
+                }
+                endAdornment={
+                  <Box mx={1}>
+                    <InputAdornment position="end">
+                      <ClearIcon
+                        onClick={onSearchClear}
+                        className="nav__icon"
+                      />
+                    </InputAdornment>
+                  </Box>
                 }
               />
             </div>

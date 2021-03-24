@@ -52,7 +52,7 @@ export const StyledNav = styled.nav`
 
   .nav__icon.search {
     &:hover {
-      cursor: ${({ isSearching }) => isSearching && 'inherit'};
+      cursor: ${({ searchMode }) => (!searchMode ? 'pointer' : 'inherit')};
     }
   }
 
@@ -72,7 +72,7 @@ export const StyledNav = styled.nav`
 
   .nav__searchInput {
     visibility: ${({ searchMode }) => (!searchMode ? 'hidden' : 'inherit')};
-    width: ${({ searchMode }) => (!searchMode ? '0px' : '200px')};
+    width: ${({ searchMode }) => (!searchMode ? '0px' : '300px')};
 
     transition: visibility 50ms ease-in-out;
     transition: width 0.2s ease-in-out;
@@ -80,6 +80,7 @@ export const StyledNav = styled.nav`
     border: 1px solid #fff;
     background-color: #111;
     color: #fff;
+    padding: 5px;
     &::placeholder {
       color: #999;
     }

@@ -1,4 +1,3 @@
-import { TMDB_API } from '../../services/apiConfig';
 import { MOVIE_REQUESTS as REQUESTS } from '../../utils/movieRequests';
 
 export const movieRows = [
