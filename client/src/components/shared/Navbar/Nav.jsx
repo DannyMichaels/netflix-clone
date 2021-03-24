@@ -45,7 +45,9 @@ export default function Nav({ handleSearch }) {
           alt="Netflix Logo"
         />
         <div className="nav__secondaryNavigation">
-          <ClickAwayListener onClickAway={searchMode && toggleSearchMode}>
+          <ClickAwayListener
+            onClickAway={() => searchMode && toggleSearchMode()}
+          >
             <div className="nav__searchContainer">
               <SearchIcon
                 className="nav__icon search"

@@ -49,11 +49,10 @@ function Home() {
   const RESULTS = (
     <InnerColumn>
       <ul className="home__searchList">
-        {getQueriedMovies().map((movie, idx) => (
+        {getQueriedMovies().map((movie) => (
           <>
             {console.log(movie)}
             <MovieCard
-              onClick={''}
               src={`${baseUrl}${movie.backdrop_path}`}
               alt={movie.name}
               key={movie.id}
