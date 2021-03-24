@@ -76,7 +76,7 @@ export const StyledFooter = styled.footer`
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      a {
+      .footer__link {
         margin-right: 0;
         &:hover {
           text-decoration: underline;

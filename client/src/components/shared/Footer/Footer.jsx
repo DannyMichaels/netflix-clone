@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useMemo } from 'react';
 
 // icons
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -47,6 +46,12 @@ Contact Us`;
 
 export default function Footer() {
   const [serviceCode, setServiceCode] = useState('');
+  const [randomId, setRandomId] = useState('');
+
+  useMemo(() => {
+    // useMemo so the randomId doesn't change when clicking on other things such as generating a service code.
+    setRandomId(`{${getRandomId(30)}}`);
+  }, []);
 
   const onGetServiceCode = () => {
     const result = getServiceCode();
@@ -72,9 +77,7 @@ export default function Footer() {
         <ul className="footer__member-links">
           {bottomFooterLinks.split(',').map((link) => (
             <li className="footer__link-wrapper">
-              <Link className="footer__link" href="/">
-                {link}
-              </Link>
+              <p className="footer__link">{link}</p>
             </li>
           ))}
         </ul>
@@ -90,7 +93,7 @@ export default function Footer() {
 
         <div className="footer__copyright">
           <span>© 1997-2021 Fakeflix, Inc. ‎&lrm;</span>
-          <span>&nbsp;{`{${getRandomId(30)}}`}</span>
+          <span>&nbsp;{randomId}</span>
         </div>
       </div>
     </StyledFooter>
