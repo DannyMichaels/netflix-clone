@@ -8,7 +8,7 @@ export const InnerColumn = styled.div`
   margin-right: auto;
   margin-left: auto;
   padding: 10px;
-  height: ${({ results }) => results && '250px'};
+  min-height: 250px;
   transition: all 0.2s ease -in;
 
   padding-bottom: 50px;

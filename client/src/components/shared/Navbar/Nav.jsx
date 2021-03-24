@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 
 // components
-import { Box, ClickAwayListener } from '@material-ui/core';
+import {
+  Box,
+  ClickAwayListener,
+  Input,
+  InputAdornment,
+} from '@material-ui/core';
 
 // icons
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -54,14 +59,21 @@ export default function Nav({ handleSearch, isSearching }) {
         <div className="nav__secondaryNavigation">
           <ClickAwayListener onClickAway={handleClickAway}>
             <div className="nav__searchContainer">
-              <SearchIcon
-                className="nav__icon search"
-                onClick={toggleSearchMode}
-              />
-              <input
+              {!searchMode && (
+                <SearchIcon
+                  className="nav__icon search"
+                  onClick={toggleSearchMode}
+                />
+              )}
+              <Input
                 onChange={handleSearch}
                 placeholder="Titles, people, genres"
                 className="nav__searchInput"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                }
               />
             </div>
           </ClickAwayListener>

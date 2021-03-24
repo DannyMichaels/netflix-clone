@@ -72,7 +72,7 @@ export const StyledNav = styled.nav`
 
   .nav__searchInput {
     visibility: ${({ searchMode }) => (!searchMode ? 'hidden' : 'inherit')};
-    width: ${({ searchMode }) => (!searchMode ? '0px' : '100px')};
+    width: ${({ searchMode }) => (!searchMode ? '0px' : '200px')};
 
     transition: visibility 50ms ease-in-out;
     transition: width 0.2s ease-in-out;
