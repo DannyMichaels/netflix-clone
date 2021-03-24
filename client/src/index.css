@@ -3,8 +3,10 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-color: #111;
+  /* background-color: #111; */
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  margin: 0;
 }
 
 code {

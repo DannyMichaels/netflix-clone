@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 
 export const StyledFooter = styled.footer`
-  margin: 20px auto 0;
-  padding: 0 4%;
-
   .footer__content {
     color: grey;
     max-width: 980px;
     margin: 20px auto 0;
-    padding: 0 4%;
+    padding: 0 4% 0.3%;
   }
 
   .footer__link-wrapper {
@@ -81,6 +78,9 @@ export const StyledFooter = styled.footer`
       box-sizing: border-box;
       a {
         margin-right: 0;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

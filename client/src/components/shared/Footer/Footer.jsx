@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // icons
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -7,6 +7,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 
 // utils
 import { getServiceCode } from '../../../utils/getServiceCode';
+import { getRandomId } from '../../../utils/generateId';
 
 // styles
 import { StyledFooter } from './footer.styles';
@@ -85,6 +86,7 @@ export default function Footer() {
 
         <div className="footer__copyright">
           <span>© 1997-2021 Fakeflix, Inc. ‎&lrm;</span>
+          <span>&nbsp;{`{${getRandomId(30)}}`}</span>
         </div>
       </div>
     </StyledFooter>
