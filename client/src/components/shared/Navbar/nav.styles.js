@@ -60,7 +60,7 @@ export const StyledNav = styled.nav`
     transform: rotate(180deg); // facing downward
     transition: transform 0.2s ease-in-out;
 
-    &:hover {
+    &.active {
       transform: rotate(360deg); // facing upward, rotating from left.
     }
   }

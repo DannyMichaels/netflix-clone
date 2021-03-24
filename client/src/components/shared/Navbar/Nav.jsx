@@ -20,6 +20,7 @@ import { StyledNav } from './nav.styles';
 export default function Nav({ handleSearch, isSearching, setSearch }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
+  const [dropDown, setDropDown] = useState(false);
 
   const onScroll = () => {
     if (window.scrollY > 100) {
@@ -40,6 +41,10 @@ export default function Nav({ handleSearch, isSearching, setSearch }) {
 
   const onSearchClear = () => {
     setSearch('');
+  };
+
+  const toggleDropDown = () => {
+    setDropDown(!dropDown);
   };
 
   const handleClickAway = () => {
@@ -98,12 +103,19 @@ export default function Nav({ handleSearch, isSearching, setSearch }) {
           </Box>
 
           <img
+            onMouseOver={toggleDropDown}
+            onMouseLeave={toggleDropDown}
             className="nav__avatar"
             src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
             alt="Profile Pic"
           />
+
           <Box mx={1}>
-            <ArrowDropUpIcon className="nav__icon arrow" />
+            <ArrowDropUpIcon
+              className={`nav__icon arrow ${dropDown && 'active'}`}
+              onMouseOver={toggleDropDown}
+              onMouseLeave={toggleDropDown}
+            />
           </Box>
         </div>
       </div>
