@@ -4,6 +4,10 @@ import { useState, useMemo } from 'react';
 import { getOneRandomMovie } from '../../../services/movies';
 import { truncate } from '../../../utils/truncate';
 
+// icons
+import PlayIcon from '@material-ui/icons/PlayArrow';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+
 //styles
 import { StyledBanner } from './banner.styles';
 
@@ -24,16 +28,25 @@ export default function Banner() {
         <h1 className="banner__title">
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
-        <div className="banner__buttons">
-          <button className="banner__button">Play</button>
-          <button className="banner__button">My List</button>
-
+        <div className="banner__descriptionContainer">
           <h1 className="banner__description">
             {truncate(movie?.overview, 250)}
           </h1>
         </div>
+        <div className="banner__buttons">
+          <button className="banner__button">
+            <PlayIcon fontSize="small" />
+            &nbsp;
+            <span>Play</span>
+          </button>
+          <button className="banner__button info">
+            <InfoIcon fontSize="small" />
+            &nbsp;&nbsp;
+            <span>More Info</span>
+          </button>
+        </div>
       </div>
-      <div className="banner--fadeBottom"></div>
+      <div className="banner--fadeBottom" />
     </StyledBanner>
   );
 }

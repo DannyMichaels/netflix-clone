@@ -14,6 +14,17 @@ const StyledNav = styled.nav`
   transition-timing-function: ease-in;
   transition: all 0.5s;
 
+  .nav__innerColumn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 98%;
+    max-width: 1900px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0 4%;
+  }
+
   .nav__logo {
     width: 80px;
     object-fit: contain;
@@ -28,18 +39,10 @@ const StyledNav = styled.nav`
     object-fit: contain;
   }
 
-  .nav__inner-column {
-    /* display: block; */
+  .nav__secondaryNavigation {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 98%;
-    max-width: 1900px;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 0 4%;
-
-    /* border: 2px solid red; */
+    padding: 20px;
   }
 `;
 
@@ -61,19 +64,14 @@ export default function Nav() {
 
   return (
     <StyledNav aria-label="navbar" isShowing={isBackgroundShowing}>
-      <div className="nav__inner-column">
+      <div className="nav__innerColumn">
         <img
           className="nav__logo"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
           alt="Netflix Logo"
         />
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '20px',
-          }}
-        >
+        <div className="nav__secondaryNavigation">
+          <BellIcon />
           <img
             className="nav__avatar"
             src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useRef } from 'react';
 
 // icons
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -46,12 +46,8 @@ Contact Us`;
 
 export default function Footer() {
   const [serviceCode, setServiceCode] = useState('');
-  const [randomId, setRandomId] = useState('');
 
-  useMemo(() => {
-    // useMemo so the randomId doesn't change when clicking on other things such as generating a service code.
-    setRandomId(`{${getRandomId(30)}}`);
-  }, []);
+  const randomId = useRef(`{${getRandomId(30)}}`); // useRef so the randomId doesn't change when clicking on other things such as generating a service code.
 
   const onGetServiceCode = () => {
     const result = getServiceCode();
@@ -62,8 +58,9 @@ export default function Footer() {
     <StyledFooter>
       <div className="footer__content">
         <div className="footer__social-links">
-          {socialLinks.map((link) => (
+          {socialLinks.map((link, idx) => (
             <a
+              key={idx}
               href={link.url}
               className="footer__link"
               target="_blank"
@@ -75,8 +72,8 @@ export default function Footer() {
         </div>
 
         <ul className="footer__member-links">
-          {bottomFooterLinks.split(',').map((link) => (
-            <li className="footer__link-wrapper">
+          {bottomFooterLinks.split(',').map((link, idx) => (
+            <li className="footer__link-wrapper" key={idx}>
               <p className="footer__link">{link}</p>
             </li>
           ))}
@@ -93,7 +90,7 @@ export default function Footer() {
 
         <div className="footer__copyright">
           <span>© 1997-2021 Fakeflix, Inc. ‎&lrm;</span>
-          <span>&nbsp;{randomId}</span>
+          <span>&nbsp;{randomId.current}</span>
         </div>
       </div>
     </StyledFooter>
