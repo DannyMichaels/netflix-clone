@@ -58,4 +58,24 @@ export const StyledNav = styled.nav`
       transform: rotate(360deg); // facing upward, rotating from left.
     }
   }
+
+  .nav__searchContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  .nav__searchInput {
+    visibility: ${({ searchMode }) => (!searchMode ? 'hidden' : 'inherit')};
+    width: ${({ searchMode }) => (!searchMode ? '0px' : '100px')};
+
+    transition: visibility 50ms ease-in-out;
+    transition: width 0.2s ease-in-out;
+
+    border: 1px solid #fff;
+    background-color: #111;
+    color: #fff;
+    &::placeholder {
+      color: #999;
+    }
+  }
 `;

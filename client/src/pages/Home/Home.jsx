@@ -13,18 +13,23 @@ function Home() {
   const [currentRows, setCurrentRows] = useState(defaultRows);
   const [search, setSearch] = useState('');
 
-  const handleSearch = async ({ target: { value: userInput } }) => {
+  const handleSearch = async (event) => {
+    const { value: userInput } = event.target;
+
     // TODO: once we have accounts set up, have a terenary opertaror for the users age regarding include adult being true or false
     setSearch(userInput);
-
-    const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=false
+    let pageNum;
+    const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=${pageNum}&include_adult=false
     &query=${search}`;
 
     const { data } = await TMDB_API.get(searchUrl);
 
-    const newQueriedRows = data.results.map((res) => ({
+    console.log(pageNum);
+
+    const newQueriedRows = data.results.map((res, idx) => ({
       ...res,
       fetchUrl: searchUrl,
+      pageNum: (idx += 1),
     }));
 
     if (userInput) {

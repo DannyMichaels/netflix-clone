@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
-import BellIcon from '@material-ui/icons/Notifications';
-import { Box } from '@material-ui/core';
+
+// components
+import { Box, ClickAwayListener } from '@material-ui/core';
+
+// icons
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import BellIcon from '@material-ui/icons/Notifications';
+import SearchIcon from '@material-ui/icons/Search';
+
+// styles
 import { StyledNav } from './nav.styles';
 
 export default function Nav({ handleSearch }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
+  const [searchMode, setSearchMode] = useState(false);
 
   const onScroll = () => {
     if (window.scrollY > 100) {
@@ -20,8 +28,16 @@ export default function Nav({ handleSearch }) {
     };
   }, []);
 
+  const toggleSearchMode = () => {
+    setSearchMode(!searchMode);
+  };
+
   return (
-    <StyledNav aria-label="navbar" isShowing={isBackgroundShowing}>
+    <StyledNav
+      aria-label="navbar"
+      isShowing={isBackgroundShowing}
+      searchMode={searchMode}
+    >
       <div className="nav__innerColumn">
         <img
           className="nav__logo"
@@ -29,9 +45,21 @@ export default function Nav({ handleSearch }) {
           alt="Netflix Logo"
         />
         <div className="nav__secondaryNavigation">
-          <input type="search" onChange={handleSearch} />
+          <ClickAwayListener onClickAway={searchMode && toggleSearchMode}>
+            <div className="nav__searchContainer">
+              <SearchIcon
+                className="nav__icon search"
+                onClick={toggleSearchMode}
+              />
+              <input
+                onChange={handleSearch}
+                placeholder="Titles, people, genres"
+                className="nav__searchInput"
+              />
+            </div>
+          </ClickAwayListener>
           <Box mx={2}>
-            <BellIcon fontSize="medium" className="nav__icon" />
+            <BellIcon fontSize="medium" className="nav__icon bell" />
           </Box>
 
           <img
