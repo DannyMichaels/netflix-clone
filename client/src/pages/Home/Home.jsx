@@ -2,46 +2,42 @@ import { Children, useState } from 'react'; // give everything without an id it'
 
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
+import MovieCard from '../../components/MovieComponents/MovieCard/MovieCard';
 import Row from '../../components/MovieComponents/Row/Row';
 import Layout from '../../components/shared/Layout/Layout';
 import { TMDB_API } from '../../services/apiConfig';
+import { InnerColumn } from './home.styles';
 
 // utils
-import { movieRows as defaultRows } from './home.utils';
+import { movieRows } from './home.utils';
+
+const baseUrl = 'https://image.tmdb.org/t/p/original';
 
 function Home() {
-  const [currentRows, setCurrentRows] = useState(defaultRows);
   const [search, setSearch] = useState('');
+  const [queriedMovies, setQueriedMovies] = useState([]);
 
-  const handleSearch = async (event) => {
-    const { value: userInput } = event.target;
-
+  const handleSearch = async ({ target: { value: userInput } }) => {
     // TODO: once we have accounts set up, have a terenary opertaror for the users age regarding include adult being true or false
     setSearch(userInput);
-    let pageNum;
-    const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=${pageNum}&include_adult=false
+
+    const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=false
     &query=${search}`;
 
     const { data } = await TMDB_API.get(searchUrl);
 
-    console.log(pageNum);
-
-    const newQueriedRows = data.results.map((res, idx) => ({
-      ...res,
-      fetchUrl: searchUrl,
-      pageNum: (idx += 1),
-    }));
-
-    if (userInput) {
-      setCurrentRows(newQueriedRows);
-    } else {
-      setCurrentRows(defaultRows);
-    }
+    setQueriedMovies(data.results);
   };
 
+  const getQueriedMovies = () =>
+    queriedMovies.filter((movie) =>
+      movie.title.toLowerCase().includes(search.toLowerCase())
+    );
+
   const ROWS = Children.toArray(
-    currentRows.map(({ title, fetchUrl }) => (
+    movieRows.map(({ title, fetchUrl }) => (
       <Row
+        handleSearch={handleSearch}
         title={title}
         fetchUrl={fetchUrl}
         isLargeRow={title.match(/^netflix originals$/i)}
@@ -50,10 +46,31 @@ function Home() {
     ))
   );
 
+  const RESULTS = (
+    <InnerColumn>
+      <ul className="home__searchList">
+        {getQueriedMovies().map((movie, idx) => (
+          <>
+            {console.log(movie)}
+            <MovieCard
+              onClick={''}
+              src={`${baseUrl}${movie.backdrop_path}`}
+              alt={movie.name}
+              key={movie.id}
+              className="home__searched-movie"
+            />
+          </>
+        ))}
+      </ul>
+    </InnerColumn>
+  );
+
+  const moviesJSX = !search ? ROWS : RESULTS;
+
   return (
     <Layout setSearch={setSearch} handleSearch={handleSearch}>
       <Banner />
-      {ROWS}
+      {moviesJSX}
     </Layout>
   );
 }
