@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+
 // icons
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import TwitterIcon from '@material-ui/icons/Twitter';
+import YouTubeIcon from '@material-ui/icons/YouTube';
 
 // utils
 import { getServiceCode } from '../../../utils/getServiceCode';
@@ -22,8 +24,10 @@ const socialLinks = [
     icon: <LinkedInIcon fontSize="large" />,
   },
   {
-    url: 'https://twitter.com/_DanielDev',
     icon: <TwitterIcon fontSize="large" />,
+  },
+  {
+    icon: <YouTubeIcon fontSize="large" />,
   },
 ];
 
