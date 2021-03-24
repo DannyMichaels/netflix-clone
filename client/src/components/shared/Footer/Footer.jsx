@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 // icons
 import GitHubIcon from '@material-ui/icons/GitHub';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
+import TwitterIcon from '@material-ui/icons/Twitter';
 
 // utils
 import { getServiceCode } from '../../../utils/getServiceCode';
@@ -18,6 +19,10 @@ const socialLinks = [
   {
     url: 'https://www.linkedin.com/in/👨🏽‍💻-daniel-michael-718825155',
     icon: <LinkedInIcon fontSize="large" />,
+  },
+  {
+    url: 'https://twitter.com/_DanielDev',
+    icon: <TwitterIcon fontSize="large" />,
   },
 ];
 
@@ -39,15 +44,8 @@ export default function Footer() {
   const [serviceCode, setServiceCode] = useState('');
 
   const onGetServiceCode = () => {
-    const codeInLocalStorage = localStorage.getItem('serviceCode');
-
-    if (codeInLocalStorage) {
-      return setServiceCode(codeInLocalStorage);
-    } else {
-      const result = getServiceCode();
-      localStorage.setItem('serviceCode', result);
-      setServiceCode(result);
-    }
+    const result = getServiceCode();
+    setServiceCode(result);
   };
 
   return (
@@ -68,7 +66,7 @@ export default function Footer() {
 
         <ul className="footer__member-links">
           {bottomFooterLinks.split(',').map((link) => (
-            <li>
+            <li className="footer__link-wrapper">
               <Link className="footer__link" href="/">
                 {link}
               </Link>

@@ -11,6 +11,25 @@ export const StyledFooter = styled.footer`
     padding: 0 4%;
   }
 
+  .footer__link-wrapper {
+    list-style-type: none;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 50%;
+    -moz-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    margin-bottom: 16px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    @media (min-width: 800px) {
+      -webkit-flex-basis: 25%;
+      -ms-flex-preferred-size: 25%;
+      flex-basis: 25%;
+    }
+  }
+
   .footer__link {
     color: grey;
     margin-right: 15px;
@@ -55,15 +74,14 @@ export const StyledFooter = styled.footer`
 
     li {
       list-style-type: none;
-      -webkit-box-flex: 0;
-      -webkit-flex: 0 0 50%;
-      -moz-box-flex: 0;
-      -ms-flex: 0 0 50%;
-      flex: 0 0 50%;
+
       margin-bottom: 16px;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
+      a {
+        margin-right: 0;
+      }
     }
   }
 
