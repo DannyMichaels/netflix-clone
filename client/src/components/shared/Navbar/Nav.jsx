@@ -43,7 +43,7 @@ export default function Nav({ handleSearch, isSearching, setSearch }) {
   };
 
   const handleClickAway = () => {
-    !isSearching && toggleSearchMode();
+    isSearching ? setSearchMode(true) : setSearchMode(false);
   };
 
   return (
