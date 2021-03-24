@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import BellIcon from '@material-ui/icons/Notifications';
+import { Box } from '@material-ui/core';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 
 const StyledNav = styled.nav`
   background: ${({ isShowing }) => isShowing && '#141414'};
@@ -37,12 +39,28 @@ const StyledNav = styled.nav`
   .nav__avatar {
     width: 30px;
     object-fit: contain;
+    border-radius: 4px;
+    cursor: pointer;
   }
 
   .nav__secondaryNavigation {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding-right: 20px;
+    color: #fff;
+  }
+
+  .nav__icon {
+    cursor: pointer;
+  }
+
+  .nav__icon.arrow {
+    transform: rotate(180deg); // facing downward
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: rotate(360deg); // facing upward, rotating from left.
+    }
   }
 `;
 
@@ -71,12 +89,18 @@ export default function Nav() {
           alt="Netflix Logo"
         />
         <div className="nav__secondaryNavigation">
-          <BellIcon />
+          <Box mx={2}>
+            <BellIcon fontSize="medium" className="nav__icon" />
+          </Box>
+
           <img
             className="nav__avatar"
             src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
             alt="Profile Pic"
           />
+          <Box mx={1}>
+            <ArrowDropUpIcon className="nav__icon arrow" />
+          </Box>
         </div>
       </div>
     </StyledNav>
