@@ -23,7 +23,7 @@ export default function Row({ title, fetchUrl, isLargeRow, isSearching }) {
       setMovies(movieData);
     };
     fetchMovies();
-  }, [fetchUrl, isSearching]);
+  }, [fetchUrl]);
 
   const OPTIONS = {
     height: '390',
