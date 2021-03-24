@@ -1,42 +1,49 @@
 import styled from 'styled-components';
 
 export const InnerColumn = styled.div`
+  color: #fff;
   display: block;
   width: 98%;
-  max-width: 1100px;
+  max-width: 1700px;
   margin-right: auto;
   margin-left: auto;
   padding: 10px;
+  height: ${({ results }) => results && '250px'};
+  transition: all 0.2s ease -in;
+
+  padding-bottom: 50px;
+  overflow: hidden;
+
+  h1 {
+    text-align: center;
+    padding: 50px;
+  }
 
   ul {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
-    grid-gap: 20px;
+    grid-gap: 10px;
     list-style: none;
 
-    img {
-      object-fit: contain;
-      transition: transform 450ms;
-      max-width: 25vw;
-      max-height: 100px;
+    picture {
+      max-width: 300px;
+      margin: 0 auto;
 
-      box-sizing: border-box;
-      z-index: 1;
-      display: block;
-      position: relative;
-      white-space: normal;
-      padding: 0 2px;
-      border-radius: 4px;
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        transition: transform 450ms;
 
-      @media screen and (min-width: 600px) {
-        max-width: 100%;
-      }
+        padding: 0 2px;
+        border-radius: 4px;
 
-      &:hover {
-        transform: scale(1.08);
-        opacity: 1;
-        z-index: 3;
+        &:hover {
+          transform: scale(1.08);
+          opacity: 1;
+          z-index: 3;
+        }
       }
     }
   }

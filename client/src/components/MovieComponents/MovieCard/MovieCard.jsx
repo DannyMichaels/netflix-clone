@@ -3,10 +3,11 @@
 // therefore we give it a flexible className as props.
 
 const MovieCard = ({ src, alt, className, onClick }) =>
+  alt !== '' &&
   !src.includes('null') && (
     <img
       src={src}
-      alt={alt ?? ''}
+      alt={alt}
       className={className ?? 'movie-card'}
       onClick={onClick}
     />
