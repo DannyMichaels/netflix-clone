@@ -2,7 +2,6 @@ import { Children, useState } from 'react'; // give everything without an id it'
 
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
-import MovieCard from '../../components/MovieComponents/MovieCard/MovieCard';
 import Row from '../../components/MovieComponents/Row/Row';
 import Layout from '../../components/shared/Layout/Layout';
 

@@ -81,7 +81,10 @@ export default function Nav({ handleSearch, searchedValue, setSearch }) {
                 startAdornment={
                   <Box marginLeft={1}>
                     <InputAdornment position="start">
-                      <SearchIcon className="nav__icon search" />
+                      <SearchIcon
+                        className="nav__icon search"
+                        onClick={toggleSearchMode}
+                      />
                     </InputAdornment>
                   </Box>
                 }
