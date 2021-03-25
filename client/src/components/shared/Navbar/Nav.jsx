@@ -17,7 +17,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 // styles
 import { StyledNav } from './nav.styles';
 
-export default function Nav({ handleSearch, isSearching, setSearch }) {
+export default function Nav({ handleSearch, searchedValue, setSearch }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [dropDown, setDropDown] = useState(false);
@@ -48,7 +48,7 @@ export default function Nav({ handleSearch, isSearching, setSearch }) {
   };
 
   const handleClickAway = () => {
-    isSearching ? setSearchMode(true) : setSearchMode(false);
+    searchedValue ? setSearchMode(true) : setSearchMode(false);
   };
 
   return (
@@ -74,7 +74,7 @@ export default function Nav({ handleSearch, isSearching, setSearch }) {
               )}
               <Input
                 onChange={handleSearch}
-                value={isSearching}
+                value={searchedValue}
                 placeholder="Titles, people, genres"
                 className="nav__searchInput"
                 disableUnderline

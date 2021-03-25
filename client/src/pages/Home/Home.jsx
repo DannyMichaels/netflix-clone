@@ -78,7 +78,7 @@ function Home() {
   return (
     <Layout
       handleSearch={handleSearch}
-      isSearching={search}
+      searchedValue={search}
       setSearch={setSearch}
     >
       <Banner />
