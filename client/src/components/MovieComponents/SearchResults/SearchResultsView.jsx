@@ -9,6 +9,7 @@ import YouTube from 'react-youtube';
 
 //styles
 import { InnerColumn } from './searchResults.styles';
+import VideoModal from '../MovieModals/VideoModal';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
@@ -63,7 +64,12 @@ export default function SearchResultsView({ getQueriedMovies }) {
           </picture>
         ))}
       </ul>
-      {trailerUrl && <YouTube videoId={trailerUrl} opts={OPTIONS} />}
+
+      <VideoModal
+        trailerUrl={trailerUrl}
+        opts={OPTIONS}
+        handleClose={() => setTrailerUrl('')}
+      />
     </InnerColumn>
   );
 }
