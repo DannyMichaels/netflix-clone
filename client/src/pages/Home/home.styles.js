@@ -19,7 +19,7 @@ export const InnerColumn = styled.div`
     padding: 50px;
   }
 
-  ul {
+  .home__searchList {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
