@@ -29,10 +29,12 @@ export default function Row({ title, fetchUrl, isLargeRow, handleVideoProps }) {
 
   const handleClick = useCallback(
     (movie) => {
-      setSelectedMovie(movie);
       if (trailerUrl) {
-        setTrailerUrl(trailerUrl);
+        setTrailerUrl('');
       }
+
+      setSelectedMovie(movie);
+
       if (movie?.media_type) {
         setMediaType(movie.media_type);
       } else if (movie?.first_air_date) {

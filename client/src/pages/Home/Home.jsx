@@ -65,13 +65,14 @@ function Home() {
 
   const moviesJSX = !search ? ROWS : RESULTS;
 
-  if (selectedMovie) {
+  if (trailerUrl && selectedMovie) {
     return (
       <Redirect
         to={{
-          pathname: `/watch/${selectedMovie.id}`,
+          pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
           state: {
             movie: selectedMovie,
+            trailerUrl: trailerUrl,
           },
         }}
       />

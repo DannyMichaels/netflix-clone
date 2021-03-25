@@ -50,7 +50,6 @@ export const StyledRow = styled.div`
     transition: transform 450ms;
     max-width: 25vw;
     max-height: 100px;
-
     box-sizing: border-box;
     z-index: 1;
     display: block;
@@ -58,7 +57,7 @@ export const StyledRow = styled.div`
     white-space: normal;
     padding: 0 2px;
     border-radius: 4px;
-
+    cursor: pointer;
     @media screen and (min-width: 600px) {
       max-width: 100%;
     }

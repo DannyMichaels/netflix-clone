@@ -102,7 +102,7 @@ export default function Nav({ handleSearch, searchedValue, setSearch }) {
             </div>
           </ClickAwayListener>
           <Box mx={2}>
-            <BellIcon fontSize="medium" className="nav__icon bell" />
+            <BellIcon fontSize="default" className="nav__icon bell" />
           </Box>
 
           <img
