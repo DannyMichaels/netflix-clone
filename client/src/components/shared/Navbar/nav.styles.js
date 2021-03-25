@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { COLORS } from '../../../utils/generalUtils';
 
 export const StyledNav = styled.nav`
-  background: ${({ isShowing }) => isShowing && '#141414'};
+  background: ${({ isShowing }) => isShowing && COLORS.BRIGHT_BLACK};
   top: 0;
   z-index: 9999;
   position: fixed;
@@ -77,12 +78,12 @@ export const StyledNav = styled.nav`
     transition: visibility 50ms ease-in-out;
     transition: width 0.2s ease-in-out;
 
-    border: 1px solid #fff;
-    background-color: #111;
-    color: #fff;
+    border: 1px solid ${COLORS.WHITE};
+    background-color: ${COLORS.BLACK};
+    color: ${COLORS.WHITE};
     padding: 5px;
     &::placeholder {
-      color: #999;
+      color: ${COLORS.GREY};
     }
   }
 `;

@@ -9,10 +9,13 @@ import Layout from '../../components/shared/Layout/Layout';
 // utils, helpers and Services
 import { movieRows } from './home.utils';
 import { TMDB_API } from '../../services/apiConfig';
-import Levenshtein from 'levenshtein';
+import { Redirect } from 'react-router';
 
 function Home() {
   const [search, setSearch] = useState('');
+  const [trailerUrl, setTrailerUrl] = useState('');
+  const [selectedMovie, setSelectedMovie] = useState('');
+  const [mediaType, setMediaType] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
 
   const handleSearch = async ({ target: { value: userInput } }) => {
@@ -35,23 +38,45 @@ function Home() {
         fetchUrl={fetchUrl}
         isLargeRow={title.match(/^netflix originals$/i)}
         isSearching={search}
+        handleVideoProps={{
+          trailerUrl,
+          setTrailerUrl,
+          setSelectedMovie,
+          mediaType,
+          setMediaType,
+        }}
       />
     ))
   );
 
   const RESULTS = (
     <SearchResultsView
-      getQueriedMovies={() =>
-        queriedMovies.sort((a, b) => {
-          var leva = new Levenshtein(a.title, search).distance; // the movie that is closest to user's search input will appear in top-left.
-          var levb = new Levenshtein(b.title, search).distance;
-          return leva - levb;
-        })
-      }
+      handleVideoProps={{
+        trailerUrl,
+        setTrailerUrl,
+        setSelectedMovie,
+        mediaType,
+        setMediaType,
+      }}
+      queriedMovies={queriedMovies}
+      search={search}
     />
   );
 
   const moviesJSX = !search ? ROWS : RESULTS;
+
+  if (selectedMovie) {
+    return (
+      <Redirect
+        to={{
+          pathname: `/watch/${selectedMovie.id}`,
+          state: {
+            movie: selectedMovie,
+          },
+        }}
+      />
+    );
+  }
 
   return (
     <Layout

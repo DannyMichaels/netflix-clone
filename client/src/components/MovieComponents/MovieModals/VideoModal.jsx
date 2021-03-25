@@ -49,7 +49,7 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function VideoModal({ handleClose, trailerUrl, opts }) {
+export default function VideoModal({ handleClose, trailerUrl, opts, title }) {
   return (
     <Dialog
       onClose={handleClose}
@@ -62,7 +62,7 @@ export default function VideoModal({ handleClose, trailerUrl, opts }) {
         id="customized-dialog-title"
         onClose={handleClose}
       >
-        {/* {name} */}
+        {title}
       </DialogTitle>
       <DialogContent>
         <YouTube videoId={trailerUrl} opts={opts} />

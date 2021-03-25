@@ -43,6 +43,7 @@ export const InnerColumn = styled.div`
           transform: scale(1.08);
           opacity: 1;
           z-index: 3;
+          cursor: pointer;
         }
       }
     }

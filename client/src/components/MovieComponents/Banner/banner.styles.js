@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { COLORS } from '../../../utils/generalUtils';
 
 export const StyledBanner = styled.header`
   color: white;
@@ -100,7 +101,7 @@ export const StyledBanner = styled.header`
   }
 
   .banner__button:hover {
-    background-color: #e6e6e6;
+    background-color: ${COLORS.EGGSHELL_WHITE};
     transition: all 0.06s;
   }
 

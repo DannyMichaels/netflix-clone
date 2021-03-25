@@ -1,35 +1,35 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
 // services and utils
 import { getYoutubeVideo } from '../../../services/movies';
+import Levenshtein from 'levenshtein';
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
-import YouTube from 'react-youtube';
 
 //styles
 import { InnerColumn } from './searchResults.styles';
-import VideoModal from '../MovieModals/VideoModal';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
-export default function SearchResultsView({ getQueriedMovies }) {
-  const [trailerUrl, setTrailerUrl] = useState('');
-  const [mediaType, setMediaType] = useState('');
-
-  const OPTIONS = {
-    height: '390',
-    width: '100%',
-    playerVars: {
-      autoplay: 1,
-    },
-  };
+export default function SearchResultsView({
+  handleVideoProps,
+  queriedMovies,
+  search,
+}) {
+  const {
+    trailerUrl,
+    setTrailerUrl,
+    setSelectedMovie,
+    mediaType,
+    setMediaType,
+  } = handleVideoProps;
 
   const handleClick = useCallback(
     (movie) => {
+      setSelectedMovie(movie);
       if (trailerUrl) {
         setTrailerUrl(trailerUrl);
-        console.log({ trailerUrl });
       }
       if (movie?.media_type) {
         setMediaType(movie.media_type);
@@ -45,8 +45,16 @@ export default function SearchResultsView({ getQueriedMovies }) {
       };
       getTrailer();
     },
-    [mediaType, trailerUrl]
+    [mediaType, trailerUrl, setMediaType, setSelectedMovie, setTrailerUrl]
   );
+
+  const getQueriedMovies = () => {
+    return queriedMovies.sort((a, b) => {
+      let leva = new Levenshtein(a.title, search).distance; // the movie that is closest to user's search input will appear in top-left.
+      let levb = new Levenshtein(b.title, search).distance;
+      return leva - levb;
+    });
+  };
 
   return (
     <InnerColumn results={!getQueriedMovies().length}>
@@ -64,12 +72,6 @@ export default function SearchResultsView({ getQueriedMovies }) {
           </picture>
         ))}
       </ul>
-
-      <VideoModal
-        trailerUrl={trailerUrl}
-        opts={OPTIONS}
-        handleClose={() => setTrailerUrl('')}
-      />
     </InnerColumn>
   );
 }
