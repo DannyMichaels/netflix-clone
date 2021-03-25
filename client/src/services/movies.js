@@ -27,7 +27,7 @@ export const getYoutubeVideo = async (mediaType, id) => {
       const { data } = await api.get(
         `/${mediaType}/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&append_to_response=videos`
       );
-      return data.videos.results[0].key;
+      return data?.videos?.results[0]?.key;
     }
   } catch (error) {
     throw error;
