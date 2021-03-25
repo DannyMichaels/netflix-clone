@@ -15,7 +15,6 @@ function Home() {
   const [search, setSearch] = useState('');
   const [trailerUrl, setTrailerUrl] = useState('');
   const [selectedMovie, setSelectedMovie] = useState('');
-  const [mediaType, setMediaType] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
 
   const handleSearch = async ({ target: { value: userInput } }) => {
@@ -26,7 +25,6 @@ function Home() {
     &query=${search}`;
 
     const { data } = await TMDB_API.get(searchUrl);
-
     setQueriedMovies(data.results);
   };
 
@@ -39,11 +37,8 @@ function Home() {
         isLargeRow={title.match(/^netflix originals$/i)}
         isSearching={search}
         handleVideoProps={{
-          trailerUrl,
           setTrailerUrl,
           setSelectedMovie,
-          mediaType,
-          setMediaType,
         }}
       />
     ))
@@ -52,11 +47,8 @@ function Home() {
   const RESULTS = (
     <SearchResultsView
       handleVideoProps={{
-        trailerUrl,
         setTrailerUrl,
         setSelectedMovie,
-        mediaType,
-        setMediaType,
       }}
       queriedMovies={queriedMovies}
       search={search}

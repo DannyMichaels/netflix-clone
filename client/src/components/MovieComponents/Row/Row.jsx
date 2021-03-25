@@ -14,42 +14,36 @@ const baseUrl = 'https://image.tmdb.org/t/p/original';
 export default function Row({ title, fetchUrl, isLargeRow, handleVideoProps }) {
   const [movies, setMovies] = useState([]);
 
-  const {
-    trailerUrl,
-    setTrailerUrl,
-    setSelectedMovie,
-    mediaType,
-    setMediaType,
-  } = handleVideoProps;
+  const { setTrailerUrl, setSelectedMovie } = handleVideoProps;
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
     setMovies(movieData);
   }, [fetchUrl]);
 
+  const getType = (movie) => {
+    if (movie?.media_type) {
+      return movie.media_type;
+    } else if (movie?.first_air_date) {
+      return 'tv';
+    } else {
+      return 'movie';
+    }
+  };
+
   const handleClick = useCallback(
     (movie) => {
-      if (trailerUrl) {
-        setTrailerUrl('');
-      }
+      const type = getType(movie);
 
       setSelectedMovie(movie);
 
-      if (movie?.media_type) {
-        setMediaType(movie.media_type);
-      } else if (movie?.first_air_date) {
-        setMediaType('tv');
-      } else {
-        setMediaType('movie');
-      }
-
       const getTrailer = async () => {
-        const fetchedUrl = await getYoutubeVideo(mediaType, movie.id);
+        const fetchedUrl = await getYoutubeVideo(type, movie.id);
         setTrailerUrl(fetchedUrl);
       };
       getTrailer();
     },
-    [mediaType, setMediaType, trailerUrl, setTrailerUrl, setSelectedMovie]
+    [setSelectedMovie, setTrailerUrl]
   );
 
   const CARDS = movies?.map((movie) => (

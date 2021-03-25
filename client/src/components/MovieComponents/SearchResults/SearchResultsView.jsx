@@ -17,40 +17,36 @@ export default function SearchResultsView({
   queriedMovies,
   search,
 }) {
-  const {
-    trailerUrl,
-    setTrailerUrl,
-    setSelectedMovie,
-    mediaType,
-    setMediaType,
-  } = handleVideoProps;
+  const { setTrailerUrl, setSelectedMovie } = handleVideoProps;
+
+  const getType = (movie) => {
+    if (movie?.media_type) {
+      return movie.media_type;
+    } else if (movie?.first_air_date) {
+      return 'tv';
+    } else {
+      return 'movie';
+    }
+  };
 
   const handleClick = useCallback(
     (movie) => {
+      const type = getType(movie);
+
       setSelectedMovie(movie);
-      if (trailerUrl) {
-        setTrailerUrl(trailerUrl);
-      }
-      if (movie?.media_type) {
-        setMediaType(movie.media_type);
-      } else if (movie?.first_air_date) {
-        setMediaType('tv');
-      } else {
-        setMediaType('movie');
-      }
 
       const getTrailer = async () => {
-        const fetchedUrl = await getYoutubeVideo(mediaType, movie.id);
+        const fetchedUrl = await getYoutubeVideo(type, movie.id);
         setTrailerUrl(fetchedUrl);
       };
       getTrailer();
     },
-    [mediaType, trailerUrl, setMediaType, setSelectedMovie, setTrailerUrl]
+    [setSelectedMovie, setTrailerUrl]
   );
 
   const getQueriedMovies = () => {
     return queriedMovies.sort((a, b) => {
-      let leva = new Levenshtein(a.title, search).distance; // the movie that is closest to user's search input will appear in top-left.
+      let leva = new Levenshtein(a.title, search).distance; // the movie that is closest to the users search input will appear in top-left.
       let levb = new Levenshtein(b.title, search).distance;
       return leva - levb;
     });
