@@ -5,33 +5,31 @@ import { getAllMovies, getYoutubeVideo } from '../../../services/movies';
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
-import Youtube from 'react-youtube';
 
 // styles
 import { StyledRow } from './row.styles';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
-export default function Row({ title, fetchUrl, isLargeRow }) {
+export default function Row({ title, fetchUrl, isLargeRow, handleVideoProps }) {
   const [movies, setMovies] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState('');
-  const [mediaType, setMediaType] = useState('');
+
+  const {
+    trailerUrl,
+    setTrailerUrl,
+    setSelectedMovie,
+    mediaType,
+    setMediaType,
+  } = handleVideoProps;
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
     setMovies(movieData);
   }, [fetchUrl]);
 
-  const OPTIONS = {
-    height: '390',
-    width: '100%',
-    playerVars: {
-      autoplay: 1,
-    },
-  };
-
   const handleClick = useCallback(
     (movie) => {
+      setSelectedMovie(movie);
       if (trailerUrl) {
         setTrailerUrl(trailerUrl);
       }
@@ -49,7 +47,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       };
       getTrailer();
     },
-    [mediaType, trailerUrl]
+    [mediaType, setMediaType, trailerUrl, setTrailerUrl, setSelectedMovie]
   );
 
   const CARDS = movies?.map((movie) => (
@@ -67,8 +65,6 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       <h2 className="row__title">{title}</h2>
 
       <div className="row__posters">{CARDS}</div>
-
-      {trailerUrl && <Youtube videoId={trailerUrl} opts={OPTIONS} />}
     </StyledRow>
   );
 }
