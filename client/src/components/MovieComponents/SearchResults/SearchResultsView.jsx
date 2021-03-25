@@ -1,7 +1,14 @@
 import { useCallback, useState } from 'react';
-import YouTube from 'react-youtube';
+
+// services and utils
 import { getYoutubeVideo } from '../../../services/movies';
+
+// components
 import MovieCard from '../MovieCard/MovieCard';
+import YouTube from 'react-youtube';
+
+//styles
+import { InnerColumn } from './searchResults.styles';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
@@ -41,7 +48,7 @@ export default function SearchResultsView({ getQueriedMovies }) {
   );
 
   return (
-    <>
+    <InnerColumn results={!getQueriedMovies().length}>
       {!getQueriedMovies().length && <h1>no results</h1>}
       <ul className="home__searchList">
         {getQueriedMovies().map((movie) => (
@@ -57,6 +64,6 @@ export default function SearchResultsView({ getQueriedMovies }) {
         ))}
       </ul>
       {trailerUrl && <YouTube videoId={trailerUrl} opts={OPTIONS} />}
-    </>
+    </InnerColumn>
   );
 }

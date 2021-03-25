@@ -3,16 +3,13 @@ import { Children, useState } from 'react'; // give everything without an id it'
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
 import Row from '../../components/MovieComponents/Row/Row';
+import SearchResultsView from '../../components/MovieComponents/SearchResults/SearchResultsView';
 import Layout from '../../components/shared/Layout/Layout';
 
 // utils, helpers and Services
 import { movieRows } from './home.utils';
 import { TMDB_API } from '../../services/apiConfig';
 import Levenshtein from 'levenshtein';
-
-//  styles
-import { InnerColumn } from './home.styles';
-import SearchResultsView from '../../components/MovieComponents/SearchResults/SearchResultsView';
 
 function Home() {
   const [search, setSearch] = useState('');
@@ -30,17 +27,6 @@ function Home() {
     setQueriedMovies(data.results);
   };
 
-  const getQueriedMovies = () => {
-    // https://stackoverflow.com/questions/26796276/array-sort-on-the-basis-of-search-text-matching-using-pure-javascript
-    // https://github.com/gf3/Levenshtein
-    // https://en.wikipedia.org/wiki/Levenshtein_distance
-    return queriedMovies.sort((a, b) => {
-      var leva = new Levenshtein(a.title, search).distance; // the movie that is closest to user's search input will appear in top-left.
-      var levb = new Levenshtein(b.title, search).distance;
-      return leva - levb;
-    });
-  };
-
   const ROWS = Children.toArray(
     movieRows.map(({ title, fetchUrl }) => (
       <Row
@@ -54,9 +40,15 @@ function Home() {
   );
 
   const RESULTS = (
-    <InnerColumn results={!getQueriedMovies().length}>
-      <SearchResultsView getQueriedMovies={getQueriedMovies} />
-    </InnerColumn>
+    <SearchResultsView
+      getQueriedMovies={() =>
+        queriedMovies.sort((a, b) => {
+          var leva = new Levenshtein(a.title, search).distance; // the movie that is closest to user's search input will appear in top-left.
+          var levb = new Levenshtein(b.title, search).distance;
+          return leva - levb;
+        })
+      }
+    />
   );
 
   const moviesJSX = !search ? ROWS : RESULTS;
