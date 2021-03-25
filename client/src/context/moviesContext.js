@@ -24,18 +24,13 @@ const MoviesContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);
 
   useMemo(async () => {
-    let fetchUrls = [];
-    movieRows.forEach(({ fetchUrl }) => {
-      fetchUrls.push(fetchUrl);
-    });
-
-    fetchUrls.map(
-      async (url) =>
-        await getAllMovies(url).then((movieData) =>
+    movieRows.map(
+      async ({ fetchUrl }) =>
+        await getAllMovies(fetchUrl).then((movieData) =>
           dispatch({
             type: 'FETCH',
             payload: movieData,
-            moviesAreLoading: false,
+            medsAreLoading: false,
           })
         )
     );

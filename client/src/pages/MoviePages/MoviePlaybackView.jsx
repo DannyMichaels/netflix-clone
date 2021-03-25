@@ -10,21 +10,26 @@ export default function MoviePlaybackView({ location: { state } }) {
   const { allMovies } = useContext(MoviesStateContext);
 
   useEffect(() => {
-    if (state !== undefined) {
-      return setVideoData({
-        movie: state.movie,
-        trailerUrl: state.trailerUrl,
-      });
-    }
+    const getMovie = async () => {
+      if (state !== undefined) {
+        return setVideoData({
+          movie: state.movie,
+          trailerUrl: state.trailerUrl,
+        });
+      }
 
-    const foundMovie = allMovies.find(
-      (movie) => movie.id === Number(params.id)
-    );
+      const foundMovie = allMovies.find(
+        (movie) => movie.id === Number(params.id)
+      );
 
-    return setVideoData({
-      movie: foundMovie,
-      trailerUrl: params.trailerUrl,
-    });
+      if (foundMovie) {
+        return setVideoData({
+          movie: foundMovie,
+          trailerUrl: params.trailerUrl,
+        });
+      }
+    };
+    getMovie();
   }, [allMovies, params, state]);
 
   const { movie, trailerUrl } = videoData;
@@ -32,10 +37,11 @@ export default function MoviePlaybackView({ location: { state } }) {
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
       <iframe
+        aria-label={`Video player playing ${movie?.name ?? 'a video'}`}
         frameBorder="0"
         allowFullScreen="1"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        title="Youtube Video"
+        title={movie?.name ?? 'Video'}
         width="100vw"
         height="100vh"
         src={`https://www.youtube.com/embed/${trailerUrl}?autoplay=1&amp;enablejsapi=1&amp;widgetid=5&showinfo=0`}
