@@ -1,19 +1,21 @@
 import { useEffect, useRef } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 
 // components
-import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import YouTube from 'react-youtube';
+import { LinearProgress } from '@material-ui/core';
+
 // icons
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
-import { LinearProgress } from '@material-ui/core';
+
+// styles
+import { StyledGrid } from './MovieInfoModal.styles.js';
 
 const styles = (theme) => ({
   root: {
@@ -48,13 +50,6 @@ const DialogTitle = withStyles(styles)((props) => {
   );
 });
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
 export default function MovieInfoModal({ setOpen, open, movie }) {
   const { onSelectMovie, trailerUrl } = useMovieSelect();
   const isMounted = useRef(true);
@@ -84,16 +79,15 @@ export default function MovieInfoModal({ setOpen, open, movie }) {
 
   return (
     <Dialog
+      fullWidth
       onClose={handleClose}
-      aria-labelledby="customized-dialog-title"
+      aria-labelledby={movie?.title}
       open={open}
-      id="video-card"
+      maxWidth="md"
+      scroll="body"
+      id={movie?.id}
     >
-      <DialogTitle
-        style={{ minWidth: '200px' }}
-        id="customized-dialog-title"
-        onClose={handleClose}
-      >
+      <DialogTitle id="customized-dialog-title" onClose={handleClose}>
         {movie?.name}
       </DialogTitle>
       <DialogContent>
@@ -103,13 +97,28 @@ export default function MovieInfoModal({ setOpen, open, movie }) {
           <LinearProgress />
         )}
       </DialogContent>
-      <DialogActions
-        style={{ display: 'flex', justifyContent: 'space-evenly' }}
-      >
-        <Button variant="contained" color="primary" onClick={handleClose}>
-          Exit
-        </Button>
-      </DialogActions>
+      <div>
+        <p>More Like This</p>
+
+        <StyledGrid>
+          {[1, 2, 3].map((item, idx) => (
+            <picture
+              style={{
+                width: '100%',
+              }}
+            >
+              <img
+                style={{
+                  width: '100%',
+                  borderRadius: '4px',
+                }}
+                src="https://occ-0-448-444.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABaDYaC2oYzusK_YisZWvN8pG0LAcwltAto5wBa40UBPVeadZZ8EnvN_PjGXCyeCpcALUM9kyNguNafsj6ttRu_p-wk4.webp?r=559"
+                alt="gg"
+              />
+            </picture>
+          ))}
+        </StyledGrid>
+      </div>
     </Dialog>
   );
 }
