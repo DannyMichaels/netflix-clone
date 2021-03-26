@@ -1,55 +1,22 @@
+// hooks
 import { useEffect, useRef } from 'react';
+import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
-import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import YouTube from 'react-youtube';
 import { LinearProgress } from '@material-ui/core';
 
 // icons
-import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
-// styles
-import { StyledGrid } from './MovieInfoModal.styles.js';
+// utils
+import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-    marginLeft: 10,
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-});
-
-// code for dialog referenced from Material-ui's docs
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
+// styles
+import { StyledGrid, StyledBox } from './MovieInfoModal.styles.js';
 
 export default function MovieInfoModal({
   setOpen,
@@ -76,12 +43,15 @@ export default function MovieInfoModal({
     width: '100%',
     playerVars: {
       autoplay: 1,
+      controls: 0,
     },
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  console.log({ movie });
 
   return (
     <Dialog
@@ -99,36 +69,38 @@ export default function MovieInfoModal({
         },
       }}
     >
-      <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-        {movie?.name}
-      </DialogTitle>
-      <DialogContent>
+      <div style={{ cursor: 'pointer' }}>
+        <StyledBox>
+          <CloseIcon fontSize="large" />
+        </StyledBox>
         {trailerUrl ? (
           <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
         ) : (
           <LinearProgress />
         )}
+      </div>
+      <DialogContent>
+        {recommendedMovies.length && (
+          <StyledGrid aria-label="recommended movies">
+            <h2>More Like This</h2>
+            <ul>
+              {recommendedMovies.map((movie) => (
+                <li className="modal__recommendedMovie">
+                  <picture>
+                    <img
+                      src={`${baseImgUrl}${movie.backdrop_path}`}
+                      alt={movie.name}
+                    />
+                  </picture>
+                  <div className="modal__recommendedMovie--description">
+                    <p className="sypnosis">{truncate(movie.overview, 200)}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </StyledGrid>
+        )}
       </DialogContent>
-      {recommendedMovies.length && (
-        <StyledGrid aria-label="recommended movies">
-          <p>More Like This</p>
-          <ul>
-            {recommendedMovies.map((movie) => (
-              <li className="modal__recommendedMovie">
-                <picture>
-                  <img
-                    src={`${baseImgUrl}${movie.backdrop_path}`}
-                    alt={movie.name}
-                  />
-                </picture>
-                <div className="modal__recommendedMovie--description">
-                  dwdowdwdkw
-                </div>
-              </li>
-            ))}
-          </ul>
-        </StyledGrid>
-      )}
     </Dialog>
   );
 }

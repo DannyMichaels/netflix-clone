@@ -4,7 +4,7 @@ import { COLORS } from '../../../utils/generalUtils';
 export const StyledNav = styled.nav`
   background: ${({ isShowing }) => isShowing && COLORS.BRIGHT_BLACK};
   top: 0;
-  z-index: 9999;
+  z-index: 1000;
   position: fixed;
   width: 100%;
   display: flex;

@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import styled from 'styled-components';
 import { COLORS } from '../../../utils/generalUtils';
 
@@ -7,7 +8,7 @@ export const StyledGrid = styled.div`
   display: block;
   max-width: 100%;
 
-  p {
+  h2 {
     user-select: none;
     font-weight: 700;
     font-size: 24px;
@@ -39,7 +40,28 @@ export const StyledGrid = styled.div`
       }
       .modal__recommendedMovie--description {
         background-color: ${COLORS.DARK_GREY};
+        border-radius: 0 0 4px 4px;
+        min-height: 50%;
+
+        .sypnosis {
+          padding: 1em 1em 1em;
+          font-size: clamp(0.6rem, 4vw, 1rem);
+          margin: 0;
+          color: ${COLORS.BRIGHT_GREY};
+        }
       }
     }
   }
+`;
+
+export const StyledBox = styled(Box)`
+  position: absolute;
+  right: 4%;
+  top: 4%;
+  color: ${COLORS.WHITE};
+  background-color: ${COLORS.VERY_BRIGHT_BLACK};
+  width: fit-content;
+  height: auto;
+  border-radius: 50%;
+  padding: 0.4% 0.4% 0% 0.4%;
 `;

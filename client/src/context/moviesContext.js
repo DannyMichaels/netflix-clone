@@ -30,7 +30,7 @@ const MoviesContextProvider = ({ children }) => {
           dispatch({
             type: 'FETCH',
             payload: movieData,
-            medsAreLoading: false,
+            moviesAreLoading: false,
           })
         )
     );
