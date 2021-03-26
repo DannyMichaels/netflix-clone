@@ -106,7 +106,7 @@ export default function Nav({ handleSearch, searchedValue, setSearch }) {
           </Box>
 
           <img
-            onMouseOver={toggleDropDown}
+            onMouseEnter={toggleDropDown}
             onMouseLeave={toggleDropDown}
             className="nav__avatar"
             src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
@@ -116,7 +116,7 @@ export default function Nav({ handleSearch, searchedValue, setSearch }) {
           <Box mx={1}>
             <ArrowDropUpIcon
               className={`nav__icon arrow ${dropDown && 'active'}`}
-              onMouseOver={toggleDropDown}
+              onMouseEnter={toggleDropDown}
               onMouseLeave={toggleDropDown}
             />
           </Box>

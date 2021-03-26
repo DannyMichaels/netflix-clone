@@ -31,12 +31,12 @@ export default function SearchResultsView({
 
   const handleClick = useCallback(
     (movie) => {
-      const type = getType(movie);
+      const mediaType = getType(movie);
 
       setSelectedMovie(movie);
 
       const getTrailer = async () => {
-        const fetchedUrl = await getYoutubeVideo(type, movie.id);
+        const fetchedUrl = await getYoutubeVideo(mediaType, movie.id);
         setTrailerUrl(fetchedUrl);
       };
       getTrailer();

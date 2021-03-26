@@ -1,11 +1,22 @@
 import { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { MoviesStateContext } from '../../context/moviesContext';
 
-export default function MoviePlaybackView({ location: { state } }) {
-  const params = useParams();
+// icons
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+// utils
+import { useHistory, useParams } from 'react-router-dom';
+import { ROUTES } from '../../utils/navigation';
+
+// styles
+import { StyledVideo } from './moviePlaybackView.styles';
+
+export default function MoviePlaybackView({ location: { state } }) {
   const [videoData, setVideoData] = useState({});
+  const [isArrowHovered, setIsArrowHovered] = useState(false);
+
+  const params = useParams();
+  const { push } = useHistory();
 
   const { allMovies } = useContext(MoviesStateContext);
 
@@ -34,23 +45,32 @@ export default function MoviePlaybackView({ location: { state } }) {
 
   const { movie, trailerUrl } = videoData;
 
+  const toggleArrowHovered = () => {
+    setIsArrowHovered(!isArrowHovered);
+  };
+
   return (
-    <div style={{ height: '100vh', width: '100vw' }}>
+    <StyledVideo isArrowHovered={isArrowHovered}>
+      <div className={`video__arrowContainer ${isArrowHovered && 'active'}`}>
+        <ArrowBackIcon
+          className="video__arrowIcon"
+          onMouseEnter={toggleArrowHovered}
+          onMouseLeave={toggleArrowHovered}
+          onClick={() => push(ROUTES.HOME)}
+        />
+        &nbsp;
+        <p className="video__backText">Back to Browse</p>
+      </div>
       <iframe
         aria-label={`Video player playing ${movie?.name ?? 'a video'}`}
         frameBorder="0"
-        allowFullScreen="1"
+        className="iframe"
+        allowFullScreen={false}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         title={movie?.name ?? 'Video'}
-        width="100vw"
-        height="100vh"
         src={`https://www.youtube.com/embed/${trailerUrl}?autoplay=1&amp;enablejsapi=1&amp;widgetid=5&showinfo=0`}
         id={movie?.id}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
       />
-    </div>
+    </StyledVideo>
   );
 }
