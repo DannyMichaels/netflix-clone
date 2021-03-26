@@ -57,17 +57,18 @@ const DialogActions = withStyles((theme) => ({
 
 export default function MovieInfoModal({ setOpen, open, movie }) {
   const { onSelectMovie, trailerUrl } = useMovieSelect();
+  const isMounted = useRef(true);
 
   useEffect(() => {
-    if (open) {
-      console.log('test');
-      return onSelectMovie(movie);
-    }
+    if (!isMounted.current) return;
 
-    // return () => {
-    //   isMounted.current = false;
-    // };
-  }, [movie]);
+    if (open) {
+      onSelectMovie(movie);
+      return () => {
+        isMounted.current = false;
+      };
+    }
+  }, [movie, onSelectMovie, open]);
 
   const VIDEO_PLAYER_OPTIONS = {
     height: '390',

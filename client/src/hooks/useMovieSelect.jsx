@@ -20,7 +20,6 @@ export const useMovieSelect = () => {
   const { push } = useHistory();
 
   const onSelectMovie = useCallback((movie) => {
-    console.log('selecting');
     const mediaType = getType(movie);
 
     setSelectedMovie(movie);
