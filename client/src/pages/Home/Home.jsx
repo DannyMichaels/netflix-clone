@@ -9,12 +9,9 @@ import Layout from '../../components/shared/Layout/Layout';
 // utils, helpers and Services
 import { movieRows } from './home.utils';
 import { TMDB_API } from '../../services/apiConfig';
-import { Redirect } from 'react-router';
 
-function Home() {
+export default function Home() {
   const [search, setSearch] = useState('');
-  const [trailerUrl, setTrailerUrl] = useState('');
-  const [selectedMovie, setSelectedMovie] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
 
   const handleSearch = async ({ target: { value: userInput } }) => {
@@ -36,40 +33,15 @@ function Home() {
         fetchUrl={fetchUrl}
         isLargeRow={title.match(/^netflix originals$/i)}
         isSearching={search}
-        handleVideoProps={{
-          setTrailerUrl,
-          setSelectedMovie,
-        }}
       />
     ))
   );
 
   const RESULTS = (
-    <SearchResultsView
-      handleVideoProps={{
-        setTrailerUrl,
-        setSelectedMovie,
-      }}
-      queriedMovies={queriedMovies}
-      search={search}
-    />
+    <SearchResultsView queriedMovies={queriedMovies} search={search} />
   );
 
   const moviesJSX = !search ? ROWS : RESULTS;
-
-  if (trailerUrl && selectedMovie) {
-    return (
-      <Redirect
-        to={{
-          pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
-          state: {
-            movie: selectedMovie,
-            trailerUrl: trailerUrl,
-          },
-        }}
-      />
-    );
-  }
 
   return (
     <Layout
@@ -82,5 +54,3 @@ function Home() {
     </Layout>
   );
 }
-
-export default Home;

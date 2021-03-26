@@ -1,7 +1,10 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+
+// hooks
+import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // services and utils
-import { getAllMovies, getYoutubeVideo } from '../../../services/movies';
+import { getAllMovies } from '../../../services/movies';
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
@@ -11,44 +14,19 @@ import { StyledRow } from './row.styles';
 
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
-export default function Row({ title, fetchUrl, isLargeRow, handleVideoProps }) {
+export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
 
-  const { setTrailerUrl, setSelectedMovie } = handleVideoProps;
+  const { handleSelectMovie } = useMovieSelect();
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
     setMovies(movieData);
   }, [fetchUrl]);
 
-  const getType = (movie) => {
-    if (movie?.media_type) {
-      return movie.media_type;
-    } else if (movie?.first_air_date) {
-      return 'tv';
-    } else {
-      return 'movie';
-    }
-  };
-
-  const handleClick = useCallback(
-    (movie) => {
-      const mediaType = getType(movie);
-
-      setSelectedMovie(movie);
-
-      const getTrailer = async () => {
-        const fetchedUrl = await getYoutubeVideo(mediaType, movie.id);
-        setTrailerUrl(fetchedUrl);
-      };
-      getTrailer();
-    },
-    [setSelectedMovie, setTrailerUrl]
-  );
-
   const CARDS = movies?.map((movie) => (
     <MovieCard
-      onClick={() => handleClick(movie)}
+      onClick={() => handleSelectMovie(movie)}
       src={`${baseUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
       alt={movie.name}
       key={movie.id}

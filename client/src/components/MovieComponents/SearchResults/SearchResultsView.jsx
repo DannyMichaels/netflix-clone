@@ -1,7 +1,4 @@
-import { useCallback } from 'react';
-
 // services and utils
-import { getYoutubeVideo } from '../../../services/movies';
 import Levenshtein from 'levenshtein';
 
 // components
@@ -10,39 +7,13 @@ import MovieCard from '../MovieCard/MovieCard';
 //styles
 import { InnerColumn } from './searchResults.styles';
 
+// hooks
+import { useMovieSelect } from '../../../hooks/useMovieSelect';
+
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
-export default function SearchResultsView({
-  handleVideoProps,
-  queriedMovies,
-  search,
-}) {
-  const { setTrailerUrl, setSelectedMovie } = handleVideoProps;
-
-  const getType = (movie) => {
-    if (movie?.media_type) {
-      return movie.media_type;
-    } else if (movie?.first_air_date) {
-      return 'tv';
-    } else {
-      return 'movie';
-    }
-  };
-
-  const handleClick = useCallback(
-    (movie) => {
-      const mediaType = getType(movie);
-
-      setSelectedMovie(movie);
-
-      const getTrailer = async () => {
-        const fetchedUrl = await getYoutubeVideo(mediaType, movie.id);
-        setTrailerUrl(fetchedUrl);
-      };
-      getTrailer();
-    },
-    [setSelectedMovie, setTrailerUrl]
-  );
+export default function SearchResultsView({ queriedMovies, search }) {
+  const { handleSelectMovie } = useMovieSelect();
 
   const getQueriedMovies = () => {
     return queriedMovies
@@ -61,7 +32,7 @@ export default function SearchResultsView({
         {getQueriedMovies().map((movie) => (
           <picture>
             <MovieCard
-              onClick={() => handleClick(movie)}
+              onClick={() => handleSelectMovie(movie)}
               src={`${baseUrl}${movie.backdrop_path}`}
               alt={movie.name}
               key={movie.id}
