@@ -1,4 +1,6 @@
+// hooks
 import { useState, useMemo } from 'react';
+import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // services and utils
 import { getOneRandomMovie } from '../../../services/movies';
@@ -13,6 +15,7 @@ import { StyledBanner } from './banner.styles';
 
 export default function Banner() {
   const [movie, setMovie] = useState(null);
+  const { handleSelectMovie } = useMovieSelect();
 
   useMemo(async () => {
     const oneMovie = await getOneRandomMovie();
@@ -35,7 +38,10 @@ export default function Banner() {
             </h1>
           </div>
           <div className="banner__buttons">
-            <button className="banner__button">
+            <button
+              className="banner__button"
+              onClick={() => handleSelectMovie(movie)}
+            >
               <PlayIcon fontSize="small" />
               &nbsp;
               <span>Play</span>
