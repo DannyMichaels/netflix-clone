@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import { getYoutubeVideo } from '../services/movies';
 
@@ -15,6 +15,8 @@ const getType = (movie) => {
 export const useMovieSelect = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [trailerUrl, setTrailerUrl] = useState('');
+  const canRedirect = useRef(false);
+
   const { push } = useHistory();
 
   const handleSelectMovie = useCallback((movie) => {
@@ -29,8 +31,13 @@ export const useMovieSelect = () => {
     getTrailer();
   }, []);
 
+  const onPlayMovie = (movie) => {
+    handleSelectMovie(movie);
+    canRedirect.current = true;
+  };
+
   useEffect(() => {
-    if (trailerUrl && selectedMovie) {
+    if (trailerUrl && selectedMovie && canRedirect.current) {
       // push to MoviePlayBackView.jsx if handleSelectMovie ran.
       push({
         pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
@@ -48,5 +55,7 @@ export const useMovieSelect = () => {
     trailerUrl,
     setTrailerUrl,
     handleSelectMovie,
+    onPlayMovie,
+    canRedirect,
   };
 };

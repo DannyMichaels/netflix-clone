@@ -13,7 +13,7 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 const baseUrl = 'https://image.tmdb.org/t/p/original';
 
 export default function SearchResultsView({ queriedMovies, search }) {
-  const { handleSelectMovie } = useMovieSelect();
+  const { onPlayMovie } = useMovieSelect();
 
   const getQueriedMovies = () => {
     return queriedMovies
@@ -32,7 +32,7 @@ export default function SearchResultsView({ queriedMovies, search }) {
         {getQueriedMovies().map((movie) => (
           <picture>
             <MovieCard
-              onClick={() => handleSelectMovie(movie)}
+              onClick={() => onPlayMovie(movie)}
               src={`${baseUrl}${movie.backdrop_path}`}
               alt={movie.name}
               key={movie.id}

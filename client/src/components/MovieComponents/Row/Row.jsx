@@ -17,7 +17,7 @@ const baseUrl = 'https://image.tmdb.org/t/p/original';
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
 
-  const { handleSelectMovie } = useMovieSelect();
+  const { onPlayMovie } = useMovieSelect();
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
@@ -26,7 +26,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
 
   const CARDS = movies?.map((movie) => (
     <MovieCard
-      onClick={() => handleSelectMovie(movie)}
+      onClick={() => onPlayMovie(movie)}
       src={`${baseUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
       alt={movie.name}
       key={movie.id}
