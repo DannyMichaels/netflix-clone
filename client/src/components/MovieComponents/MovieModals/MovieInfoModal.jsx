@@ -1,13 +1,19 @@
+import { useEffect, useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+
+// components
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogActions from '@material-ui/core/DialogActions';
+import YouTube from 'react-youtube';
+// icons
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import YouTube from 'react-youtube';
+import { useMovieSelect } from '../../../hooks/useMovieSelect';
+import { LinearProgress } from '@material-ui/core';
 
 const styles = (theme) => ({
   root: {
@@ -49,12 +55,37 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function VideoModal({ handleClose, trailerUrl, opts, title }) {
+export default function MovieInfoModal({ setOpen, open, movie }) {
+  const { onSelectMovie, trailerUrl } = useMovieSelect();
+
+  useEffect(() => {
+    if (open) {
+      console.log('test');
+      return onSelectMovie(movie);
+    }
+
+    // return () => {
+    //   isMounted.current = false;
+    // };
+  }, [movie]);
+
+  const VIDEO_PLAYER_OPTIONS = {
+    height: '390',
+    width: '100%',
+    playerVars: {
+      autoplay: 1,
+    },
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Dialog
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"
-      open={trailerUrl}
+      open={open}
       id="video-card"
     >
       <DialogTitle
@@ -62,10 +93,14 @@ export default function VideoModal({ handleClose, trailerUrl, opts, title }) {
         id="customized-dialog-title"
         onClose={handleClose}
       >
-        {title}
+        {movie?.name}
       </DialogTitle>
       <DialogContent>
-        <YouTube videoId={trailerUrl} opts={opts} />
+        {trailerUrl ? (
+          <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
+        ) : (
+          <LinearProgress />
+        )}
       </DialogContent>
       <DialogActions
         style={{ display: 'flex', justifyContent: 'space-evenly' }}

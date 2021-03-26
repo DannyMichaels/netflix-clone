@@ -13,13 +13,15 @@ import InfoIcon from '@material-ui/icons/InfoOutlined';
 //styles
 import { StyledBanner } from './banner.styles';
 import { MoviesStateContext } from '../../../context/moviesContext';
+import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
 export default function Banner() {
   const [movie, setMovie] = useState(null);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
 
-  const { handleSelectMovie } = useMovieSelect();
+  const { onPlayMovie } = useMovieSelect();
+
   const { allMovies } = useContext(MoviesStateContext);
 
   useMemo(async () => {
@@ -60,7 +62,7 @@ export default function Banner() {
           <div className="banner__buttons">
             <button
               className="banner__button"
-              onClick={() => handleSelectMovie(movie)}
+              onClick={() => onPlayMovie(movie)}
             >
               <PlayIcon fontSize="small" />
               &nbsp;
@@ -75,6 +77,13 @@ export default function Banner() {
         </div>
         <div className="banner--fadeBottom" />
       </StyledBanner>
+
+      <MovieInfoModal
+        open={isInfoOpen}
+        setOpen={setIsInfoOpen}
+        recommendedMovies={recommendedMovies}
+        movie={movie}
+      />
     </>
   );
 }
