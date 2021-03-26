@@ -51,8 +51,6 @@ export default function MovieInfoModal({
     setOpen(false);
   };
 
-  console.log({ movie });
-
   return (
     <Dialog
       fullWidth
@@ -69,16 +67,14 @@ export default function MovieInfoModal({
         },
       }}
     >
-      <div style={{ cursor: 'pointer' }}>
-        <StyledBox>
-          <CloseIcon fontSize="large" />
-        </StyledBox>
-        {trailerUrl ? (
-          <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
-        ) : (
-          <LinearProgress />
-        )}
-      </div>
+      <StyledBox onClick={handleClose}>
+        <CloseIcon fontSize="large" />
+      </StyledBox>
+      {trailerUrl ? (
+        <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
+      ) : (
+        <LinearProgress />
+      )}
       <DialogContent>
         {recommendedMovies.length && (
           <StyledGrid aria-label="recommended movies">

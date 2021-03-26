@@ -55,9 +55,10 @@ export const StyledGrid = styled.div`
 `;
 
 export const StyledBox = styled(Box)`
+  cursor: pointer;
   position: absolute;
-  right: 4%;
-  top: 4%;
+  right: 2.5%;
+  top: 8%;
   color: ${COLORS.WHITE};
   background-color: ${COLORS.VERY_BRIGHT_BLACK};
   width: fit-content;
