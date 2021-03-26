@@ -1,5 +1,6 @@
 // services and utils
 import Levenshtein from 'levenshtein';
+import { baseImgUrl } from '../../../utils/generalUtils';
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
@@ -9,8 +10,6 @@ import { InnerColumn } from './searchResults.styles';
 
 // hooks
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
-
-const baseUrl = 'https://image.tmdb.org/t/p/original';
 
 export default function SearchResultsView({ queriedMovies, search }) {
   const { onPlayMovie } = useMovieSelect();
@@ -33,7 +32,7 @@ export default function SearchResultsView({ queriedMovies, search }) {
           <picture>
             <MovieCard
               onClick={() => onPlayMovie(movie)}
-              src={`${baseUrl}${movie.backdrop_path}`}
+              src={`${baseImgUrl}${movie.backdrop_path}`}
               alt={movie.name}
               key={movie.id}
               className="home__searched-movie"

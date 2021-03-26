@@ -5,14 +5,13 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
+import { baseImgUrl } from '../../../utils/generalUtils';
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
 
 // styles
 import { StyledRow } from './row.styles';
-
-const baseUrl = 'https://image.tmdb.org/t/p/original';
 
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
@@ -27,7 +26,9 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   const CARDS = movies?.map((movie) => (
     <MovieCard
       onClick={() => onPlayMovie(movie)}
-      src={`${baseUrl}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
+      src={`${baseImgUrl}${
+        isLargeRow ? movie.poster_path : movie.backdrop_path
+      }`}
       alt={movie.name}
       key={movie.id}
       className={`row__poster ${isLargeRow && 'row__posterLarge'}`}

@@ -16,6 +16,7 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // styles
 import { StyledGrid } from './MovieInfoModal.styles.js';
+import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 
 const styles = (theme) => ({
   root: {
@@ -50,7 +51,12 @@ const DialogTitle = withStyles(styles)((props) => {
   );
 });
 
-export default function MovieInfoModal({ setOpen, open, movie }) {
+export default function MovieInfoModal({
+  setOpen,
+  open,
+  movie,
+  recommendedMovies,
+}) {
   const { onSelectMovie, trailerUrl } = useMovieSelect();
   const isMounted = useRef(true);
 
@@ -86,6 +92,12 @@ export default function MovieInfoModal({ setOpen, open, movie }) {
       maxWidth="md"
       scroll="body"
       id={movie?.id}
+      PaperProps={{
+        style: {
+          backgroundColor: COLORS.VERY_BRIGHT_BLACK,
+          boxShadow: 'none',
+        },
+      }}
     >
       <DialogTitle id="customized-dialog-title" onClose={handleClose}>
         {movie?.name}
@@ -97,28 +109,26 @@ export default function MovieInfoModal({ setOpen, open, movie }) {
           <LinearProgress />
         )}
       </DialogContent>
-      <div>
-        <p>More Like This</p>
-
-        <StyledGrid>
-          {[1, 2, 3].map((item, idx) => (
-            <picture
-              style={{
-                width: '100%',
-              }}
-            >
-              <img
-                style={{
-                  width: '100%',
-                  borderRadius: '4px',
-                }}
-                src="https://occ-0-448-444.1.nflxso.net/dnm/api/v6/X194eJsgWBDE2aQbaNdmCXGUP-Y/AAAABaDYaC2oYzusK_YisZWvN8pG0LAcwltAto5wBa40UBPVeadZZ8EnvN_PjGXCyeCpcALUM9kyNguNafsj6ttRu_p-wk4.webp?r=559"
-                alt="gg"
-              />
-            </picture>
-          ))}
+      {recommendedMovies.length && (
+        <StyledGrid aria-label="recommended movies">
+          <p>More Like This</p>
+          <ul>
+            {recommendedMovies.map((movie) => (
+              <li className="modal__recommendedMovie">
+                <picture>
+                  <img
+                    src={`${baseImgUrl}${movie.backdrop_path}`}
+                    alt={movie.name}
+                  />
+                </picture>
+                <div className="modal__recommendedMovie--description">
+                  dwdowdwdkw
+                </div>
+              </li>
+            ))}
+          </ul>
         </StyledGrid>
-      </div>
+      )}
     </Dialog>
   );
 }
