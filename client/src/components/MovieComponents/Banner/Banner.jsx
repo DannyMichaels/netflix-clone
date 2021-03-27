@@ -3,7 +3,11 @@ import { useState, useMemo, useContext } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // services and utils
-import { getOneRandomMovie } from '../../../services/movies';
+import {
+  getMoviesByGenreId,
+  getOneRandomMovie,
+  getRecommendedMovies,
+} from '../../../services/movies';
 import { truncate } from '../../../utils/truncate';
 
 // icons
@@ -30,17 +34,10 @@ export default function Banner() {
   }, []);
 
   useMemo(async () => {
-    const match = 0 || 1 || 2 || 3 || 4 || 5 || 6 || 7 || 9 || 10;
-
-    // TODO: there has to be a better way to do this.
-    //  doesn't IMDB api have something to find by genre id?
-    if (movie?.genre_ids) {
-      const moviesAlike = allMovies?.filter(
-        (m) => m.genre_ids[match] === Number(movie.genre_ids[match])
-      );
-      setRecommendedMovies(moviesAlike);
-    }
-  }, [allMovies, movie]);
+    if (!movie) return;
+    const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
+    setRecommendedMovies(recommendedData);
+  }, [movie]);
 
   const toggleInfoOpen = () => {
     setIsInfoOpen(!isInfoOpen);
