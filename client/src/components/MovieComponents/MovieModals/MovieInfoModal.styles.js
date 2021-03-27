@@ -156,3 +156,13 @@ export const StyledDialogContent = styled(DialogContent)`
     }
   }
 `;
+
+export const StyledVideo = styled.div`
+  .modal__loading--container {
+    height: 400px;
+    width: 100%;
+    background: ${COLORS.BLACK};
+    display: flex;
+    justify-content: center;
+  }
+`;

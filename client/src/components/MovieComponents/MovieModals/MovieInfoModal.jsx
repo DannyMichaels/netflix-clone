@@ -21,10 +21,12 @@ import {
   StyledGrid,
   StyledBox,
   StyledDialogContent,
+  StyledVideo,
 } from './MovieInfoModal.styles.js';
 
 // Context
 import { MoviesStateContext } from '../../../context/moviesContext';
+import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 
 export default function MovieInfoModal({
   setOpen,
@@ -32,13 +34,7 @@ export default function MovieInfoModal({
   movie,
   recommendedMovies,
 }) {
-  const {
-    onSelectMovie,
-    onPlayMovie,
-    trailerUrl,
-    canRedirect,
-    setTrailerUrl,
-  } = useMovieSelect();
+  const { onSelectMovie, trailerUrl } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
@@ -107,30 +103,19 @@ export default function MovieInfoModal({
       <StyledBox onClick={handleClose}>
         <CloseIcon fontSize="large" />
       </StyledBox>
-      {trailerUrl ? (
-        <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
-      ) : (
-        <div
-          style={{
-            height: '400px',
-            width: '100%',
-            background: COLORS.BLACK,
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <CircularProgress
-            style={{
-              marginTop: '6em',
-              left: '50%',
-              top: '20%',
-              color: 'red',
-            }}
-            thickness={1}
-            size={150}
-          />
-        </div>
-      )}
+
+      <StyledVideo>
+        {!trailerUrl ? (
+          <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
+        ) : (
+          <div className="modal__loading--container">
+            <CircularProgressLoading thickness={1} marginTop="6em" size={150} />
+          </div>
+        )}
+      </StyledVideo>
+
+      <br />
+
       <StyledDialogContent>
         <div className="modal__container">
           <div className="modal__details--metaData">
