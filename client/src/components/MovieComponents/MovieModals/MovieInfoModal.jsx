@@ -11,9 +11,11 @@ import { Link } from 'react-router-dom';
 // icons
 import CloseIcon from '@material-ui/icons/Close';
 
-// utils
+// services and utils
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
+import { getCastByMovieId } from '../../../services/movies';
+
 // styles
 import {
   StyledGrid,
@@ -33,6 +35,7 @@ export default function MovieInfoModal({
   const { onSelectMovie, trailerUrl } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const [genres, setGenres] = useState([]);
+  const [cast, setCast] = useState([]);
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -46,7 +49,7 @@ export default function MovieInfoModal({
   }, [movie, onSelectMovie, open]);
 
   useEffect(() => {
-    const getGenres = async (movie) => {
+    const getData = async (movie) => {
       if (!movie) return;
       if (!allGenres) return;
 
@@ -58,8 +61,11 @@ export default function MovieInfoModal({
           setGenres((prevState) => [...prevState, foundGenre]);
         }
       }
+
+      const castData = await getCastByMovieId(movie.id);
+      setCast(castData);
     };
-    getGenres(movie);
+    getData(movie);
   }, [allGenres, movie]);
 
   const VIDEO_PLAYER_OPTIONS = {
@@ -74,14 +80,6 @@ export default function MovieInfoModal({
   const handleClose = () => {
     setOpen(false);
   };
-
-  const genresJSX = [...new Set(genres)]?.map((genre, idx) => (
-    <Link to={`/browse/${genre.id}`}>
-      {genre.name}
-      {/* don't show "," if it's the last genre in the list */}
-      {idx !== genres.length - 1 && ','}&nbsp;
-    </Link>
-  ));
 
   return (
     <Dialog
@@ -108,21 +106,50 @@ export default function MovieInfoModal({
         <LinearProgress />
       )}
       <StyledDialogContent>
-        <div className="modal__movieGenres">{genresJSX}</div>
+        <div className="modal__details--metaData">
+          <div className="metaData__left">{console.log({ movie })}</div>
+          <div className="metaData__right">
+            <div className="metaData__right--tags cast">
+              <span>Cast:&nbsp;</span>
+              {cast.map((person, idx) => (
+                <Link key={person.id} to={`/browse/person/${person.id}`}>
+                  {person.name}
+                  {idx !== cast.length - 1 && ','}&nbsp;
+                </Link>
+              ))}
+            </div>
+
+            <div className="metaData__right--tags genres">
+              <span>Genres:&nbsp;</span>
+              {[...new Set(genres)].map(
+                (genre, idx) =>
+                  genre && (
+                    <Link to={`/browse/genre/${genre.id}`} key={genre.id}>
+                      {genre.name}
+                      {/* don't show "," if it's the last genre in the list */}
+                      {idx !== genres.length - 1 && ','}&nbsp;
+                    </Link>
+                  )
+              )}
+            </div>
+          </div>
+        </div>
         {recommendedMovies?.length ? (
           <StyledGrid aria-label="recommended movies">
             <h2>More Like This</h2>
             <ul>
-              {recommendedMovies?.map((movie) => (
-                <li className="modal__recommendedMovie" key={movie.id}>
+              {recommendedMovies?.map((recMovie) => (
+                <li className="modal__recommendedMovie" key={recMovie.id}>
                   <picture>
                     <img
-                      src={`${baseImgUrl}${movie.backdrop_path}`}
-                      alt={movie.name}
+                      src={`${baseImgUrl}${recMovie.backdrop_path}`}
+                      alt={recMovie.name}
                     />
                   </picture>
                   <div className="modal__recommendedMovie--description">
-                    <p className="sypnosis">{truncate(movie.overview, 200)}</p>
+                    <p className="sypnosis">
+                      {truncate(recMovie.overview, 200)}
+                    </p>
                   </div>
                 </li>
               ))}

@@ -42,6 +42,9 @@ export const StyledGrid = styled.div`
         background-color: ${COLORS.DARK_GREY};
         border-radius: 0 0 4px 4px;
         min-height: 50%;
+        max-height: 50%;
+        line-height: 20px;
+        padding: 0 0 0.5rem 0;
 
         .sypnosis {
           padding: 1em 1em 1em;
@@ -68,11 +71,46 @@ export const StyledBox = styled(Box)`
 `;
 
 export const StyledDialogContent = styled(DialogContent)`
-  a {
-    color: #fff;
-    text-decoration: none;
-    font-size: clamp(0.6rem, 4vw, 0.6rem);
-    line-height: 20px;
-    word-break: break-word;
+  .modal__details--metaData {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    column-gap: 2em;
+    -webkit-column-gap: 2em;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      /* font-size: clamp(0.6rem, 4vw, 0.8rem); */
+      line-height: 20px;
+      word-break: break-word;
+    }
+
+    .metaData__left {
+      -webkit-box-sizing: inherit;
+      -moz-box-sizing: inherit;
+      box-sizing: inherit;
+    }
+
+    .metaData__right {
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -moz-box-orient: vertical;
+      -moz-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+
+      .metaData__right--tags {
+        span {
+          color: #777;
+        }
+        font-size: 14px;
+        line-height: 20px;
+        margin: 0.5em;
+        margin-left: 0;
+        word-break: break-word;
+      }
+    }
   }
 `;

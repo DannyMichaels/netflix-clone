@@ -54,3 +54,14 @@ export const getAllGenres = async () => {
     throw error;
   }
 };
+
+export const getCastByMovieId = async (movieId) => {
+  try {
+    const resp = await api.get(
+      `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+    );
+    return resp.data.cast;
+  } catch (error) {
+    throw error;
+  }
+};

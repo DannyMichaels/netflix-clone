@@ -32,7 +32,6 @@ const MoviesContextProvider = ({ children }) => {
 
     await getAllGenres()
       .then(({ genres }) => {
-        console.log({ genres });
         dispatch({
           type: TYPES.FETCH_GENRES,
           payload: genres,
