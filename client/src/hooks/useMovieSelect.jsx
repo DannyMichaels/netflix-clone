@@ -19,12 +19,8 @@ export const useMovieSelect = () => {
 
   const { push } = useHistory();
 
-  const setRedirect = async () => {
-    canRedirect.current = true;
-  };
-
-  const onSelectMovie = useCallback((movie) => {
-    const mediaType = getType(movie);
+  const onSelectMovie = useCallback(async (movie) => {
+    const mediaType = await getType(movie);
 
     setSelectedMovie(movie);
 
@@ -37,7 +33,7 @@ export const useMovieSelect = () => {
 
   const onPlayMovie = async (movie) => {
     onSelectMovie(movie);
-    await setRedirect();
+    canRedirect.current = true;
   };
 
   useEffect(() => {

@@ -1,5 +1,12 @@
 // core-components/hooks
-import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+import {
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
@@ -33,17 +40,20 @@ export default function MovieInfoModal({
   movie,
   recommendedMovies,
 }) {
-  const { onSelectMovie, trailerUrl } = useMovieSelect();
+  const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
   const isMounted = useRef(true);
 
-  useEffect(() => {
+  useMemo(async () => {
     if (!isMounted.current) return;
+
     if (open) {
       onSelectMovie(movie);
+      isMounted.current = false;
       return () => {
+        onSelectMovie(movie);
         isMounted.current = false;
       };
     }
@@ -81,7 +91,6 @@ export default function MovieInfoModal({
   const handleClose = () => {
     setOpen(false);
   };
-  const onPlayRecommendedMovie = async (recommendedMovie) => {};
 
   return (
     <Dialog
@@ -184,9 +193,7 @@ export default function MovieInfoModal({
                         <img
                           src={`${baseImgUrl}${recommendedMovie.backdrop_path}`}
                           alt={recommendedMovie.name}
-                          onClick={() =>
-                            onPlayRecommendedMovie(recommendedMovie)
-                          }
+                          onClick={() => onPlayMovie(recommendedMovie)}
                         />
                       </picture>
                       <div className="modal__recommendedMovie--description">
