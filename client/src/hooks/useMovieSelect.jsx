@@ -19,6 +19,10 @@ export const useMovieSelect = () => {
 
   const { push } = useHistory();
 
+  const setRedirect = async () => {
+    canRedirect.current = true;
+  };
+
   const onSelectMovie = useCallback((movie) => {
     const mediaType = getType(movie);
 
@@ -31,9 +35,9 @@ export const useMovieSelect = () => {
     getTrailer();
   }, []);
 
-  const onPlayMovie = (movie) => {
+  const onPlayMovie = async (movie) => {
     onSelectMovie(movie);
-    canRedirect.current = true;
+    await setRedirect();
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
-import Footer from '../Footer/Footer';
-import Nav from '../Navbar/Nav';
+import Footer from './Footer/Footer';
+import Nav from './Navbar/Nav';
 
 const Layout = ({ children, handleSearch, searchedValue, setSearch }) => (
   <div className="layout">

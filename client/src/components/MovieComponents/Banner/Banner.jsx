@@ -1,12 +1,14 @@
 // hooks
-import { useState, useMemo, useContext } from 'react';
+import { useState, useMemo } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
+
+// components
+import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
 // services and utils
 import {
   getMoviesByGenreId,
   getOneRandomMovie,
-  getRecommendedMovies,
 } from '../../../services/movies';
 import { truncate } from '../../../utils/truncate';
 
@@ -16,8 +18,6 @@ import InfoIcon from '@material-ui/icons/InfoOutlined';
 
 //styles
 import { StyledBanner } from './banner.styles';
-import { MoviesStateContext } from '../../../context/moviesContext';
-import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
 export default function Banner() {
   const [movie, setMovie] = useState(null);
@@ -25,8 +25,6 @@ export default function Banner() {
   const [recommendedMovies, setRecommendedMovies] = useState([]);
 
   const { onPlayMovie } = useMovieSelect();
-
-  const { allMovies } = useContext(MoviesStateContext);
 
   useMemo(async () => {
     const oneMovie = await getOneRandomMovie();

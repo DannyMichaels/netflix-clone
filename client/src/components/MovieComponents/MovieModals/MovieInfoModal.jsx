@@ -1,11 +1,11 @@
-// hooks
-import { useContext, useEffect, useRef, useState } from 'react';
+// core-components/hooks
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
-import { LinearProgress } from '@material-ui/core';
+import { CircularProgress, LinearProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 // icons
@@ -32,7 +32,13 @@ export default function MovieInfoModal({
   movie,
   recommendedMovies,
 }) {
-  const { onSelectMovie, trailerUrl } = useMovieSelect();
+  const {
+    onSelectMovie,
+    onPlayMovie,
+    trailerUrl,
+    canRedirect,
+    setTrailerUrl,
+  } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
@@ -69,7 +75,7 @@ export default function MovieInfoModal({
   }, [allGenres, movie]);
 
   const VIDEO_PLAYER_OPTIONS = {
-    height: '390',
+    height: '400',
     width: '100%',
     playerVars: {
       autoplay: 1,
@@ -80,6 +86,7 @@ export default function MovieInfoModal({
   const handleClose = () => {
     setOpen(false);
   };
+  const onPlayRecommendedMovie = async (recommendedMovie) => {};
 
   return (
     <Dialog
@@ -103,7 +110,26 @@ export default function MovieInfoModal({
       {trailerUrl ? (
         <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
       ) : (
-        <LinearProgress />
+        <div
+          style={{
+            height: '400px',
+            width: '100%',
+            background: COLORS.BLACK,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress
+            style={{
+              marginTop: '6em',
+              left: '50%',
+              top: '20%',
+              color: 'red',
+            }}
+            thickness={1}
+            size={150}
+          />
+        </div>
       )}
       <StyledDialogContent>
         <div className="modal__container">
@@ -129,10 +155,13 @@ export default function MovieInfoModal({
               <div className="metaData__right--tags cast">
                 <span>Cast:&nbsp;</span>
                 {cast.map((person, idx) => (
-                  <Link key={person.id} to={`/browse/person/${person.id}`}>
-                    {person.name}
-                    {idx !== cast.length - 1 && ','}&nbsp;
-                  </Link>
+                  <Fragment key={person.id}>
+                    <Link key={person.id} to={`/browse/person/${person.id}`}>
+                      {person.name}
+                      {idx !== cast.length - 1 && ','}
+                    </Link>
+                    &nbsp;
+                  </Fragment>
                 ))}
               </div>
 
@@ -141,11 +170,14 @@ export default function MovieInfoModal({
                 {[...new Set(genres)].map(
                   (genre, idx) =>
                     genre && (
-                      <Link to={`/browse/genre/${genre.id}`} key={genre.id}>
-                        {genre.name}
-                        {/* don't show "," if it's the last genre in the list */}
-                        {idx !== genres.length - 1 && ','}&nbsp;
-                      </Link>
+                      <Fragment key={genre.id}>
+                        <Link to={`/browse/genre/${genre.id}`}>
+                          {genre.name}
+                          {/* don't show "," if it's the last genre in the list */}
+                          {idx !== genres.length - 1 && ','}
+                        </Link>
+                        &nbsp;
+                      </Fragment>
                     )
                 )}
               </div>
@@ -155,26 +187,35 @@ export default function MovieInfoModal({
             <StyledGrid aria-label="recommended movies">
               <h2>More Like This</h2>
               <ul>
-                {recommendedMovies?.map((recMovie) => (
-                  <li className="modal__recommendedMovie" key={recMovie.id}>
-                    <picture>
-                      <img
-                        src={`${baseImgUrl}${recMovie.backdrop_path}`}
-                        alt={recMovie.name}
-                      />
-                    </picture>
-                    <div className="modal__recommendedMovie--description">
-                      <p className="sypnosis">
-                        {truncate(recMovie.overview, 200)}
-                      </p>
-                    </div>
-                  </li>
-                ))}
+                {recommendedMovies
+                  ?.filter(({ backdrop_path, overview }) =>
+                    Boolean(backdrop_path && overview)
+                  ) // filter by attributes that aren't null undefined.
+                  .map((recommendedMovie) => (
+                    <li
+                      className="modal__recommendedMovie"
+                      key={recommendedMovie.id}
+                    >
+                      <picture>
+                        <img
+                          src={`${baseImgUrl}${recommendedMovie.backdrop_path}`}
+                          alt={recommendedMovie.name}
+                          onClick={() =>
+                            onPlayRecommendedMovie(recommendedMovie)
+                          }
+                        />
+                      </picture>
+                      <div className="modal__recommendedMovie--description">
+                        <p>{truncate(recommendedMovie.overview, 200)}</p>
+                      </div>
+                    </li>
+                  ))}
               </ul>
             </StyledGrid>
           ) : (
             <></>
           )}
+          <br />
         </div>
       </StyledDialogContent>
     </Dialog>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COLORS } from '../../../utils/generalUtils';
+import { COLORS } from '../../../../utils/generalUtils';
 
 export const StyledNav = styled.nav`
   background: ${({ isShowing }) => isShowing && COLORS.BRIGHT_BLACK};

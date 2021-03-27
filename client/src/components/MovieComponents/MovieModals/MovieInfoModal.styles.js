@@ -40,12 +40,12 @@ export const StyledGrid = styled.div`
         border-radius: 0 0 4px 4px;
         min-height: 50%;
         max-height: 50%;
-        line-height: 20px;
         padding: 0 0 0.5rem 0;
 
-        .sypnosis {
+        p {
+          line-height: 20px;
           padding: 1em 1em 1em;
-          font-size: clamp(0.6rem, 4vw, 1rem);
+          font-size: clamp(0.6rem, 4vw, 0.8rem);
           margin: 0;
           color: ${COLORS.BRIGHT_GREY};
         }
@@ -86,6 +86,10 @@ export const StyledDialogContent = styled(DialogContent)`
       text-decoration: none;
       line-height: 20px;
       word-break: break-word;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     .metaData__left {
@@ -102,7 +106,7 @@ export const StyledDialogContent = styled(DialogContent)`
         justify-content: flex-start;
         -webkit-box-align: center;
         align-items: center;
-
+        user-select: none;
         .movie__scoreContainer {
           display: flex;
           margin-right: 0.5em;
@@ -141,6 +145,7 @@ export const StyledDialogContent = styled(DialogContent)`
       .metaData__right--tags {
         span {
           color: #777;
+          user-select: none;
         }
         font-size: 14px;
         line-height: 20px;

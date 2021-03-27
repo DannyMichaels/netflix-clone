@@ -7,8 +7,8 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 
 // utils
-import { getServiceCode } from '../../../utils/getServiceCode';
-import { getRandomId } from '../../../utils/generateId';
+import { getServiceCode } from '../../../../utils/getServiceCode';
+import { getRandomId } from '../../../../utils/generateId';
 
 // styles
 import { StyledFooter } from './footer.styles';
