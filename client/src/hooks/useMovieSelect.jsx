@@ -24,11 +24,8 @@ export const useMovieSelect = () => {
 
     setSelectedMovie(movie);
 
-    const getTrailer = async () => {
-      const fetchedUrl = await getYoutubeVideo(mediaType, movie?.id);
-      setTrailerUrl(fetchedUrl);
-    };
-    getTrailer();
+    const fetchedUrl = await getYoutubeVideo(mediaType, movie?.id);
+    setTrailerUrl(fetchedUrl);
   }, []);
 
   const onPlayMovie = async (movie) => {
