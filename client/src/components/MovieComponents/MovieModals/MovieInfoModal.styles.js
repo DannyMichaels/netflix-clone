@@ -1,5 +1,5 @@
-import { Box } from '@material-ui/core';
 import styled from 'styled-components';
+import { Box, DialogContent } from '@material-ui/core';
 import { COLORS } from '../../../utils/generalUtils';
 
 export const StyledGrid = styled.div`
@@ -66,3 +66,5 @@ export const StyledBox = styled(Box)`
   border-radius: 50%;
   padding: 0.4% 0.4% 0% 0.4%;
 `;
+
+export const StyledDialogContent = styled(DialogContent)``;

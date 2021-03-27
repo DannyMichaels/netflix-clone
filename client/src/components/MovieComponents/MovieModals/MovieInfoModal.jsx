@@ -1,10 +1,9 @@
 // hooks
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
 import YouTube from 'react-youtube';
 import { LinearProgress } from '@material-ui/core';
 
@@ -16,7 +15,13 @@ import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 
 // styles
-import { StyledGrid, StyledBox } from './MovieInfoModal.styles.js';
+import {
+  StyledGrid,
+  StyledBox,
+  StyledDialogContent,
+} from './MovieInfoModal.styles.js';
+
+// Context
 import { MoviesStateContext } from '../../../context/moviesContext';
 
 export default function MovieInfoModal({
@@ -26,6 +31,8 @@ export default function MovieInfoModal({
   recommendedMovies,
 }) {
   const { onSelectMovie, trailerUrl } = useMovieSelect();
+  const { allGenres } = useContext(MoviesStateContext);
+  const [genres, setGenres] = useState([]);
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -37,6 +44,23 @@ export default function MovieInfoModal({
       };
     }
   }, [movie, onSelectMovie, open]);
+
+  useEffect(() => {
+    const getGenres = async (movie) => {
+      if (!movie) return;
+      if (!allGenres) return;
+
+      for (let i = 0; i < allGenres.length; i++) {
+        let foundGenre = allGenres.find(
+          (g) => g.id === Number(movie.genre_ids[i])
+        );
+        if (foundGenre) {
+          setGenres((prevState) => [...prevState, foundGenre]);
+        }
+      }
+    };
+    getGenres(movie);
+  }, [allGenres, movie]);
 
   const VIDEO_PLAYER_OPTIONS = {
     height: '390',
@@ -75,7 +99,10 @@ export default function MovieInfoModal({
       ) : (
         <LinearProgress />
       )}
-      <DialogContent>
+      <StyledDialogContent>
+        {[...new Set(genres)]?.map(({ name }) => (
+          <>&nbsp; {name}</>
+        ))}
         {recommendedMovies?.length ? (
           <StyledGrid aria-label="recommended movies">
             <h2>More Like This</h2>
@@ -98,7 +125,7 @@ export default function MovieInfoModal({
         ) : (
           <></>
         )}
-      </DialogContent>
+      </StyledDialogContent>
     </Dialog>
   );
 }

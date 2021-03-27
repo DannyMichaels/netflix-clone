@@ -31,10 +31,11 @@ const MoviesContextProvider = ({ children }) => {
     );
 
     await getAllGenres()
-      .then((genreData) => {
+      .then(({ genres }) => {
+        console.log({ genres });
         dispatch({
           type: TYPES.FETCH_GENRES,
-          payload: genreData,
+          payload: genres,
         });
       })
       .catch((err) => console.error(err.message));
