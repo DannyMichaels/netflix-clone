@@ -76,7 +76,7 @@ export default function MovieInfoModal({
         <LinearProgress />
       )}
       <DialogContent>
-        {recommendedMovies.length && (
+        {recommendedMovies.length ? (
           <StyledGrid aria-label="recommended movies">
             <h2>More Like This</h2>
             <ul>
@@ -95,6 +95,8 @@ export default function MovieInfoModal({
               ))}
             </ul>
           </StyledGrid>
+        ) : (
+          <></>
         )}
       </DialogContent>
     </Dialog>
