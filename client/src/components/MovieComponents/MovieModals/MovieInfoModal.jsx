@@ -5,7 +5,6 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
-import { CircularProgress, LinearProgress } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 // icons
@@ -105,7 +104,7 @@ export default function MovieInfoModal({
       </StyledBox>
 
       <StyledVideo>
-        {!trailerUrl ? (
+        {trailerUrl ? (
           <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
         ) : (
           <div className="modal__loading--container">
