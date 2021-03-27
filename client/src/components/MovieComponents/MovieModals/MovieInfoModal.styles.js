@@ -4,9 +4,6 @@ import { COLORS } from '../../../utils/generalUtils';
 
 export const StyledGrid = styled.div`
   color: ${COLORS.WHITE};
-  padding: 20px 4%;
-  display: block;
-  max-width: 100%;
 
   h2 {
     user-select: none;
@@ -71,6 +68,13 @@ export const StyledBox = styled(Box)`
 `;
 
 export const StyledDialogContent = styled(DialogContent)`
+  .modal__container {
+    @media screen and (min-width: 420px) {
+      padding: 0 3em;
+    }
+    display: block;
+  }
+
   .modal__details--metaData {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
@@ -80,7 +84,6 @@ export const StyledDialogContent = styled(DialogContent)`
     a {
       color: #fff;
       text-decoration: none;
-      /* font-size: clamp(0.6rem, 4vw, 0.8rem); */
       line-height: 20px;
       word-break: break-word;
     }
@@ -89,6 +92,40 @@ export const StyledDialogContent = styled(DialogContent)`
       -webkit-box-sizing: inherit;
       -moz-box-sizing: inherit;
       box-sizing: inherit;
+
+      .metaData__left--infoWrapper {
+        box-sizing: inherit;
+        color: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        -webkit-box-pack: start;
+        justify-content: flex-start;
+        -webkit-box-align: center;
+        align-items: center;
+
+        .movie__scoreContainer {
+          display: flex;
+          margin-right: 0.5em;
+
+          .movie__score {
+            white-space: unset;
+            color: ${COLORS.GREEN};
+            display: inline-block;
+            font-weight: 700;
+          }
+        }
+
+        .metaData__secondLine {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+
+          .movie__year {
+            margin-right: 0.5em;
+            font-size: 16px;
+          }
+        }
+      }
     }
 
     .metaData__right {
