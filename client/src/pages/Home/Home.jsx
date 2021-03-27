@@ -14,10 +14,10 @@ export default function Home() {
   const [search, setSearch] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
 
-  const handleSearch = async ({ target: { value } }) => {
-    setSearch(value);
-    const { data } = await getSearchedMovies(search);
-    setQueriedMovies(data.results);
+  const handleSearch = async ({ target: { value: userInput } }) => {
+    setSearch(userInput);
+    const searchedMovies = await getSearchedMovies(search);
+    setQueriedMovies(searchedMovies);
   };
 
   const ROWS = Children.toArray(

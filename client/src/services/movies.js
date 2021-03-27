@@ -10,17 +10,14 @@ export const getAllMovies = async (fetchUrl) => {
   }
 };
 
-export const getSearchedMovies = async (searchValue) => {
-  try {
-    // TODO: once we have accounts set up, have a terenary opertaror for the users age regarding include adult being true or false
-    const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=false
-      &query=${searchValue}`;
+export const getSearchedMovies = async (search) => {
+  // TODO: once we have accounts set up, have a terenary opertaror for the users age regarding include adult being true or false
+  const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=false
+    &query=${search}`;
 
-    const { data } = await api.get(searchUrl);
-    return data;
-  } catch (error) {
-    throw error;
-  }
+  const { data } = await api.get(searchUrl);
+
+  return data.results;
 };
 
 export const getOneRandomMovie = async () => {
