@@ -8,20 +8,15 @@ import Layout from '../../components/shared/Layout/Layout';
 
 // utils, helpers and Services
 import { movieRows } from './home.utils';
-import { TMDB_API } from '../../services/apiConfig';
+import { getSearchedMovies } from '../../services/movies';
 
 export default function Home() {
   const [search, setSearch] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
 
-  const handleSearch = async ({ target: { value: userInput } }) => {
-    // TODO: once we have accounts set up, have a terenary opertaror for the users age regarding include adult being true or false
-    setSearch(userInput);
-
-    const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=false
-    &query=${search}`;
-
-    const { data } = await TMDB_API.get(searchUrl);
+  const handleSearch = async ({ target: { value } }) => {
+    setSearch(value);
+    const { data } = await getSearchedMovies(search);
     setQueriedMovies(data.results);
   };
 

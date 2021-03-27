@@ -32,8 +32,10 @@ export default function Banner() {
   useMemo(async () => {
     const match = 0 || 1 || 2 || 3 || 4 || 5 || 6 || 7 || 9 || 10;
 
+    // TODO: there has to be a better way to do this.
+    //  doesn't IMDB api have something to find by genre id?
     if (movie?.genre_ids) {
-      const moviesAlike = allMovies.filter(
+      const moviesAlike = allMovies?.filter(
         (m) => m.genre_ids[match] === Number(movie.genre_ids[match])
       );
       setRecommendedMovies(moviesAlike);

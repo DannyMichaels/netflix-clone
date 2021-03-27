@@ -1,5 +1,5 @@
 // hooks
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
@@ -17,6 +17,7 @@ import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 
 // styles
 import { StyledGrid, StyledBox } from './MovieInfoModal.styles.js';
+import { MoviesStateContext } from '../../../context/moviesContext';
 
 export default function MovieInfoModal({
   setOpen,
@@ -29,7 +30,6 @@ export default function MovieInfoModal({
 
   useEffect(() => {
     if (!isMounted.current) return;
-
     if (open) {
       onSelectMovie(movie);
       return () => {
@@ -76,12 +76,12 @@ export default function MovieInfoModal({
         <LinearProgress />
       )}
       <DialogContent>
-        {recommendedMovies.length ? (
+        {recommendedMovies?.length ? (
           <StyledGrid aria-label="recommended movies">
             <h2>More Like This</h2>
             <ul>
-              {recommendedMovies.map((movie) => (
-                <li className="modal__recommendedMovie">
+              {recommendedMovies?.map((movie) => (
+                <li className="modal__recommendedMovie" key={movie.id}>
                   <picture>
                     <img
                       src={`${baseImgUrl}${movie.backdrop_path}`}

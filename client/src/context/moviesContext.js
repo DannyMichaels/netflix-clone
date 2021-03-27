@@ -1,23 +1,16 @@
 import React, { createContext, useReducer, useMemo } from 'react';
 import { movieRows } from '../pages/Home/home.utils';
-import { getAllMovies } from '../services/movies';
+import { movieReducer } from '../reducers/movieReducer';
+import { getAllGenres, getAllMovies } from '../services/movies';
+import { TYPES } from './movieReducerTypes';
+
 export const MoviesStateContext = createContext();
 export const MoviesDispatchContext = createContext();
-
-const movieReducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH':
-      return {
-        allMovies: action.payload,
-      };
-    default:
-      return state;
-  }
-};
 
 const MoviesContextProvider = ({ children }) => {
   const initialMoviesState = {
     allMovies: [],
+    allGenres: [],
     moviesAreLoading: true,
   };
 
@@ -26,14 +19,25 @@ const MoviesContextProvider = ({ children }) => {
   useMemo(async () => {
     movieRows.map(
       async ({ fetchUrl }) =>
-        await getAllMovies(fetchUrl).then((movieData) =>
-          dispatch({
-            type: 'FETCH',
-            payload: movieData,
-            moviesAreLoading: false,
-          })
-        )
+        await getAllMovies(fetchUrl)
+          .then((movieData) =>
+            dispatch({
+              type: TYPES.FETCH_MOVIES,
+              payload: movieData,
+              moviesAreLoading: false,
+            })
+          )
+          .catch((err) => console.error(err.message))
     );
+
+    await getAllGenres()
+      .then((genreData) => {
+        dispatch({
+          type: TYPES.FETCH_GENRES,
+          payload: genreData,
+        });
+      })
+      .catch((err) => console.error(err.message));
   }, []);
 
   return (

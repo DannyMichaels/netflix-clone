@@ -1,0 +1,4 @@
+export const TYPES = {
+  FETCH_MOVIES: 'FETCH_MOVIES',
+  FETCH_GENRES: 'FETCH_GENRES',
+};
