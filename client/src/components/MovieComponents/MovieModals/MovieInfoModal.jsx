@@ -6,6 +6,7 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
 import { LinearProgress } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,7 +14,6 @@ import CloseIcon from '@material-ui/icons/Close';
 // utils
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
-
 // styles
 import {
   StyledGrid,
@@ -75,6 +75,14 @@ export default function MovieInfoModal({
     setOpen(false);
   };
 
+  const genresJSX = [...new Set(genres)]?.map((genre, idx) => (
+    <Link to={`/browse/${genre.id}`}>
+      {genre.name}
+      {/* don't show "," if it's the last genre in the list */}
+      {idx !== genres.length - 1 && ','}&nbsp;
+    </Link>
+  ));
+
   return (
     <Dialog
       fullWidth
@@ -100,9 +108,7 @@ export default function MovieInfoModal({
         <LinearProgress />
       )}
       <StyledDialogContent>
-        {[...new Set(genres)]?.map(({ name }) => (
-          <>&nbsp; {name}</>
-        ))}
+        <div className="modal__movieGenres">{genresJSX}</div>
         {recommendedMovies?.length ? (
           <StyledGrid aria-label="recommended movies">
             <h2>More Like This</h2>

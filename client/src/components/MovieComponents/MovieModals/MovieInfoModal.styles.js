@@ -67,4 +67,12 @@ export const StyledBox = styled(Box)`
   padding: 0.4% 0.4% 0% 0.4%;
 `;
 
-export const StyledDialogContent = styled(DialogContent)``;
+export const StyledDialogContent = styled(DialogContent)`
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-size: clamp(0.6rem, 4vw, 0.6rem);
+    line-height: 20px;
+    word-break: break-word;
+  }
+`;
