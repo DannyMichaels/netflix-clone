@@ -1,7 +1,7 @@
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 const MovieCard = ({ src, alt, className, movie }) => {
-  const { onPlayMovie, onOpenModal, isInfoOpen, modalJSX } = useMovieSelect();
+  const { onOpenModal, isInfoOpen, modalJSX } = useMovieSelect();
 
   return (
     <>
