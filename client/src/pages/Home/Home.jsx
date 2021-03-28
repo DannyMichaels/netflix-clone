@@ -1,4 +1,4 @@
-import { Children, useState } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
+import { Children, useContext, useState } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
 
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
@@ -8,22 +8,16 @@ import Layout from '../../components/shared/Layout/Layout';
 
 // utils, helpers and Services
 import { movieRows } from './home.utils';
-import { getSearchedMovies } from '../../services/movies';
+
+// context
+import { SearchContext } from '../../context/search/searchContext';
 
 export default function Home() {
-  const [search, setSearch] = useState('');
-  const [queriedMovies, setQueriedMovies] = useState([]);
-
-  const handleSearch = async ({ target: { value: userInput } }) => {
-    setSearch(userInput);
-    const searchedMovies = await getSearchedMovies(search);
-    setQueriedMovies(searchedMovies);
-  };
+  const { search } = useContext(SearchContext);
 
   const ROWS = Children.toArray(
     movieRows.map(({ title, fetchUrl }) => (
       <Row
-        handleSearch={handleSearch}
         title={title}
         fetchUrl={fetchUrl}
         isLargeRow={title.match(/^netflix originals$/i)}
@@ -32,26 +26,14 @@ export default function Home() {
     ))
   );
 
-  const RESULTS = (
-    <SearchResultsView queriedMovies={queriedMovies} search={search} />
-  );
+  const RESULTS = <SearchResultsView />;
 
-  const loadMoviesJSX = () => {
-    if (!search) {
-      return ROWS;
-    } else {
-      return RESULTS;
-    }
-  };
+  const moviesJSX = !search ? ROWS : RESULTS;
 
   return (
-    <Layout
-      handleSearch={handleSearch}
-      searchedValue={search}
-      setSearch={setSearch}
-    >
+    <Layout>
       <Banner />
-      {loadMoviesJSX()}
+      {moviesJSX}
     </Layout>
   );
 }

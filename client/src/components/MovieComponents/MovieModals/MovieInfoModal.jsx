@@ -31,7 +31,7 @@ import {
 } from './MovieInfoModal.styles.js';
 
 // Context
-import { MoviesStateContext } from '../../../context/moviesContext';
+import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 
 export default function MovieInfoModal({

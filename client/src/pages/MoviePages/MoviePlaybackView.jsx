@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { MoviesStateContext } from '../../context/moviesContext';
+import { MoviesStateContext } from '../../context/movies/moviesContext';
 
 // icons
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';

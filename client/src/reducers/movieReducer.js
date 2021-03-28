@@ -1,4 +1,4 @@
-import { TYPES } from '../context/movieReducerTypes';
+import { TYPES } from '../context/movies/movieReducerTypes';
 
 export const movieReducer = (state, action) => {
   switch (action.type) {

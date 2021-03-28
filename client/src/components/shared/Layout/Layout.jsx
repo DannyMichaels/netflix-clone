@@ -1,13 +1,9 @@
 import Footer from './Footer/Footer';
 import Nav from './Navbar/Nav';
 
-const Layout = ({ children, handleSearch, searchedValue, setSearch }) => (
+const Layout = ({ children }) => (
   <div className="layout">
-    <Nav
-      handleSearch={handleSearch}
-      searchedValue={searchedValue}
-      setSearch={setSearch}
-    />
+    <Nav />
     <div className="layout__children">{children}</div>
     <Footer />
   </div>

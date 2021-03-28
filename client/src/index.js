@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import MoviesContextProvider from './context/moviesContext';
+import MoviesContextProvider from './context/movies/moviesContext';
+import SearchContextProvider from './context/search/searchContext';
 
 ReactDOM.render(
-  <MoviesContextProvider>
-    <App />
-  </MoviesContextProvider>,
+  <SearchContextProvider>
+    <MoviesContextProvider>
+      <App />
+    </MoviesContextProvider>
+  </SearchContextProvider>,
   document.getElementById('root')
 );
 

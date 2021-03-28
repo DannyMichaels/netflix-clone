@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 // components
 import {
@@ -16,11 +16,13 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 // styles
 import { StyledNav } from './nav.styles';
+import { SearchContext } from '../../../../context/search/searchContext';
 
-export default function Nav({ handleSearch, searchedValue, setSearch }) {
+export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [dropDown, setDropDown] = useState(false);
+  const { search, handleSearch, setSearch } = useContext(SearchContext);
 
   const onScroll = () => {
     if (window.scrollY > 100) {
@@ -48,7 +50,7 @@ export default function Nav({ handleSearch, searchedValue, setSearch }) {
   };
 
   const handleClickAway = () => {
-    searchedValue ? setSearchMode(true) : setSearchMode(false);
+    search ? setSearchMode(true) : setSearchMode(false);
   };
 
   return (
@@ -74,7 +76,7 @@ export default function Nav({ handleSearch, searchedValue, setSearch }) {
               )}
               <Input
                 onChange={handleSearch}
-                value={searchedValue}
+                value={search}
                 placeholder="Titles, people, genres"
                 className="nav__searchInput"
                 disableUnderline
