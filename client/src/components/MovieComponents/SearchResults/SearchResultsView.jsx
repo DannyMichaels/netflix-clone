@@ -8,12 +8,7 @@ import MovieCard from '../MovieCard/MovieCard';
 //styles
 import { InnerColumn } from './searchResults.styles';
 
-// hooks
-import { useMovieSelect } from '../../../hooks/useMovieSelect';
-
 export default function SearchResultsView({ queriedMovies, search }) {
-  const { onPlayMovie } = useMovieSelect();
-
   const getQueriedMovies = () => {
     return queriedMovies
       .filter(({ backdrop_path }) => Boolean(backdrop_path)) // don't make a cell for a movie that has images that are undefined.
@@ -31,7 +26,7 @@ export default function SearchResultsView({ queriedMovies, search }) {
         {getQueriedMovies().map((movie) => (
           <picture>
             <MovieCard
-              onClick={() => onPlayMovie(movie)}
+              movie={movie}
               src={`${baseImgUrl}${movie.backdrop_path}`}
               alt={movie.name}
               key={movie.id}
