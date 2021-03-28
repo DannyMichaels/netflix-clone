@@ -42,15 +42,6 @@ export const useMovieSelect = () => {
     onSelectMovie(movie);
     setIsInfoOpen(true);
 
-    const getRecommendations = async () => {
-      if (!selectedMovie) return;
-      const recommendedData = await getMoviesByGenreId(
-        selectedMovie.genre_ids[0]
-      );
-      setRecommendedMovies(recommendedData);
-    };
-    getRecommendations();
-
     canRedirect.current = false;
 
     setModalJSX(
@@ -63,6 +54,16 @@ export const useMovieSelect = () => {
     );
   };
 
+  useEffect(() => {
+    const getRecommendations = async () => {
+      if (!selectedMovie) return;
+      const recommendedData = await getMoviesByGenreId(
+        selectedMovie.genre_ids[0]
+      );
+      setRecommendedMovies(recommendedData);
+    };
+    getRecommendations();
+  }, [selectedMovie]);
   // useEffect(() => {}, [selectedMovie]);
 
   useEffect(() => {
