@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import MovieInfoModal from '../components/MovieComponents/MovieModals/MovieInfoModal';
 import { getMoviesByGenreId, getYoutubeVideo } from '../services/movies';

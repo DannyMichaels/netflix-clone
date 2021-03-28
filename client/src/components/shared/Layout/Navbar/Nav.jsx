@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router';
 
 // components
 import {
@@ -17,12 +18,14 @@ import ClearIcon from '@material-ui/icons/Clear';
 // styles
 import { StyledNav } from './nav.styles';
 import { SearchContext } from '../../../../context/search/searchContext';
+import { ROUTES } from '../../../../utils/navigation';
 
 export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [dropDown, setDropDown] = useState(false);
   const { search, setSearch, handleSearch } = useContext(SearchContext);
+  const { push } = useHistory();
 
   const onScroll = () => {
     if (window.scrollY > 100) {
@@ -61,6 +64,7 @@ export default function Nav() {
     >
       <div className="nav__innerColumn">
         <img
+          onClick={() => push(ROUTES.HOME)}
           className="nav__logo"
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
           alt="Netflix Logo"
