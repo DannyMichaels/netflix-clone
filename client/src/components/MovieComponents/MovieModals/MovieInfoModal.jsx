@@ -1,12 +1,5 @@
 // core-components/hooks
-import {
-  Fragment,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
@@ -15,12 +8,14 @@ import YouTube from 'react-youtube';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
+import ShowLessIcon from '@material-ui/icons/ExpandLess';
+import ShowMoreIcon from '@material-ui/icons/ExpandMore';
 
 // services and utils
 import { Link, useHistory } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
-import { getCastByMovieId } from '../../../services/movies';
+import { getCastByMovieId, getMoviesByGenreId } from '../../../services/movies';
 
 // styles
 import {
@@ -34,32 +29,42 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
+import { getReleaseYear } from '../../../utils/getReleaseYear';
+import { IconButton } from '@material-ui/core';
 
-export default function MovieInfoModal({
-  movie,
-  recommendedMovies,
-  open,
-  setOpen,
-}) {
-  const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
+export default function MovieInfoModal({ movie, open, setOpen }) {
+  const {
+    onSelectMovie,
+    trailerUrl,
+    onPlayMovie,
+    setTrailerUrl,
+    setSelectedMovie,
+  } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
+  const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] = useState(
+    false
+  );
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const isMounted = useRef(true);
   const { push } = useHistory();
 
-  useMemo(async () => {
-    if (!isMounted.current) return;
+  useEffect(() => {
+    const loadMovie = async () => {
+      if (!isMounted.current) return;
 
-    if (open) {
-      onSelectMovie(movie);
-      isMounted.current = false;
-      return () => {
+      if (open) {
         onSelectMovie(movie);
         isMounted.current = false;
-      };
-    }
+        return () => {
+          onSelectMovie(movie);
+          isMounted.current = false;
+        };
+      }
+    };
+    loadMovie();
   }, [movie, onSelectMovie, open]);
 
   useEffect(() => {
@@ -78,6 +83,9 @@ export default function MovieInfoModal({
 
       const castData = await getCastByMovieId(movie.id);
       setCast(castData);
+
+      const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
+      setRecommendedMovies(recommendedData);
     };
     getData(movie);
   }, [allGenres, movie]);
@@ -99,6 +107,18 @@ export default function MovieInfoModal({
     setSearch('');
     handleClose();
     push(`/browse/${type}/${id}`);
+  };
+
+  const getRecommendedMovies = () => {
+    return recommendedMovies?.filter(({ backdrop_path, overview }) =>
+      Boolean(backdrop_path && overview)
+    );
+  };
+
+  const redirectToClickedMovie = async (movie) => {
+    setSelectedMovie('');
+    setTrailerUrl('');
+    return onPlayMovie(movie);
   };
 
   return (
@@ -123,7 +143,11 @@ export default function MovieInfoModal({
 
       <StyledVideo>
         {trailerUrl ? (
-          <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
+          <YouTube
+            videoId={trailerUrl}
+            opts={VIDEO_PLAYER_OPTIONS}
+            className="modal__videoPlayer"
+          />
         ) : (
           <div className="modal__loading--container">
             <CircularProgressLoading thickness={1} marginTop="6em" size={150} />
@@ -146,11 +170,7 @@ export default function MovieInfoModal({
                   </div>
                 </div>
                 <div className="metaData__secondLine">
-                  <div className="movie__year">
-                    {/* only get the year from the release date by getting the first 4 digits of the release date. */}
-                    {movie?.first_air_date?.match(/\d{4}/) || // some movies have first_air_date and some have release_date
-                      movie?.release_date?.match(/\d{4}/)}
-                  </div>
+                  <div className="movie__year">{getReleaseYear(movie)}</div>
                 </div>
               </div>
             </div>
@@ -192,36 +212,76 @@ export default function MovieInfoModal({
               </div>
             </div>
           </div>
-          {recommendedMovies?.length ? (
-            <StyledGrid aria-label="recommended movies">
-              <h2>More Like This</h2>
-              <ul>
-                {recommendedMovies
-                  ?.filter(({ backdrop_path, overview }) =>
-                    Boolean(backdrop_path && overview)
-                  ) // filter by attributes that aren't null undefined.
-                  .map((recommendedMovie) => (
+
+          <StyledGrid
+            aria-label="recommended movies"
+            showMoreRecommendedMovies={showMoreRecommendedMovies}
+          >
+            {recommendedMovies.length ? (
+              <>
+                <h2>More Like This</h2>
+                <ul>
+                  {getRecommendedMovies().map((recommendedMovie) => (
                     <li
                       className="modal__recommendedMovie"
                       key={recommendedMovie.id}
                     >
-                      <picture>
+                      <picture
+                        onClick={() => redirectToClickedMovie(recommendedMovie)}
+                      >
                         <img
                           src={`${baseImgUrl}${recommendedMovie.backdrop_path}`}
                           alt={recommendedMovie.name}
-                          onClick={() => onPlayMovie(recommendedMovie)}
                         />
                       </picture>
-                      <div className="modal__recommendedMovie--description">
-                        <p>{truncate(recommendedMovie.overview, 200)}</p>
+                      <div className="modal__recommendedMovie--metaData">
+                        <div className="recommendedMovie__MetaData--firstLine">
+                          <h4
+                            onClick={() =>
+                              redirectToClickedMovie(recommendedMovie)
+                            }
+                          >
+                            {getReleaseYear(recommendedMovie)}
+                          </h4>
+                          <IconButton className="icon">+</IconButton>
+                        </div>
+                        <p
+                          onClick={() =>
+                            redirectToClickedMovie(recommendedMovie)
+                          }
+                        >
+                          {truncate(recommendedMovie.overview, 200)}
+                        </p>
                       </div>
                     </li>
                   ))}
-              </ul>
-            </StyledGrid>
-          ) : (
-            <></>
-          )}
+                </ul>
+                <div
+                  className={`modal__sectionDivider ${
+                    !showMoreRecommendedMovies && 'collapsed'
+                  }`}
+                >
+                  <button
+                    className="modal__sectionDivider--expandButton"
+                    onClick={() =>
+                      setShowMoreRecommendedMovies((currState) => !currState)
+                    }
+                  >
+                    {showMoreRecommendedMovies ? (
+                      <ShowLessIcon className="modal__expandIcon" />
+                    ) : (
+                      <ShowMoreIcon className="modal__expandIcon" />
+                    )}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div style={{ minHeight: '20em' }}>
+                <br />
+              </div>
+            )}
+          </StyledGrid>
+
           <br />
         </div>
       </StyledDialogContent>

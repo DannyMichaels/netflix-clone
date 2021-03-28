@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import MovieInfoModal from '../components/MovieComponents/MovieModals/MovieInfoModal';
-import { getMoviesByGenreId, getYoutubeVideo } from '../services/movies';
+import { getYoutubeVideo } from '../services/movies';
 
 const getType = (movie) => {
   if (movie?.media_type) {
@@ -17,7 +17,7 @@ export const useMovieSelect = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [trailerUrl, setTrailerUrl] = useState('');
   const [modalJSX, setModalJSX] = useState(<></>);
-  const [recommendedMovies, setRecommendedMovies] = useState([]);
+  // const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const canRedirect = useRef(false);
@@ -37,16 +37,16 @@ export const useMovieSelect = () => {
     }
   }, [trailerUrl, selectedMovie, push]);
 
-  useEffect(() => {
-    const getRecommendations = async () => {
-      if (!selectedMovie) return;
-      const recommendedData = await getMoviesByGenreId(
-        selectedMovie.genre_ids[0]
-      );
-      setRecommendedMovies(recommendedData);
-    };
-    getRecommendations();
-  }, [selectedMovie]);
+  // useEffect(() => {
+  //   const getRecommendations = async () => {
+  //     if (!selectedMovie) return;
+  //     const recommendedData = await getMoviesByGenreId(
+  //       selectedMovie.genre_ids[0]
+  //     );
+  //     setRecommendedMovies(recommendedData);
+  //   };
+  //   getRecommendations();
+  // }, [selectedMovie]);
 
   const onSelectMovie = useCallback(async (movie) => {
     const mediaType = await getType(movie);
@@ -74,13 +74,12 @@ export const useMovieSelect = () => {
             <MovieInfoModal
               open={movie}
               setOpen={setIsInfoOpen}
-              recommendedMovies={recommendedMovies}
               movie={movie}
             />
           ))
       );
     },
-    [onSelectMovie, recommendedMovies, setIsInfoOpen]
+    [onSelectMovie, setIsInfoOpen]
   );
 
   return {
