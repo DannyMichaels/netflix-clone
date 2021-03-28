@@ -1,12 +1,5 @@
 // core-components/hooks
-import {
-  Fragment,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
 
 // components
@@ -15,6 +8,8 @@ import YouTube from 'react-youtube';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
+import ShowLessIcon from '@material-ui/icons/ExpandLess';
+import ShowMoreIcon from '@material-ui/icons/ExpandMore';
 
 // services and utils
 import { Link, useHistory } from 'react-router-dom';
@@ -49,22 +44,27 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
-  const [recommendedMoviesAmount, setRecommendedMoviesAmount] = useState(6);
+  const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] = useState(
+    false
+  );
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const isMounted = useRef(true);
   const { push } = useHistory();
 
-  useMemo(async () => {
-    if (!isMounted.current) return;
+  useEffect(() => {
+    const loadMovie = async () => {
+      if (!isMounted.current) return;
 
-    if (open) {
-      onSelectMovie(movie);
-      isMounted.current = false;
-      return () => {
+      if (open) {
         onSelectMovie(movie);
         isMounted.current = false;
-      };
-    }
+        return () => {
+          onSelectMovie(movie);
+          isMounted.current = false;
+        };
+      }
+    };
+    loadMovie();
   }, [movie, onSelectMovie, open]);
 
   useEffect(() => {
@@ -110,11 +110,9 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   };
 
   const getRecommendedMovies = () => {
-    return recommendedMovies
-      ?.filter(({ backdrop_path, overview }) =>
-        Boolean(backdrop_path && overview)
-      )
-      .slice(0, recommendedMoviesAmount);
+    return recommendedMovies?.filter(({ backdrop_path, overview }) =>
+      Boolean(backdrop_path && overview)
+    );
   };
 
   const redirectToClickedMovie = async (movie) => {
@@ -215,7 +213,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
             </div>
           </div>
 
-          <StyledGrid aria-label="recommended movies">
+          <StyledGrid
+            aria-label="recommended movies"
+            showMoreRecommendedMovies={showMoreRecommendedMovies}
+          >
             {recommendedMovies.length ? (
               <>
                 <h2>More Like This</h2>
@@ -255,6 +256,24 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                     </li>
                   ))}
                 </ul>
+                <div
+                  className={`modal__sectionDivider ${
+                    !showMoreRecommendedMovies && 'collapsed'
+                  }`}
+                >
+                  <button
+                    className="modal__sectionDivider--expandButton"
+                    onClick={() =>
+                      setShowMoreRecommendedMovies((currState) => !currState)
+                    }
+                  >
+                    {showMoreRecommendedMovies ? (
+                      <ShowLessIcon className="modal__expandIcon" />
+                    ) : (
+                      <ShowMoreIcon className="modal__expandIcon" />
+                    )}
+                  </button>
+                </div>
               </>
             ) : (
               <div style={{ minHeight: '20em' }}>
