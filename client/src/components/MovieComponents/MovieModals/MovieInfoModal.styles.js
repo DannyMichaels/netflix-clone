@@ -142,6 +142,16 @@ export const StyledDialogContent = styled(DialogContent)`
       flex-direction: column;
 
       .metaData__right--tags {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        max-height: 10em;
+        overflow-y: scroll;
+        text-overflow: ellipsis;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
         span {
           color: #777;
           user-select: none;
