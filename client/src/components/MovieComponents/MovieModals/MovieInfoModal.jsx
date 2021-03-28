@@ -34,9 +34,17 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
+import { getReleaseYear } from '../../../utils/getReleaseYear';
+import { IconButton } from '@material-ui/core';
 
 export default function MovieInfoModal({ movie, open, setOpen }) {
-  const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
+  const {
+    onSelectMovie,
+    trailerUrl,
+    onPlayMovie,
+    setTrailerUrl,
+    setSelectedMovie,
+  } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
@@ -109,6 +117,12 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
       .slice(0, recommendedMoviesAmount);
   };
 
+  const redirectToClickedMovie = async (movie) => {
+    setSelectedMovie('');
+    setTrailerUrl('');
+    return onPlayMovie(movie);
+  };
+
   return (
     <Dialog
       fullWidth
@@ -131,7 +145,11 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
 
       <StyledVideo>
         {trailerUrl ? (
-          <YouTube videoId={trailerUrl} opts={VIDEO_PLAYER_OPTIONS} />
+          <YouTube
+            videoId={trailerUrl}
+            opts={VIDEO_PLAYER_OPTIONS}
+            className="modal__videoPlayer"
+          />
         ) : (
           <div className="modal__loading--container">
             <CircularProgressLoading thickness={1} marginTop="6em" size={150} />
@@ -154,11 +172,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                   </div>
                 </div>
                 <div className="metaData__secondLine">
-                  <div className="movie__year">
-                    {/* only get the year from the release date by getting the first 4 digits of the release date. */}
-                    {movie?.first_air_date?.match(/\d{4}/) || // some movies have first_air_date and some have release_date
-                      movie?.release_date?.match(/\d{4}/)}
-                  </div>
+                  <div className="movie__year">{getReleaseYear(movie)}</div>
                 </div>
               </div>
             </div>
@@ -211,15 +225,32 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                       className="modal__recommendedMovie"
                       key={recommendedMovie.id}
                     >
-                      <picture>
+                      <picture
+                        onClick={() => redirectToClickedMovie(recommendedMovie)}
+                      >
                         <img
                           src={`${baseImgUrl}${recommendedMovie.backdrop_path}`}
                           alt={recommendedMovie.name}
-                          onClick={() => onPlayMovie(recommendedMovie)}
                         />
                       </picture>
-                      <div className="modal__recommendedMovie--description">
-                        <p>{truncate(recommendedMovie.overview, 200)}</p>
+                      <div className="modal__recommendedMovie--metaData">
+                        <div className="recommendedMovie__MetaData--firstLine">
+                          <h4
+                            onClick={() =>
+                              redirectToClickedMovie(recommendedMovie)
+                            }
+                          >
+                            {getReleaseYear(recommendedMovie)}
+                          </h4>
+                          <IconButton className="icon">+</IconButton>
+                        </div>
+                        <p
+                          onClick={() =>
+                            redirectToClickedMovie(recommendedMovie)
+                          }
+                        >
+                          {truncate(recommendedMovie.overview, 200)}
+                        </p>
                       </div>
                     </li>
                   ))}

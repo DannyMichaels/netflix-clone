@@ -26,6 +26,8 @@ export const StyledGrid = styled.div`
     }
 
     li {
+      user-select: none;
+      cursor: pointer;
       picture {
         width: 100%;
 
@@ -35,15 +37,30 @@ export const StyledGrid = styled.div`
           border-radius: 4px;
         }
       }
-      .modal__recommendedMovie--description {
+      .modal__recommendedMovie--metaData {
         background-color: ${COLORS.DARK_GREY};
         border-radius: 0 0 4px 4px;
-        min-height: 150px;
+        min-height: 200px;
+        max-height: 200px;
+        overflow-y: hidden;
         padding: 0 0 0.5rem 0;
+
+        .recommendedMovie__MetaData--firstLine {
+          display: flex;
+          flex-wrap: nowrap;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1em 1em 0;
+
+          h4 {
+            display: flex;
+            flex: 1;
+          }
+        }
 
         p {
           line-height: 20px;
-          padding: 1em 1em 1em;
+          padding: 0 1em 1em;
           font-size: clamp(0.6rem, 4vw, 0.8rem);
           margin: 0;
           color: ${COLORS.BRIGHT_GREY};
@@ -57,7 +74,7 @@ export const StyledBox = styled(Box)`
   cursor: pointer;
   position: absolute;
   right: 2.5%;
-  top: 8%;
+  top: 10px;
   color: ${COLORS.WHITE};
   background-color: ${COLORS.VERY_BRIGHT_BLACK};
   width: fit-content;
@@ -167,6 +184,10 @@ export const StyledDialogContent = styled(DialogContent)`
 `;
 
 export const StyledVideo = styled.div`
+  div {
+    pointer-events: none;
+  }
+
   .modal__loading--container {
     height: 400px;
     width: 100%;
