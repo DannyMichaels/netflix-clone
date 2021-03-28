@@ -1,0 +1,19 @@
+.extraInfo {
+  background: #999;
+  border-radius: 0 0 4px 4px;
+  height: 5em;
+  z-index: 6;
+  margin: 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  visibility: inherit;
+  opacity: 1;
+  transition: 0.2s all ease-in;
+}
+
+.extraInfo.inactive {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in;
+}

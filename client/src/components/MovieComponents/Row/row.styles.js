@@ -61,11 +61,11 @@ export const StyledRow = styled.div`
     } */
   }
 
-  .row__poster:hover {
+  /* .row__poster:hover {
     transform: scale(1.08);
     opacity: 1;
     z-index: 3;
-  }
+  } */
 
   .row__posterLarge {
     max-height: 200px;
@@ -80,7 +80,16 @@ export const StyledRow = styled.div`
     }
   }
 
-  .row__posterLarge:hover {
+  .row__card--parent {
+    transition: transform 450ms;
+    &:hover {
+      transform: scale(1.08);
+      opacity: 1;
+      z-index: 3;
+    }
+  }
+
+  .row__card--parent.large:hover {
     transform: scale(1.09);
     opacity: 1;
     z-index: 3;
