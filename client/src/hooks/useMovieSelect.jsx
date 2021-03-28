@@ -16,9 +16,9 @@ const getType = (movie) => {
 export const useMovieSelect = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [trailerUrl, setTrailerUrl] = useState('');
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [modalJSX, setModalJSX] = useState(<></>);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const canRedirect = useRef(false);
 
@@ -60,21 +60,28 @@ export const useMovieSelect = () => {
     canRedirect.current = true;
   };
 
-  const onOpenModal = (movie) => {
-    onSelectMovie(movie);
-    setIsInfoOpen(true);
+  const onOpenModal = useCallback(
+    async (movie) => {
+      if (!movie) return;
 
-    canRedirect.current = false;
+      onSelectMovie(movie);
 
-    setModalJSX(
-      <MovieInfoModal
-        open={isInfoOpen}
-        setOpen={setIsInfoOpen}
-        recommendedMovies={recommendedMovies}
-        movie={movie}
-      />
-    );
-  };
+      setIsInfoOpen(movie.id);
+
+      setModalJSX(
+        (curr) =>
+          (curr = (
+            <MovieInfoModal
+              open={movie}
+              setOpen={setIsInfoOpen}
+              recommendedMovies={recommendedMovies}
+              movie={movie}
+            />
+          ))
+      );
+    },
+    [onSelectMovie, recommendedMovies, setIsInfoOpen]
+  );
 
   return {
     selectedMovie,
@@ -85,7 +92,7 @@ export const useMovieSelect = () => {
     onPlayMovie,
     canRedirect,
     isInfoOpen,
-    setIsInfoOpen,
+    // setIsInfoOpen,
     onOpenModal,
     modalJSX,
   };

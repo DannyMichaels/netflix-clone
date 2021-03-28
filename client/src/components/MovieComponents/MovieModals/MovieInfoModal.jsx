@@ -36,10 +36,10 @@ import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLo
 import { SearchContext } from '../../../context/search/searchContext';
 
 export default function MovieInfoModal({
-  setOpen,
-  open,
   movie,
   recommendedMovies,
+  open,
+  setOpen,
 }) {
   const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);

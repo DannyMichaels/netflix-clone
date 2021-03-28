@@ -70,7 +70,7 @@ export const getMoviesByGenreId = async (genreId) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
-      `/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&sort_by=popularity.asc&include_adult=true&include_video=true&page=1&with_genres=${genreId}`
+      `/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=true&page=1&with_genres=${genreId}`
     );
     return data.results;
   } catch (error) {
@@ -82,7 +82,7 @@ export const getMoviesByPersonId = async (personId) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
-      `/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&sort_by=popularity.asc&include_adult=true&include_video=true&page=1&with_people=${personId}`
+      `/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=true&page=1&with_people=${personId}`
     );
     return data.results;
   } catch (error) {
