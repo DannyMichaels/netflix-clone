@@ -56,9 +56,9 @@ export const StyledRow = styled.div`
     padding: 0 2px;
     border-radius: 4px;
     cursor: pointer;
-    @media screen and (min-width: 600px) {
+    /* @media screen and (min-width: 600px) {
       max-width: 100%;
-    }
+    } */
   }
 
   .row__poster:hover {
