@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import MovieInfoModal from '../components/MovieComponents/MovieModals/MovieInfoModal';
-import { getMoviesByGenreId, getYoutubeVideo } from '../services/movies';
+import { getYoutubeVideo } from '../services/movies';
 
 const getType = (movie) => {
   if (movie?.media_type) {
