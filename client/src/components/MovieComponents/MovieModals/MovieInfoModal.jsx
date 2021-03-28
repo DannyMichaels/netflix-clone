@@ -41,6 +41,7 @@ export default function MovieInfoModal({
   recommendedMovies,
 }) {
   const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
+
   const { allGenres } = useContext(MoviesStateContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
@@ -139,7 +140,8 @@ export default function MovieInfoModal({
                 <div className="metaData__secondLine">
                   <div className="movie__year">
                     {/* only get the year from the release date by getting the first 4 digits of the release date. */}
-                    {movie?.first_air_date.match(/\d{4}/)}
+                    {movie?.first_air_date?.match(/\d{4}/) || // some movies have first_air_date and some have release_date
+                      movie?.release_date?.match(/\d{4}/)}
                   </div>
                 </div>
               </div>

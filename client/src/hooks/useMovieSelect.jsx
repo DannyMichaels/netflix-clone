@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import { getYoutubeVideo } from '../services/movies';
+import MovieInfoModal from '../components/MovieComponents/MovieModals/MovieInfoModal';
+import { getMoviesByGenreId, getYoutubeVideo } from '../services/movies';
 
 const getType = (movie) => {
   if (movie?.media_type) {
@@ -15,6 +16,10 @@ const getType = (movie) => {
 export const useMovieSelect = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [trailerUrl, setTrailerUrl] = useState('');
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
+  const [modalJSX, setModalJSX] = useState(<></>);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
+
   const canRedirect = useRef(false);
 
   const { push } = useHistory();
@@ -32,6 +37,33 @@ export const useMovieSelect = () => {
     onSelectMovie(movie);
     canRedirect.current = true;
   };
+
+  const onOpenModal = (movie) => {
+    onSelectMovie(movie);
+    setIsInfoOpen(true);
+
+    const getRecommendations = async () => {
+      if (!selectedMovie) return;
+      const recommendedData = await getMoviesByGenreId(
+        selectedMovie.genre_ids[0]
+      );
+      setRecommendedMovies(recommendedData);
+    };
+    getRecommendations();
+
+    canRedirect.current = false;
+
+    setModalJSX(
+      <MovieInfoModal
+        open={isInfoOpen}
+        setOpen={setIsInfoOpen}
+        recommendedMovies={recommendedMovies}
+        movie={movie}
+      />
+    );
+  };
+
+  // useEffect(() => {}, [selectedMovie]);
 
   useEffect(() => {
     if (trailerUrl && selectedMovie && canRedirect.current) {
@@ -54,5 +86,9 @@ export const useMovieSelect = () => {
     onSelectMovie,
     onPlayMovie,
     canRedirect,
+    isInfoOpen,
+    setIsInfoOpen,
+    onOpenModal,
+    modalJSX,
   };
 };

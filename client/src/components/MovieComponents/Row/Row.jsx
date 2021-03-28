@@ -16,7 +16,7 @@ import { StyledRow } from './row.styles';
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
 
-  const { onPlayMovie } = useMovieSelect();
+  const { onPlayMovie, onOpenModal, isInfoOpen, modalJSX } = useMovieSelect();
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
@@ -25,7 +25,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
 
   const CARDS = movies?.map((movie) => (
     <MovieCard
-      onClick={() => onPlayMovie(movie)}
+      onClick={() => onOpenModal(movie)}
       src={`${baseImgUrl}${
         isLargeRow ? movie.poster_path : movie.backdrop_path
       }`}
@@ -36,10 +36,13 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   ));
 
   return (
-    <StyledRow aria-label="movies row">
-      <h2 className="row__title">{title}</h2>
+    <>
+      <StyledRow aria-label="movies row">
+        <h2 className="row__title">{title}</h2>
 
-      <div className="row__posters">{CARDS}</div>
-    </StyledRow>
+        <div className="row__posters">{CARDS}</div>
+      </StyledRow>
+      {isInfoOpen && modalJSX}
+    </>
   );
 }

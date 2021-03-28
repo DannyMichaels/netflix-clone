@@ -3,12 +3,14 @@
 // therefore we give it a flexible className as props.
 
 const MovieCard = ({ src, alt, className, onClick }) => (
-  <img
-    src={src}
-    alt={alt}
-    className={className ?? 'movie-card'}
-    onClick={onClick}
-  />
+  <>
+    <img
+      src={src}
+      alt={alt}
+      className={className ?? 'movie-card'}
+      onClick={onClick}
+    />
+  </>
 );
 
 export default MovieCard;
