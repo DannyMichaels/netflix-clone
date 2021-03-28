@@ -20,7 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Link, useHistory } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
-import { getCastByMovieId } from '../../../services/movies';
+import { getCastByMovieId, getMoviesByGenreId } from '../../../services/movies';
 
 // styles
 import {
@@ -35,17 +35,14 @@ import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
 
-export default function MovieInfoModal({
-  movie,
-  recommendedMovies,
-  open,
-  setOpen,
-}) {
+export default function MovieInfoModal({ movie, open, setOpen }) {
   const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
   const { allGenres } = useContext(MoviesStateContext);
   const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
+  const [recommendedMoviesAmount, setRecommendedMoviesAmount] = useState(6);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const isMounted = useRef(true);
   const { push } = useHistory();
 
@@ -78,6 +75,9 @@ export default function MovieInfoModal({
 
       const castData = await getCastByMovieId(movie.id);
       setCast(castData);
+
+      const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
+      setRecommendedMovies(recommendedData);
     };
     getData(movie);
   }, [allGenres, movie]);
@@ -99,6 +99,14 @@ export default function MovieInfoModal({
     setSearch('');
     handleClose();
     push(`/browse/${type}/${id}`);
+  };
+
+  const getRecommendedMovies = () => {
+    return recommendedMovies
+      ?.filter(({ backdrop_path, overview }) =>
+        Boolean(backdrop_path && overview)
+      )
+      .slice(0, recommendedMoviesAmount);
   };
 
   return (
@@ -192,15 +200,13 @@ export default function MovieInfoModal({
               </div>
             </div>
           </div>
-          {recommendedMovies?.length ? (
-            <StyledGrid aria-label="recommended movies">
-              <h2>More Like This</h2>
-              <ul>
-                {recommendedMovies
-                  ?.filter(({ backdrop_path, overview }) =>
-                    Boolean(backdrop_path && overview)
-                  ) // filter by attributes that aren't null undefined.
-                  .map((recommendedMovie) => (
+
+          <StyledGrid aria-label="recommended movies">
+            {recommendedMovies.length ? (
+              <>
+                <h2>More Like This</h2>
+                <ul>
+                  {getRecommendedMovies().map((recommendedMovie) => (
                     <li
                       className="modal__recommendedMovie"
                       key={recommendedMovie.id}
@@ -217,11 +223,15 @@ export default function MovieInfoModal({
                       </div>
                     </li>
                   ))}
-              </ul>
-            </StyledGrid>
-          ) : (
-            <></>
-          )}
+                </ul>
+              </>
+            ) : (
+              <div style={{ minHeight: '20em' }}>
+                <br />
+              </div>
+            )}
+          </StyledGrid>
+
           <br />
         </div>
       </StyledDialogContent>
