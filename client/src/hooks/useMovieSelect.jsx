@@ -24,11 +24,33 @@ export const useMovieSelect = () => {
 
   const { push } = useHistory();
 
+  useEffect(() => {
+    if (trailerUrl && selectedMovie && canRedirect.current) {
+      // push to MoviePlayBackView.jsx if onPlayMovie ran.
+      push({
+        pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
+        state: {
+          movie: selectedMovie,
+          trailerUrl: trailerUrl,
+        },
+      });
+    }
+  }, [trailerUrl, selectedMovie, push]);
+
+  useEffect(() => {
+    const getRecommendations = async () => {
+      if (!selectedMovie) return;
+      const recommendedData = await getMoviesByGenreId(
+        selectedMovie.genre_ids[0]
+      );
+      setRecommendedMovies(recommendedData);
+    };
+    getRecommendations();
+  }, [selectedMovie]);
+
   const onSelectMovie = useCallback(async (movie) => {
     const mediaType = await getType(movie);
-
     setSelectedMovie(movie);
-
     const fetchedUrl = await getYoutubeVideo(mediaType, movie?.id);
     setTrailerUrl(fetchedUrl);
   }, []);
@@ -53,31 +75,6 @@ export const useMovieSelect = () => {
       />
     );
   };
-
-  useEffect(() => {
-    const getRecommendations = async () => {
-      if (!selectedMovie) return;
-      const recommendedData = await getMoviesByGenreId(
-        selectedMovie.genre_ids[0]
-      );
-      setRecommendedMovies(recommendedData);
-    };
-    getRecommendations();
-  }, [selectedMovie]);
-  // useEffect(() => {}, [selectedMovie]);
-
-  useEffect(() => {
-    if (trailerUrl && selectedMovie && canRedirect.current) {
-      // push to MoviePlayBackView.jsx if onPlayMovie ran.
-      push({
-        pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
-        state: {
-          movie: selectedMovie,
-          trailerUrl: trailerUrl,
-        },
-      });
-    }
-  }, [trailerUrl, selectedMovie, push]);
 
   return {
     selectedMovie,
