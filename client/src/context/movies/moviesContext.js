@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useMemo } from 'react';
-import { movieRows } from '../../pages/Home/home.utils';
+import { movieRows } from '../../pages/Browse/Home/home.utils';
 import { movieReducer } from '../../reducers/movieReducer';
 import { getAllGenres, getAllMovies } from '../../services/movies';
 import { TYPES } from './movieReducerTypes';

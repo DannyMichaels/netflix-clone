@@ -1,4 +1,4 @@
-import { MOVIE_REQUESTS as REQUESTS } from '../../utils/movieRequests';
+import { MOVIE_REQUESTS as REQUESTS } from '../../../utils/movieRequests';
 
 export const movieRows = [
   {

@@ -22,7 +22,7 @@ export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [dropDown, setDropDown] = useState(false);
-  const { search, handleSearch, setSearch } = useContext(SearchContext);
+  const { search, setSearch, handleSearch } = useContext(SearchContext);
 
   const onScroll = () => {
     if (window.scrollY > 100) {

@@ -12,12 +12,12 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
-import { Link } from 'react-router-dom';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
 
 // services and utils
+import { Link, useHistory } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 import { getCastByMovieId } from '../../../services/movies';
@@ -33,6 +33,7 @@ import {
 // Context
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
+import { SearchContext } from '../../../context/search/searchContext';
 
 export default function MovieInfoModal({
   setOpen,
@@ -41,11 +42,12 @@ export default function MovieInfoModal({
   recommendedMovies,
 }) {
   const { onSelectMovie, trailerUrl, onPlayMovie } = useMovieSelect();
-
   const { allGenres } = useContext(MoviesStateContext);
+  const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
   const isMounted = useRef(true);
+  const { push } = useHistory();
 
   useMemo(async () => {
     if (!isMounted.current) return;
@@ -91,6 +93,12 @@ export default function MovieInfoModal({
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const onRedirect = async (type, id) => {
+    setSearch('');
+    handleClose();
+    push(`/browse/${type}/${id}`);
   };
 
   return (
@@ -151,7 +159,10 @@ export default function MovieInfoModal({
                 <span>Cast:&nbsp;</span>
                 {cast.map((person, idx) => (
                   <Fragment key={person.id}>
-                    <Link key={person.id} to={`/browse/person/${person.id}`}>
+                    <Link
+                      key={person.id}
+                      onClick={() => onRedirect('person', person.id)}
+                    >
                       {person.name}
                       {idx !== cast.length - 1 && ','}
                     </Link>
@@ -166,7 +177,10 @@ export default function MovieInfoModal({
                   (genre, idx) =>
                     genre && (
                       <Fragment key={genre.id}>
-                        <Link to={`/browse/genre/${genre.id}`}>
+                        <Link
+                          to={`/browse/genre/${genre.id}`}
+                          onClick={() => onRedirect('genre', genre.id)}
+                        >
                           {genre.name}
                           {/* don't show "," if it's the last genre in the list */}
                           {idx !== genres.length - 1 && ','}

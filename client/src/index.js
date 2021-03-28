@@ -5,13 +5,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import MoviesContextProvider from './context/movies/moviesContext';
 import SearchContextProvider from './context/search/searchContext';
+import { BrowserRouter as RouterProvider } from 'react-router-dom';
 
 ReactDOM.render(
-  <SearchContextProvider>
-    <MoviesContextProvider>
-      <App />
-    </MoviesContextProvider>
-  </SearchContextProvider>,
+  <RouterProvider>
+    <SearchContextProvider>
+      <MoviesContextProvider>
+        <App />
+      </MoviesContextProvider>
+    </SearchContextProvider>
+  </RouterProvider>,
   document.getElementById('root')
 );
 
