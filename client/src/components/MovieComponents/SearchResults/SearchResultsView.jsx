@@ -15,7 +15,7 @@ export default function SearchResultsView() {
   return (
     <InnerColumn>
       {!queriedMovies.length && <h1>no results</h1>}
-      <ul className="home__searchList">
+      <ul className="search__searchList">
         {queriedMovies.map((movie) => (
           <picture>
             <MovieCard
@@ -23,7 +23,7 @@ export default function SearchResultsView() {
               src={`${baseImgUrl}${movie.backdrop_path}`}
               alt={movie.name}
               key={movie.id}
-              className="home__searched-movie"
+              className="searchResults__searchedMovie"
             />
           </picture>
         ))}

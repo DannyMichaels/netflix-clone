@@ -19,7 +19,7 @@ export const InnerColumn = styled.div`
     padding: 50px;
   }
 
-  .home__searchList {
+  .search__searchList {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
@@ -31,8 +31,10 @@ export const InnerColumn = styled.div`
     }
 
     picture {
+      position: relative;
       max-width: 300px;
       margin: 0 auto;
+
       @media screen and (max-width: 340px) {
         width: 75vw;
         margin: 0 0;
