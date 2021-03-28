@@ -13,8 +13,10 @@ const AppRouter = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={ROUTES.HOME} component={Home} />
-      <Route path={ROUTES.BROWSE_BY_GENRE} component={BrowseByCategoryAndId} />
-      <Route path={ROUTES.BROWSE_BY_PERSON} component={BrowseByCategoryAndId} />
+      <Route
+        path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}
+        component={BrowseByCategoryAndId}
+      />
       <Route path={ROUTES.MOVIE_PLAYBACK} component={MoviePlaybackView} />
     </Switch>
   </BrowserRouter>
