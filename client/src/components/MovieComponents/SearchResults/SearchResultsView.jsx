@@ -10,13 +10,13 @@ import MovieCard from '../MovieCard/MovieCard';
 import { InnerColumn } from './searchResults.styles';
 
 export default function SearchResultsView() {
-  const { getQueriedMovies } = useContext(SearchContext);
+  const { queriedMovies } = useContext(SearchContext);
 
   return (
-    <InnerColumn results={!getQueriedMovies().length}>
-      {!getQueriedMovies().length && <h1>no results</h1>}
+    <InnerColumn>
+      {!queriedMovies.length && <h1>no results</h1>}
       <ul className="home__searchList">
-        {getQueriedMovies().map((movie) => (
+        {queriedMovies.map((movie) => (
           <picture>
             <MovieCard
               movie={movie}
