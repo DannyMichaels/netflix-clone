@@ -1,4 +1,4 @@
-import { Children, useContext, useState } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
+import { Children, useContext } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
 
 // components
 import Banner from '../../components/MovieComponents/Banner/Banner';
