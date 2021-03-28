@@ -6,10 +6,7 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
 // services and utils
-import {
-  getMoviesByGenreId,
-  getOneRandomMovie,
-} from '../../../services/movies';
+import { getOneRandomMovie } from '../../../services/movies';
 import { truncate } from '../../../utils/truncate';
 
 // icons
