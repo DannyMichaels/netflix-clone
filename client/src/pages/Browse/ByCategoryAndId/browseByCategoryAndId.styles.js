@@ -23,7 +23,7 @@ export const InnerColumn = styled.div`
     }
   }
 
-  .home__searchList {
+  .search__searchList {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     grid-gap: 10px;
@@ -34,6 +34,7 @@ export const InnerColumn = styled.div`
     }
 
     picture {
+      position: relative;
       max-width: 300px;
       margin: 0 auto;
       @media screen and (max-width: 340px) {

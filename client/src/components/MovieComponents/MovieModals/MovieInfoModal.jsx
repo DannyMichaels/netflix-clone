@@ -5,6 +5,7 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
+import { IconButton } from '@material-ui/core';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
@@ -16,6 +17,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 import { getCastByMovieId, getMoviesByGenreId } from '../../../services/movies';
+import { getReleaseYear } from '../../../utils/getReleaseYear';
 
 // styles
 import {
@@ -29,8 +31,6 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
-import { getReleaseYear } from '../../../utils/getReleaseYear';
-import { IconButton } from '@material-ui/core';
 
 export default function MovieInfoModal({ movie, open, setOpen }) {
   const {

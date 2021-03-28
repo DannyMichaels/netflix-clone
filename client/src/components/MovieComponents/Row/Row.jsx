@@ -27,6 +27,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       src={`${baseImgUrl}${
         isLargeRow ? movie.poster_path : movie.backdrop_path
       }`}
+      isLargeRow={isLargeRow}
       alt={movie.name}
       key={movie.id}
       className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
