@@ -36,7 +36,13 @@ export default function Home() {
     <SearchResultsView queriedMovies={queriedMovies} search={search} />
   );
 
-  const moviesJSX = !search ? ROWS : RESULTS;
+  const loadMoviesJSX = () => {
+    if (!search) {
+      return ROWS;
+    } else {
+      return RESULTS;
+    }
+  };
 
   return (
     <Layout
@@ -45,7 +51,7 @@ export default function Home() {
       setSearch={setSearch}
     >
       <Banner />
-      {moviesJSX}
+      {loadMoviesJSX()}
     </Layout>
   );
 }

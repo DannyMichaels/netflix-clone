@@ -18,7 +18,7 @@ export const StyledGrid = styled.div`
     margin: 0;
     list-style: none;
     display: grid;
-    grid-gap: 10px;
+    grid-gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr));
 
     @media screen and (min-width: 360px) {
@@ -38,8 +38,7 @@ export const StyledGrid = styled.div`
       .modal__recommendedMovie--description {
         background-color: ${COLORS.DARK_GREY};
         border-radius: 0 0 4px 4px;
-        min-height: 50%;
-        max-height: 50%;
+        min-height: 150px;
         padding: 0 0 0.5rem 0;
 
         p {
