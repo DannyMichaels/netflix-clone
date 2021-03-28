@@ -44,10 +44,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] = useState(
     false
   );
-  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const isMounted = useRef(true);
   const { push } = useHistory();
 
@@ -85,7 +85,12 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
       setCast(castData);
 
       const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
-      setRecommendedMovies(recommendedData);
+
+      const newRecommendedMovies = recommendedData.filter(
+        ({ backdrop_path, overview }) => Boolean(backdrop_path && overview)
+      );
+
+      setRecommendedMovies(newRecommendedMovies);
     };
     getData(movie);
   }, [allGenres, movie]);
@@ -109,17 +114,26 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     push(`/browse/${type}/${id}`);
   };
 
-  const getRecommendedMovies = () => {
-    return recommendedMovies?.filter(({ backdrop_path, overview }) =>
-      Boolean(backdrop_path && overview)
-    );
-  };
-
   const redirectToClickedMovie = async (movie) => {
     setSelectedMovie('');
     setTrailerUrl('');
     return onPlayMovie(movie);
   };
+
+  const sectionDividerJSX = (state, setState) => (
+    <div className={`modal__sectionDivider ${!state && 'collapsed'}`}>
+      <button
+        className="modal__sectionDivider--expandButton"
+        onClick={() => setState((curr) => !curr)}
+      >
+        {state ? (
+          <ShowLessIcon className="modal__expandIcon" />
+        ) : (
+          <ShowMoreIcon className="modal__expandIcon" />
+        )}
+      </button>
+    </div>
+  );
 
   return (
     <Dialog
@@ -221,7 +235,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
               <>
                 <h2>More Like This</h2>
                 <ul>
-                  {getRecommendedMovies().map((recommendedMovie) => (
+                  {recommendedMovies.map((recommendedMovie) => (
                     <li
                       className="modal__recommendedMovie"
                       key={recommendedMovie.id}
@@ -256,24 +270,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                     </li>
                   ))}
                 </ul>
-                <div
-                  className={`modal__sectionDivider ${
-                    !showMoreRecommendedMovies && 'collapsed'
-                  }`}
-                >
-                  <button
-                    className="modal__sectionDivider--expandButton"
-                    onClick={() =>
-                      setShowMoreRecommendedMovies((currState) => !currState)
-                    }
-                  >
-                    {showMoreRecommendedMovies ? (
-                      <ShowLessIcon className="modal__expandIcon" />
-                    ) : (
-                      <ShowMoreIcon className="modal__expandIcon" />
-                    )}
-                  </button>
-                </div>
+                {sectionDividerJSX(
+                  showMoreRecommendedMovies,
+                  setShowMoreRecommendedMovies
+                )}
               </>
             ) : (
               <div style={{ minHeight: '20em' }}>
