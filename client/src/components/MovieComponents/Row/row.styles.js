@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledRow = styled.div`
-  &:not(:last-of-type) {
-    margin: 3vw 0;
-    margin-left: 20px;
-  }
+  margin: 3vw 0;
+  margin-left: 20px;
 
   &:last-of-type {
     padding-bottom: 50px;
