@@ -26,12 +26,12 @@ export const InnerColumn = styled.div`
   .home__searchList {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-gap: 10px;
+    list-style: none;
+
     @media screen and (max-width: 340px) {
       padding-left: 0;
     }
-
-    grid-gap: 10px;
-    list-style: none;
 
     picture {
       max-width: 300px;

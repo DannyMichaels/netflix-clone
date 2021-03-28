@@ -26,10 +26,17 @@ export const InnerColumn = styled.div`
     grid-gap: 10px;
     list-style: none;
 
+    @media screen and (max-width: 340px) {
+      padding-left: 0;
+    }
+
     picture {
       max-width: 300px;
       margin: 0 auto;
-
+      @media screen and (max-width: 340px) {
+        width: 75vw;
+        margin: 0 0;
+      }
       img {
         width: 100%;
         height: auto;
