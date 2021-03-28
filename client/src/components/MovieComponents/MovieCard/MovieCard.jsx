@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { useMovieSelect } from '../../../hooks/useMovieSelect';
+import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
 const MovieCard = ({ src, alt, className, movie }) => {
-  const { onPlayMovie, onOpenModal, isInfoOpen, modalJSX } = useMovieSelect();
+  const { onPlayMovie } = useMovieSelect();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -9,9 +12,14 @@ const MovieCard = ({ src, alt, className, movie }) => {
         src={src}
         alt={alt}
         className={className ?? 'movie-card'}
-        onClick={() => onOpenModal(movie)}
+        onClick={() => setIsModalOpen(movie?.id)}
       />
-      {isInfoOpen && modalJSX}
+
+      <MovieInfoModal
+        open={isModalOpen === movie?.id}
+        setOpen={setIsModalOpen}
+        movie={movie}
+      />
     </>
   );
 };

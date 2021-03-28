@@ -21,8 +21,7 @@ import { StyledBanner } from './banner.styles';
 
 export default function Banner() {
   const [movie, setMovie] = useState(null);
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
-  const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { onPlayMovie } = useMovieSelect();
 
@@ -31,14 +30,8 @@ export default function Banner() {
     setMovie(oneMovie);
   }, []);
 
-  useMemo(async () => {
-    if (!movie) return;
-    const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
-    setRecommendedMovies(recommendedData);
-  }, [movie]);
-
   const toggleInfoOpen = () => {
-    setIsInfoOpen(!isInfoOpen);
+    setIsModalOpen(movie.id);
   };
 
   return (
@@ -76,9 +69,8 @@ export default function Banner() {
       </StyledBanner>
 
       <MovieInfoModal
-        open={isInfoOpen}
-        setOpen={setIsInfoOpen}
-        recommendedMovies={recommendedMovies}
+        open={isModalOpen === movie?.id}
+        setOpen={setIsModalOpen}
         movie={movie}
       />
     </>
