@@ -11,6 +11,7 @@ import UpVoteIcon from '@material-ui/icons/ThumbUp';
 
 // Utils
 import { COLORS } from '../../../utils/generalUtils';
+import Tooltip from '../../shared/Tooltip/Tooltip';
 
 const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
   const { onPlayMovie } = useMovieSelect();
@@ -49,9 +50,11 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
             <PlayIcon fontSize="small" style={{ color: 'black' }} />
           </IconButton>
 
-          <IconButton style={{ background: COLORS.VERY_BRIGHT_BLACK }}>
-            <AddIcon fontSize="small" style={{ color: 'white' }} />
-          </IconButton>
+          <Tooltip content="Add to My List" direction="top">
+            <IconButton style={{ background: COLORS.VERY_BRIGHT_BLACK }}>
+              <AddIcon fontSize="small" style={{ color: 'white' }} />
+            </IconButton>
+          </Tooltip>
 
           <IconButton
             style={{ background: COLORS.VERY_BRIGHT_BLACK }}
