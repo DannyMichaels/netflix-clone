@@ -10,8 +10,8 @@ export const InnerColumn = styled.div`
   padding: 10px;
   min-height: 250px;
   transition: all 0.2s ease -in;
-
   padding-bottom: 50px;
+  margin-top: ${({ browseName }) => browseName && '6.99999993%'};
   overflow: hidden;
 
   h1 {

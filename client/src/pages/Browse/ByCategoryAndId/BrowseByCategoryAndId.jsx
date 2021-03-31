@@ -25,7 +25,7 @@ import { InnerColumn } from '../../../styled-components/InnerColumn';
 export default function BrowseByCategoryAndId() {
   const [movies, setMovies] = useState([]);
   const { allGenres } = useContext(MoviesStateContext);
-  const { search, setBrowseName } = useContext(SearchContext);
+  const { search, browseName, setBrowseName } = useContext(SearchContext);
   const { pathname } = useLocation();
   const { id } = useParams();
 
@@ -50,7 +50,7 @@ export default function BrowseByCategoryAndId() {
   }, [id, pathname]);
 
   const moviesJSX = !search ? (
-    <InnerColumn>
+    <InnerColumn browseName={browseName}>
       <ul className="search__searchList">
         {movies
           .filter(({ backdrop_path }) => Boolean(backdrop_path))
