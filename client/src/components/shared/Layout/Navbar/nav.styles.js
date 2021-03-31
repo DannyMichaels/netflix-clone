@@ -5,7 +5,9 @@ export const StyledNav = styled.nav`
   background: ${({ isShowing }) => isShowing && COLORS.BRIGHT_BLACK};
   top: 0;
   z-index: 1000;
-  position: fixed;
+  position: ${({ browseName }) => (browseName ? 'relative' : 'fixed')};
+  position: ${({ hasBrowseName }) => hasBrowseName && 'sticky'};
+  background: ${({ hasBrowseName }) => hasBrowseName && COLORS.BRIGHT_BLACK};
   width: 100%;
   display: flex;
   padding: 20px;
@@ -85,5 +87,11 @@ export const StyledNav = styled.nav`
     &::placeholder {
       color: ${COLORS.GREY};
     }
+  }
+
+  .nav__browseName {
+    color: #fff;
+    font-size: 2.5rem;
+    font-size: clamp(1rem, 2vw, 2.5rem);
   }
 `;

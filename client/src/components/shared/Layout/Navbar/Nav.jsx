@@ -24,7 +24,9 @@ export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [dropDown, setDropDown] = useState(false);
-  const { search, setSearch, handleSearch } = useContext(SearchContext);
+  const { search, setSearch, handleSearch, browseName } = useContext(
+    SearchContext
+  );
   const { push } = useHistory();
 
   const onScroll = () => {
@@ -57,77 +59,87 @@ export default function Nav() {
   };
 
   return (
-    <StyledNav
-      aria-label="navbar"
-      isShowing={isBackgroundShowing}
-      searchMode={searchMode}
-    >
-      <div className="nav__innerColumn">
-        <img
-          onClick={() => push(ROUTES.HOME)}
-          className="nav__logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
-          alt="Netflix Logo"
-        />
-        <div className="nav__secondaryNavigation">
-          <ClickAwayListener onClickAway={handleClickAway}>
-            <div className="nav__searchContainer">
-              {!searchMode && (
-                <SearchIcon
-                  className="nav__icon search"
-                  onClick={toggleSearchMode}
-                />
-              )}
-              <Input
-                onChange={handleSearch}
-                value={search}
-                placeholder="Titles, people, genres"
-                className="nav__searchInput"
-                disableUnderline
-                startAdornment={
-                  <Box marginLeft={1}>
-                    <InputAdornment position="start">
-                      <SearchIcon
-                        className="nav__icon search"
-                        onClick={toggleSearchMode}
-                      />
-                    </InputAdornment>
-                  </Box>
-                }
-                endAdornment={
-                  <Box mx={1}>
-                    <InputAdornment position="end">
-                      <ClearIcon
-                        onClick={onSearchClear}
-                        className="nav__icon"
-                      />
-                    </InputAdornment>
-                  </Box>
-                }
-              />
-            </div>
-          </ClickAwayListener>
-          <Box mx={2}>
-            <BellIcon fontSize="default" className="nav__icon bell" />
-          </Box>
-
+    <>
+      <StyledNav
+        aria-label="navbar"
+        isShowing={isBackgroundShowing}
+        searchMode={searchMode}
+        browseName={browseName}
+      >
+        <div className="nav__innerColumn">
           <img
-            onMouseEnter={toggleDropDown}
-            onMouseLeave={toggleDropDown}
-            className="nav__avatar"
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-            alt="Profile Pic"
+            onClick={() => push(ROUTES.HOME)}
+            className="nav__logo"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
+            alt="Netflix Logo"
           />
+          <div className="nav__secondaryNavigation">
+            <ClickAwayListener onClickAway={handleClickAway}>
+              <div className="nav__searchContainer">
+                {!searchMode && (
+                  <SearchIcon
+                    className="nav__icon search"
+                    onClick={toggleSearchMode}
+                  />
+                )}
+                <Input
+                  onChange={handleSearch}
+                  value={search}
+                  placeholder="Titles, people, genres"
+                  className="nav__searchInput"
+                  disableUnderline
+                  startAdornment={
+                    <Box marginLeft={1}>
+                      <InputAdornment position="start">
+                        <SearchIcon
+                          className="nav__icon search"
+                          onClick={toggleSearchMode}
+                        />
+                      </InputAdornment>
+                    </Box>
+                  }
+                  endAdornment={
+                    <Box mx={1}>
+                      <InputAdornment position="end">
+                        <ClearIcon
+                          onClick={onSearchClear}
+                          className="nav__icon"
+                        />
+                      </InputAdornment>
+                    </Box>
+                  }
+                />
+              </div>
+            </ClickAwayListener>
+            <Box mx={2}>
+              <BellIcon fontSize="default" className="nav__icon bell" />
+            </Box>
 
-          <Box mx={1}>
-            <ArrowDropUpIcon
-              className={`nav__icon arrow ${dropDown && 'active'}`}
+            <img
               onMouseEnter={toggleDropDown}
               onMouseLeave={toggleDropDown}
+              className="nav__avatar"
+              src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+              alt="Profile Pic"
             />
-          </Box>
+
+            <Box mx={1}>
+              <ArrowDropUpIcon
+                className={`nav__icon arrow ${dropDown && 'active'}`}
+                onMouseEnter={toggleDropDown}
+                onMouseLeave={toggleDropDown}
+              />
+            </Box>
+          </div>
         </div>
-      </div>
-    </StyledNav>
+      </StyledNav>
+      {browseName && (
+        <StyledNav hasBrowseName>
+          <div className="nav__innerColumn">
+            <h1 className="nav__browseName">{browseName}</h1>
+          </div>
+        </StyledNav>
+      )}
+    </>
   );
 }

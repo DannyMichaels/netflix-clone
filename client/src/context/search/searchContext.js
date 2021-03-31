@@ -7,6 +7,7 @@ export const SearchContext = createContext();
 function SearchContextProvider({ children }) {
   const [search, setSearch] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
+  const [browseName, setBrowseName] = useState('');
 
   const handleSearch = async ({ target: { value: userInput } }) => {
     setSearch(userInput);
@@ -25,7 +26,14 @@ function SearchContextProvider({ children }) {
 
   return (
     <SearchContext.Provider
-      value={{ search, setSearch, queriedMovies, handleSearch }}
+      value={{
+        search,
+        setSearch,
+        queriedMovies,
+        handleSearch,
+        browseName,
+        setBrowseName,
+      }}
     >
       {children}
     </SearchContext.Provider>
