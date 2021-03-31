@@ -13,12 +13,12 @@ import UpVoteIcon from '@material-ui/icons/ThumbUp';
 import { COLORS } from '../../../utils/generalUtils';
 import Tooltip from '../../shared/Tooltip/Tooltip';
 
-const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
-  const { onPlayMovie, setSelectedMovie, setTrailerUrl } = useMovieSelect();
+const MovieCard = ({ src, alt, className, movie, isLargeRow, enableMore }) => {
+  const { onPlayMovie } = useMovieSelect();
   const [isExtraInfoShowing, setIsExtraInfoShowing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [vote, setVote] = useState('');
+  const [, setVote] = useState('');
 
   const showMore = () => {
     setIsExtraInfoShowing(movie.id);
@@ -27,8 +27,6 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
   const showLess = () => {
     setIsExtraInfoShowing(false);
   };
-
-  let enableMore = false;
 
   return (
     <>

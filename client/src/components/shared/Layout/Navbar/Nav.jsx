@@ -133,7 +133,7 @@ export default function Nav() {
           </div>
         </div>
       </StyledNav>
-      {browseName && (
+      {browseName && !search && (
         <StyledNav hasBrowseName>
           <div className="nav__innerColumn">
             <h1 className="nav__browseName">{browseName}</h1>

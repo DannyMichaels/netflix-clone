@@ -40,6 +40,7 @@ export const StyledGrid = styled.div`
           border-radius: 4px;
         }
       }
+
       .modal__recommendedMovie--metaData {
         background-color: ${COLORS.DARK_GREY};
         border-radius: 0 0 4px 4px;
@@ -71,6 +72,7 @@ export const StyledGrid = styled.div`
       }
     }
   }
+
   .modal__sectionDivider {
     position: relative;
     width: 100%;
@@ -134,6 +136,7 @@ export const StyledGrid = styled.div`
         transparent 50%
       );
     }
+
     .modal__sectionDivider--expandButton {
       position: absolute;
       min-width: 32px;
@@ -168,9 +171,15 @@ export const StyledGrid = styled.div`
       word-break: break-word;
       white-space: nowrap;
       border-radius: 50%;
+
       &:focus {
         outline: none;
       }
+
+      &:hover {
+        filter: contrast(0.5);
+      }
+
       .modal__expandIcon {
         color: ${COLORS.WHITE};
       }

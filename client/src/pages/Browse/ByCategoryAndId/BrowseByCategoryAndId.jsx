@@ -39,7 +39,7 @@ export default function BrowseByCategoryAndId() {
         setBrowseName(name);
       } else {
         const movieDataByGenreId = await getMoviesByGenreId(id);
-        const foundGenre = allGenres.find((g) => g.id === Number(id));
+        const foundGenre = allGenres?.find((g) => g.id === Number(id));
 
         setMovies(movieDataByGenreId);
         setBrowseName(foundGenre?.name);
