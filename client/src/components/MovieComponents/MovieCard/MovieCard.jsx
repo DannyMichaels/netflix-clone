@@ -14,7 +14,7 @@ import { COLORS } from '../../../utils/generalUtils';
 import Tooltip from '../../shared/Tooltip/Tooltip';
 
 const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
-  const { onPlayMovie } = useMovieSelect();
+  const { onPlayMovie, setSelectedMovie, setTrailerUrl } = useMovieSelect();
   const [isExtraInfoShowing, setIsExtraInfoShowing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,6 +27,8 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
   const showLess = () => {
     setIsExtraInfoShowing(false);
   };
+
+  let enableMore = false;
 
   return (
     <>
@@ -41,35 +43,43 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
           className={className ?? 'movie-card'}
           onClick={() => setIsModalOpen(movie?.id)}
         />
-        <div
-          className={`movie__card--extraInfo ${
-            !isExtraInfoShowing ? 'inactive' : 'active'
-          }`}
-        >
-          <IconButton style={{ background: 'white' }}>
-            <PlayIcon fontSize="small" style={{ color: 'black' }} />
-          </IconButton>
-
-          <Tooltip content="Add to My List" direction="top">
-            <IconButton style={{ background: COLORS.VERY_BRIGHT_BLACK }}>
-              <AddIcon fontSize="small" style={{ color: 'white' }} />
+        {enableMore && (
+          <div
+            className={`movie__card--extraInfo ${
+              !isExtraInfoShowing ? 'inactive' : 'active'
+            }`}
+          >
+            <IconButton
+              style={{ background: 'white' }}
+              onClick={() => onPlayMovie(movie)}
+            >
+              <PlayIcon fontSize="small" style={{ color: 'black' }} />
             </IconButton>
-          </Tooltip>
 
-          <IconButton
-            style={{ background: COLORS.VERY_BRIGHT_BLACK }}
-            onClick={() => setVote('upVote')}
-          >
-            <UpVoteIcon fontSize="small" style={{ color: 'white' }} />
-          </IconButton>
+            <Tooltip content="Add to My List" direction="top">
+              <IconButton style={{ background: COLORS.VERY_BRIGHT_BLACK }}>
+                <AddIcon fontSize="small" style={{ color: 'white' }} />
+              </IconButton>
+            </Tooltip>
 
-          <IconButton
-            style={{ background: COLORS.VERY_BRIGHT_BLACK }}
-            onClick={() => setVote('downVote')}
-          >
-            <DownVoteIcon fontSize="small" style={{ color: 'white' }} />
-          </IconButton>
-        </div>
+            <Tooltip content="I like this" direction="top">
+              <IconButton
+                style={{ background: COLORS.VERY_BRIGHT_BLACK }}
+                onClick={() => setVote('upVote')}
+              >
+                <UpVoteIcon fontSize="small" style={{ color: 'white' }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip content="Not for me" direction="top">
+              <IconButton
+                style={{ background: COLORS.VERY_BRIGHT_BLACK }}
+                onClick={() => setVote('downVote')}
+              >
+                <DownVoteIcon fontSize="small" style={{ color: 'white' }} />
+              </IconButton>
+            </Tooltip>
+          </div>
+        )}
       </div>
 
       <MovieInfoModal
