@@ -54,7 +54,7 @@ export const StyledGrid = styled.div`
           flex-wrap: nowrap;
           align-items: center;
           justify-content: space-between;
-          padding: 1em 1em 0;
+          padding: 1em;
 
           h4 {
             display: flex;
