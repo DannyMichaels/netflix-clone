@@ -12,7 +12,7 @@ import BrowseByCategoryAndId from '../pages/Browse/ByCategoryAndId/BrowseByCateg
 const AppRouter = () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path={ROUTES.HOME} component={Home} />
+      <Route exact path={ROUTES.BROWSE_ALL} component={Home} />
       <Route
         path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}
         component={BrowseByCategoryAndId}

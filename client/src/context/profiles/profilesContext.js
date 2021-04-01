@@ -1,19 +1,52 @@
-import React, { useState, createContext } from 'react';
+import React, { useMemo, createContext, useReducer } from 'react';
 
-const ProfilesContext = createContext();
+// utils
+import { getRandomId } from '../../utils/generateId';
+
+// reducer
+import { profilesReducer } from './profilesReducer';
+import { FETCH_PROFILES } from './profilesReducerTypes';
+
+export const ProfilesStateContext = createContext();
+export const ProfilesDispatchContext = createContext();
 
 export default function ProfilesContextProvider({ children }) {
-  const [profiles, setProfiles] = useState(() => {
+  const initialProfilesState = [
+    {
+      id: getRandomId(100),
+      name: 'guest',
+      imgUrl:
+        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
+      isKid: false,
+      list: [],
+    },
+  ];
+
+  const [state, dispatch] = useReducer(profilesReducer, initialProfilesState);
+
+  useMemo(async () => {
     const storedProfiles = localStorage.getItem('profiles');
     if (storedProfiles !== null) {
-      return JSON.parse(storedProfiles);
+      return dispatch({
+        type: FETCH_PROFILES,
+        payload: JSON.parse(storedProfiles),
+      });
     }
-    return [];
-  });
+
+    localStorage.setItem('profiles', JSON.stringify(initialProfilesState));
+    return dispatch({
+      type: FETCH_PROFILES,
+      payload: initialProfilesState,
+    });
+
+    //eslint-disable-next-line
+  }, []);
 
   return (
-    <ProfilesContext.Provider value={[profiles, setProfiles]}>
-      {children}
-    </ProfilesContext.Provider>
+    <ProfilesStateContext.Provider value={state}>
+      <ProfilesDispatchContext.Provider value={dispatch}>
+        {children}
+      </ProfilesDispatchContext.Provider>
+    </ProfilesStateContext.Provider>
   );
 }

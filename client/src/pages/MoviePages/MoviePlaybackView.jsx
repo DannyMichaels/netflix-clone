@@ -6,7 +6,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 // utils
 import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from '../../utils/navigation';
 
 // styles
 import { StyledVideo } from './moviePlaybackView.styles';
@@ -16,7 +15,7 @@ export default function MoviePlaybackView({ location: { state } }) {
   const [isArrowHovered, setIsArrowHovered] = useState(false);
 
   const params = useParams();
-  const { push } = useHistory();
+  const { goBack } = useHistory();
 
   const { allMovies } = useContext(MoviesStateContext);
 
@@ -56,7 +55,7 @@ export default function MoviePlaybackView({ location: { state } }) {
           className="video__arrowIcon"
           onMouseEnter={toggleArrowHovered}
           onMouseLeave={toggleArrowHovered}
-          onClick={() => push(ROUTES.HOME)}
+          onClick={goBack}
         />
         &nbsp;
         <p className="video__backText">Back to Browse</p>
