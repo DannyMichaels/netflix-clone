@@ -120,12 +120,30 @@ export const Dropdown = styled.div`
     opacity: ${({ background, isActive }) => background && isActive && 0.9};
     background: ${COLORS.BLACK};
 
+    &:hover {
+      opacity: 0.96;
+    }
+
     .dropDown__items {
       color: white;
       display: flex;
       flex-direction: column;
       align-items: start;
-      list-style-type: none;
+      gap: 10px;
+      li {
+        list-style-type: none;
+        font-size: clamp(0.5rem, 2vw, 0.8rem);
+        font-weight: 400;
+        color: ${COLORS.WHITE};
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5em;
+        opacity: 1;
+        span:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 

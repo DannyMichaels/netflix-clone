@@ -143,7 +143,17 @@ export default function Nav() {
                   <ArrowDropDownIcon className="nav__dropDown--arrow" />
                   <div className="nav__dropDown">
                     <div className="dropDown__items">
-                      <li>test</li>
+                      {[0, 1, 2, 3].map(() => (
+                        <li>
+                          <img
+                            className="nav__avatar"
+                            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+                            alt="Profile Pic"
+                          />
+
+                          <span>username</span>
+                        </li>
+                      ))}
                     </div>
                   </div>
                 </Dropdown>
