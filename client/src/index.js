@@ -3,18 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import MoviesContextProvider from './context/movies/moviesContext';
-import SearchContextProvider from './context/search/searchContext';
-import { BrowserRouter as RouterProvider } from 'react-router-dom';
+
+import { ContextProvidersNest } from './context/ContextProvidersNest';
 
 ReactDOM.render(
-  <RouterProvider>
-    <SearchContextProvider>
-      <MoviesContextProvider>
-        <App />
-      </MoviesContextProvider>
-    </SearchContextProvider>
-  </RouterProvider>,
+  <ContextProvidersNest>
+    <App />
+  </ContextProvidersNest>,
   document.getElementById('root')
 );
 

@@ -4,7 +4,7 @@ import { getSearchedMovies } from '../../services/movies';
 
 export const SearchContext = createContext();
 
-function SearchContextProvider({ children }) {
+export default function SearchContextProvider({ children }) {
   const [search, setSearch] = useState('');
   const [queriedMovies, setQueriedMovies] = useState([]);
   const [browseName, setBrowseName] = useState('');
@@ -39,5 +39,3 @@ function SearchContextProvider({ children }) {
     </SearchContext.Provider>
   );
 }
-
-export default SearchContextProvider;
