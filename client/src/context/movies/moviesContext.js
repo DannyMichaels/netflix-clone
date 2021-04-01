@@ -17,14 +17,11 @@ const MoviesContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);
 
   useMemo(async () => {
-    await getAllGenres()
-      .then(({ genres }) => {
-        dispatch({
-          type: TYPES.FETCH_GENRES,
-          payload: genres,
-        });
-      })
-      .catch((err) => console.error(err.message));
+    const { genres } = await getAllGenres();
+    dispatch({
+      type: TYPES.FETCH_GENRES,
+      payload: genres,
+    });
   }, []);
 
   useEffect(() => {
