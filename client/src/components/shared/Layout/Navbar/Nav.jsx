@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router';
 
+// utils
+import { ROUTES } from '../../../../utils/navigation';
+
 // components
 import {
   Box,
@@ -14,17 +17,19 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import BellIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
-import { StyledNav } from './nav.styles';
+import { Dropdown, StyledNav } from './nav.styles';
 import { SearchContext } from '../../../../context/search/searchContext';
-import { ROUTES } from '../../../../utils/navigation';
 
 export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
-  const [dropDown, setDropDown] = useState(false);
-  const { search, setSearch, handleSearch } = useContext(SearchContext);
+  const [isDropdownShowing, setIsDropdownShowing] = useState(false);
+  const { search, setSearch, handleSearch, browseName } = useContext(
+    SearchContext
+  );
   const { push } = useHistory();
 
   const onScroll = () => {
@@ -49,7 +54,7 @@ export default function Nav() {
   };
 
   const toggleDropDown = () => {
-    setDropDown(!dropDown);
+    setIsDropdownShowing(!isDropdownShowing);
   };
 
   const handleClickAway = () => {
@@ -57,77 +62,126 @@ export default function Nav() {
   };
 
   return (
-    <StyledNav
-      aria-label="navbar"
-      isShowing={isBackgroundShowing}
-      searchMode={searchMode}
-    >
-      <div className="nav__innerColumn">
-        <img
-          onClick={() => push(ROUTES.HOME)}
-          className="nav__logo"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
-          alt="Netflix Logo"
-        />
-        <div className="nav__secondaryNavigation">
-          <ClickAwayListener onClickAway={handleClickAway}>
-            <div className="nav__searchContainer">
-              {!searchMode && (
-                <SearchIcon
-                  className="nav__icon search"
-                  onClick={toggleSearchMode}
-                />
-              )}
-              <Input
-                onChange={handleSearch}
-                value={search}
-                placeholder="Titles, people, genres"
-                className="nav__searchInput"
-                disableUnderline
-                startAdornment={
-                  <Box marginLeft={1}>
-                    <InputAdornment position="start">
-                      <SearchIcon
-                        className="nav__icon search"
-                        onClick={toggleSearchMode}
-                      />
-                    </InputAdornment>
-                  </Box>
-                }
-                endAdornment={
-                  <Box mx={1}>
-                    <InputAdornment position="end">
-                      <ClearIcon
-                        onClick={onSearchClear}
-                        className="nav__icon"
-                      />
-                    </InputAdornment>
-                  </Box>
-                }
-              />
-            </div>
-          </ClickAwayListener>
-          <Box mx={2}>
-            <BellIcon fontSize="default" className="nav__icon bell" />
-          </Box>
-
+    <>
+      <StyledNav
+        aria-label="navbar"
+        isShowing={isBackgroundShowing}
+        searchMode={searchMode}
+        browseName={browseName}
+      >
+        <div className="nav__innerColumn">
           <img
-            onMouseEnter={toggleDropDown}
-            onMouseLeave={toggleDropDown}
-            className="nav__avatar"
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-            alt="Profile Pic"
+            onClick={() => push(ROUTES.HOME)}
+            className="nav__logo"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
+            alt="Netflix Logo"
           />
+          <div className="nav__secondaryNavigation">
+            <ClickAwayListener onClickAway={handleClickAway}>
+              <div className="nav__searchContainer">
+                {!searchMode && (
+                  <SearchIcon
+                    className="nav__icon search"
+                    onClick={toggleSearchMode}
+                  />
+                )}
+                <Input
+                  onChange={handleSearch}
+                  value={search}
+                  placeholder="Titles, people, genres"
+                  className="nav__searchInput"
+                  disableUnderline
+                  startAdornment={
+                    <Box marginLeft={1}>
+                      <InputAdornment position="start">
+                        <SearchIcon
+                          className="nav__icon search"
+                          onClick={toggleSearchMode}
+                        />
+                      </InputAdornment>
+                    </Box>
+                  }
+                  endAdornment={
+                    <Box mx={1}>
+                      <InputAdornment position="end">
+                        <ClearIcon
+                          onClick={onSearchClear}
+                          className="nav__icon"
+                        />
+                      </InputAdornment>
+                    </Box>
+                  }
+                />
+              </div>
+            </ClickAwayListener>
+            <Box mx={2}>
+              <BellIcon fontSize="default" className="nav__icon bell" />
+            </Box>
 
-          <Box mx={1}>
-            <ArrowDropUpIcon
-              className={`nav__icon arrow ${dropDown && 'active'}`}
+            <div
+              className="nav__profileContainer"
               onMouseEnter={toggleDropDown}
               onMouseLeave={toggleDropDown}
-            />
-          </Box>
+            >
+              <img
+                className="nav__avatar"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+                alt="Profile Pic"
+              />
+
+              <Box mx={1}>
+                <ArrowDropUpIcon
+                  className={`nav__icon arrow ${isDropdownShowing && 'active'}`}
+                />
+              </Box>
+
+              <>
+                <Dropdown
+                  isActive={isDropdownShowing}
+                  background={isBackgroundShowing}
+                >
+                  <ArrowDropDownIcon className="nav__dropDown--arrow" />
+                  <div className="nav__dropDown">
+                    <div className="dropDown__items">
+                      {[0, 1, 2, 3].map(() => (
+                        <li>
+                          <img
+                            className="nav__avatar"
+                            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+                            alt="Profile Pic"
+                          />
+
+                          <span>username</span>
+                        </li>
+                      ))}
+                      <li>
+                        <span>Manage Profiles</span>
+                      </li>
+                    </div>
+                    <div className="hr" />
+                    <div className="dropDown__items">
+                      {['Account', 'Help Center', 'Sign out of Netflix'].map(
+                        (text) => (
+                          <li>
+                            <span>{text}</span>
+                          </li>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </Dropdown>
+              </>
+            </div>
+          </div>
         </div>
-      </div>
-    </StyledNav>
+      </StyledNav>
+      {browseName && !search && (
+        <StyledNav hasBrowseName>
+          <div className="nav__innerColumn">
+            <h1 className="nav__browseName">{browseName}</h1>
+          </div>
+        </StyledNav>
+      )}
+    </>
   );
 }

@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledRow = styled.div`
-  &:not(:last-of-type) {
-    margin: 3vw 0;
-    margin-left: 20px;
-  }
+  margin: 3vw 0;
+  margin-left: 20px;
 
   &:last-of-type {
     padding-bottom: 50px;
@@ -38,7 +36,10 @@ export const StyledRow = styled.div`
     outline: 0;
 
     z-index: 2;
-    padding: 0 4%;
+    /* padding: 0 4%; */
+
+    padding-left: 4%;
+    padding-right: 4%;
   }
 
   .row__posters::-webkit-scrollbar {
@@ -58,15 +59,6 @@ export const StyledRow = styled.div`
     padding: 0 2px;
     border-radius: 4px;
     cursor: pointer;
-    @media screen and (min-width: 600px) {
-      max-width: 100%;
-    }
-  }
-
-  .row__poster:hover {
-    transform: scale(1.08);
-    opacity: 1;
-    z-index: 3;
   }
 
   .row__posterLarge {
@@ -82,7 +74,58 @@ export const StyledRow = styled.div`
     }
   }
 
-  .row__posterLarge:hover {
+  .movie__card--parent {
+    transition: transform 450ms;
+    &:hover {
+      transform: scale(1.08);
+      opacity: 1;
+      z-index: 3;
+    }
+
+    .movie__card--extraInfo {
+      background: #999;
+      border-radius: 0 0 4px 4px;
+      height: 2em;
+      z-index: 999;
+      margin: 0;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      visibility: inherit;
+      opacity: 1;
+      transition: 0.2s all ease-in;
+    }
+
+    .movie__card--extraInfo.inactive {
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.2s ease-in;
+    }
+  }
+
+  .movie__card--parent.large {
+    .movie__card--extraInfo {
+      background: #999;
+      border-radius: 0 0 4px 4px;
+      height: 6em;
+      z-index: 6;
+      margin: 0;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      visibility: inherit;
+      opacity: 1;
+      transition: 0.2s all ease-in;
+    }
+
+    .movie__card--extraInfo.inactive {
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.2s ease-in;
+    }
+  }
+
+  .movie__card--parent.large:hover {
     transform: scale(1.09);
     opacity: 1;
     z-index: 3;

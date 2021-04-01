@@ -1,4 +1,4 @@
-import { Children, useContext } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
+import { Children, useContext, useEffect, useRef } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
 
 // components
 import Banner from '../../../components/MovieComponents/Banner/Banner';
@@ -13,7 +13,18 @@ import { movieRows } from './home.utils';
 import { SearchContext } from '../../../context/search/searchContext';
 
 export default function Home() {
-  const { search } = useContext(SearchContext);
+  const { search, setBrowseName } = useContext(SearchContext);
+
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      setBrowseName('');
+    }
+    return () => {
+      isMounted.current = false;
+    };
+  }, [setBrowseName]);
 
   const ROWS = Children.toArray(
     movieRows.map(({ title, fetchUrl }) => (

@@ -29,7 +29,7 @@ export default function MoviePlaybackView({ location: { state } }) {
         });
       }
 
-      const foundMovie = allMovies.find(
+      const foundMovie = allMovies?.find(
         (movie) => movie.id === Number(params.id)
       );
 

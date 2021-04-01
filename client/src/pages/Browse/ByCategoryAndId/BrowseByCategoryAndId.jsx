@@ -1,6 +1,9 @@
 import { useContext, useEffect, useState } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
 import { useLocation, useParams } from 'react-router';
 
+// utils
+import { baseImgUrl } from '../../../utils/generalUtils';
+
 // components
 import Banner from '../../../components/MovieComponents/Banner/Banner';
 import MovieCard from '../../../components/MovieComponents/MovieCard/MovieCard';
@@ -15,14 +18,14 @@ import {
   getMoviesByPersonId,
   getOnePersonById,
 } from '../../../services/movies';
-import { baseImgUrl } from '../../../utils/generalUtils';
-import { InnerColumn } from './browseByCategoryAndId.styles';
+
+// styles
+import { InnerColumn } from '../../../styled-components/InnerColumn';
 
 export default function BrowseByCategoryAndId() {
   const [movies, setMovies] = useState([]);
-  const [name, setName] = useState('');
   const { allGenres } = useContext(MoviesStateContext);
-  const { search } = useContext(SearchContext);
+  const { search, browseName, setBrowseName } = useContext(SearchContext);
   const { pathname } = useLocation();
   const { id } = useParams();
 
@@ -33,13 +36,13 @@ export default function BrowseByCategoryAndId() {
         const movieDataByPersonId = await getMoviesByPersonId(id);
         const { name } = await getOnePersonById(id);
         setMovies(movieDataByPersonId);
-        setName(name);
+        setBrowseName(name);
       } else {
         const movieDataByGenreId = await getMoviesByGenreId(id);
-        const foundGenre = allGenres.find((g) => g.id === Number(id));
+        const foundGenre = allGenres?.find((g) => g.id === Number(id));
 
         setMovies(movieDataByGenreId);
-        setName(foundGenre?.name);
+        setBrowseName(foundGenre?.name);
       }
     };
     fetchMovies();
@@ -47,9 +50,8 @@ export default function BrowseByCategoryAndId() {
   }, [id, pathname]);
 
   const moviesJSX = !search ? (
-    <InnerColumn>
-      <h1>{name}</h1>
-      <ul className="home__searchList">
+    <InnerColumn browseName={browseName}>
+      <ul className="search__searchList">
         {movies
           .filter(({ backdrop_path }) => Boolean(backdrop_path))
           .map((movie) => (
@@ -59,7 +61,7 @@ export default function BrowseByCategoryAndId() {
                 src={`${baseImgUrl}${movie.backdrop_path}`}
                 alt={movie.name}
                 key={movie.id}
-                className="home__searched-movie"
+                className="search__searched-movie"
               />
             </picture>
           ))}

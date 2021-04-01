@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
-import MovieInfoModal from '../components/MovieComponents/MovieModals/MovieInfoModal';
 import { getYoutubeVideo } from '../services/movies';
 
 const getType = (movie) => {
@@ -16,9 +15,6 @@ const getType = (movie) => {
 export const useMovieSelect = () => {
   const [selectedMovie, setSelectedMovie] = useState('');
   const [trailerUrl, setTrailerUrl] = useState('');
-  const [modalJSX, setModalJSX] = useState(<></>);
-  // const [recommendedMovies, setRecommendedMovies] = useState([]);
-  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const canRedirect = useRef(false);
 
@@ -37,17 +33,6 @@ export const useMovieSelect = () => {
     }
   }, [trailerUrl, selectedMovie, push]);
 
-  // useEffect(() => {
-  //   const getRecommendations = async () => {
-  //     if (!selectedMovie) return;
-  //     const recommendedData = await getMoviesByGenreId(
-  //       selectedMovie.genre_ids[0]
-  //     );
-  //     setRecommendedMovies(recommendedData);
-  //   };
-  //   getRecommendations();
-  // }, [selectedMovie]);
-
   const onSelectMovie = useCallback(async (movie) => {
     const mediaType = await getType(movie);
     setSelectedMovie(movie);
@@ -60,28 +45,6 @@ export const useMovieSelect = () => {
     canRedirect.current = true;
   };
 
-  const onOpenModal = useCallback(
-    async (movie) => {
-      if (!movie) return;
-
-      onSelectMovie(movie);
-
-      setIsInfoOpen(movie.id);
-
-      setModalJSX(
-        (curr) =>
-          (curr = (
-            <MovieInfoModal
-              open={movie}
-              setOpen={setIsInfoOpen}
-              movie={movie}
-            />
-          ))
-      );
-    },
-    [onSelectMovie, setIsInfoOpen]
-  );
-
   return {
     selectedMovie,
     setSelectedMovie,
@@ -90,9 +53,5 @@ export const useMovieSelect = () => {
     onSelectMovie,
     onPlayMovie,
     canRedirect,
-    isInfoOpen,
-    // setIsInfoOpen,
-    onOpenModal,
-    modalJSX,
   };
 };

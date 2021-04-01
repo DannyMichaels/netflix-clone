@@ -5,6 +5,7 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
+import BootstrapTooltip from '../../shared/Tooltip/BootstrapTooltip';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
@@ -16,6 +17,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 import { getCastByMovieId, getMoviesByGenreId } from '../../../services/movies';
+import { getReleaseYear } from '../../../utils/getReleaseYear';
 
 // styles
 import {
@@ -29,8 +31,6 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
-import { getReleaseYear } from '../../../utils/getReleaseYear';
-import { IconButton } from '@material-ui/core';
 
 export default function MovieInfoModal({ movie, open, setOpen }) {
   const {
@@ -44,10 +44,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   const { setSearch } = useContext(SearchContext);
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] = useState(
     false
   );
-  const [recommendedMovies, setRecommendedMovies] = useState([]);
   const isMounted = useRef(true);
   const { push } = useHistory();
 
@@ -85,7 +85,12 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
       setCast(castData);
 
       const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
-      setRecommendedMovies(recommendedData);
+
+      const newRecommendedMovies = recommendedData.filter(
+        ({ backdrop_path, overview }) => Boolean(backdrop_path && overview)
+      );
+
+      setRecommendedMovies(newRecommendedMovies);
     };
     getData(movie);
   }, [allGenres, movie]);
@@ -109,17 +114,26 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     push(`/browse/${type}/${id}`);
   };
 
-  const getRecommendedMovies = () => {
-    return recommendedMovies?.filter(({ backdrop_path, overview }) =>
-      Boolean(backdrop_path && overview)
-    );
-  };
-
   const redirectToClickedMovie = async (movie) => {
     setSelectedMovie('');
     setTrailerUrl('');
     return onPlayMovie(movie);
   };
+
+  const sectionDividerJSX = (state, setState) => (
+    <div className={`modal__sectionDivider ${!state && 'collapsed'}`}>
+      <button
+        className="modal__sectionDivider--expandButton"
+        onClick={() => setState((curr) => !curr)}
+      >
+        {state ? (
+          <ShowLessIcon className="modal__expandIcon" />
+        ) : (
+          <ShowMoreIcon className="modal__expandIcon" />
+        )}
+      </button>
+    </div>
+  );
 
   return (
     <Dialog
@@ -221,7 +235,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
               <>
                 <h2>More Like This</h2>
                 <ul>
-                  {getRecommendedMovies().map((recommendedMovie) => (
+                  {recommendedMovies.map((recommendedMovie) => (
                     <li
                       className="modal__recommendedMovie"
                       key={recommendedMovie.id}
@@ -243,7 +257,20 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                           >
                             {getReleaseYear(recommendedMovie)}
                           </h4>
-                          <IconButton className="icon">+</IconButton>
+
+                          <BootstrapTooltip
+                            placement="top"
+                            title="Add to My List"
+                          >
+                            <div className="icon">
+                              <svg viewBox="0 0 24 24">
+                                <path
+                                  d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z"
+                                  fill="currentColor"
+                                />
+                              </svg>
+                            </div>
+                          </BootstrapTooltip>
                         </div>
                         <p
                           onClick={() =>
@@ -256,24 +283,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                     </li>
                   ))}
                 </ul>
-                <div
-                  className={`modal__sectionDivider ${
-                    !showMoreRecommendedMovies && 'collapsed'
-                  }`}
-                >
-                  <button
-                    className="modal__sectionDivider--expandButton"
-                    onClick={() =>
-                      setShowMoreRecommendedMovies((currState) => !currState)
-                    }
-                  >
-                    {showMoreRecommendedMovies ? (
-                      <ShowLessIcon className="modal__expandIcon" />
-                    ) : (
-                      <ShowMoreIcon className="modal__expandIcon" />
-                    )}
-                  </button>
-                </div>
+                {sectionDividerJSX(
+                  showMoreRecommendedMovies,
+                  setShowMoreRecommendedMovies
+                )}
               </>
             ) : (
               <div style={{ minHeight: '20em' }}>

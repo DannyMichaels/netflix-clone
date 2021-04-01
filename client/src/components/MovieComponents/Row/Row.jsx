@@ -15,7 +15,10 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
-    setMovies(movieData);
+    const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
+      Boolean(backdrop_path)
+    );
+    setMovies(moviesThatHaveImage);
   }, [fetchUrl]);
 
   const CARDS = movies?.map((movie) => (
@@ -24,6 +27,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       src={`${baseImgUrl}${
         isLargeRow ? movie.poster_path : movie.backdrop_path
       }`}
+      isLargeRow={isLargeRow}
       alt={movie.name}
       key={movie.id}
       className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
@@ -31,11 +35,9 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   ));
 
   return (
-    <>
-      <StyledRow aria-label="movies row">
-        <h2 className="row__title">{title}</h2>
-        <div className="row__posters">{CARDS}</div>
-      </StyledRow>
-    </>
+    <StyledRow aria-label="movies row">
+      <h2 className="row__title">{title}</h2>
+      <div className="row__posters">{CARDS}</div>
+    </StyledRow>
   );
 }
