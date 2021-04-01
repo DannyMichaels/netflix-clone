@@ -257,7 +257,17 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                           >
                             {getReleaseYear(recommendedMovie)}
                           </h4>
-                          <IconButton className="icon">+</IconButton>
+
+                          <div style={{ boxSizing: 'inherit' }}>
+                            <div className="icon">
+                              <svg viewBox="0 0 24 24">
+                                <path
+                                  d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z"
+                                  fill="currentColor"
+                                />
+                              </svg>
+                            </div>
+                          </div>
                         </div>
                         <p
                           onClick={() =>
