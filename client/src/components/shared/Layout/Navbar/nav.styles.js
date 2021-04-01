@@ -71,6 +71,8 @@ export const StyledNav = styled.nav`
   .nav__searchContainer {
     display: flex;
     align-items: center;
+    margin: 0;
+    padding: 0%;
   }
 
   .nav__searchInput {

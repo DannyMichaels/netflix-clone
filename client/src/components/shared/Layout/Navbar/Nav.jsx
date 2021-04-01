@@ -57,6 +57,14 @@ export default function Nav() {
     setIsDropdownShowing(!isDropdownShowing);
   };
 
+  const handleOpenDropdown = () => {
+    setIsDropdownShowing(true);
+  };
+
+  const handleCloseDropdown = () => {
+    setIsDropdownShowing(false);
+  };
+
   const handleClickAway = () => {
     search ? setSearchMode(true) : setSearchMode(false);
   };
@@ -120,8 +128,8 @@ export default function Nav() {
 
             <div
               className="nav__profileContainer"
-              onMouseEnter={toggleDropDown}
-              onMouseLeave={toggleDropDown}
+              onMouseEnter={handleOpenDropdown}
+              onMouseLeave={handleCloseDropdown}
             >
               <img
                 className="nav__avatar"
