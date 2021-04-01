@@ -1,7 +1,7 @@
-import { useContext } from 'react';
 import './App.css';
-import NetflixLoading from './components/shared/Loading/NetflixLoading';
+import { useContext } from 'react';
 import { MoviesStateContext } from './context/movies/moviesContext';
+import NetflixLoading from './components/shared/Loading/NetflixLoading';
 import AppRouter from './router/AppRouter';
 
 const App = () => {
