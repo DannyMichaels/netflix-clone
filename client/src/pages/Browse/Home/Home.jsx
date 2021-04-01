@@ -11,9 +11,13 @@ import { movieRows } from './home.utils';
 
 // context
 import { SearchContext } from '../../../context/search/searchContext';
+import { MoviesStateContext } from '../../../context/movies/moviesContext';
+import { CircularProgressLoading } from '../../../components/shared/Loading/CircularProgressLoading';
 
 export default function Home() {
   const { search, setBrowseName } = useContext(SearchContext);
+  const { moviesAreLoading } = useContext(MoviesStateContext);
+
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -39,6 +43,23 @@ export default function Home() {
   const RESULTS = <SearchResultsView />;
 
   const moviesJSX = !search ? ROWS : RESULTS;
+
+  if (!moviesAreLoading) {
+    return (
+      <div style={{ height: '100vh', background: '#000' }}>
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <CircularProgressLoading />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Layout>
