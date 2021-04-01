@@ -22,10 +22,23 @@ export default function MoviePlaybackView({ location: { state } }) {
 
   useEffect(() => {
     const getMovie = async () => {
-      setVideoData({
-        movie: state.movie,
-        trailerUrl: state.trailerUrl,
-      });
+      if (state !== undefined) {
+        return setVideoData({
+          movie: state.movie,
+          trailerUrl: state.trailerUrl,
+        });
+      }
+
+      const foundMovie = allMovies?.find(
+        (movie) => movie.id === Number(params.id)
+      );
+
+      if (foundMovie) {
+        return setVideoData({
+          movie: foundMovie,
+          trailerUrl: params.trailerUrl,
+        });
+      }
     };
     getMovie();
   }, [allMovies, params, state]);
