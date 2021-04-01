@@ -1,3 +1,4 @@
+import { Card } from '@material-ui/core';
 import styled from 'styled-components';
 import { COLORS } from '../../../../utils/generalUtils';
 
@@ -89,9 +90,35 @@ export const StyledNav = styled.nav`
     }
   }
 
+  .nav__profileContainer {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+  }
+
   .nav__browseName {
     color: #fff;
     font-size: 2.5rem;
     font-size: clamp(1rem, 2vw, 2.5rem);
+  }
+`;
+
+export const Dropdown = styled(Card)`
+  position: absolute;
+  min-width: 5em;
+  top: 45px;
+  right: 2em;
+  z-index: 5;
+  box-shadow: -3px 5px 17px 1px #000;
+  .MuiPaper-root {
+    background: black;
+    background-color: #999;
+  }
+  .dropdown-items {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
   }
 `;

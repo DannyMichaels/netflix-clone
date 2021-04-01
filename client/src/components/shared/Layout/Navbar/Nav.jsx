@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router';
 
+// utils
+import { ROUTES } from '../../../../utils/navigation';
+
 // components
 import {
   Box,
@@ -16,14 +19,13 @@ import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 
 // styles
-import { StyledNav } from './nav.styles';
+import { Dropdown, StyledNav } from './nav.styles';
 import { SearchContext } from '../../../../context/search/searchContext';
-import { ROUTES } from '../../../../utils/navigation';
 
 export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
-  const [dropDown, setDropDown] = useState(false);
+  const [isDropdownShowing, setIsDropdownShowing] = useState(false);
   const { search, setSearch, handleSearch, browseName } = useContext(
     SearchContext
   );
@@ -51,7 +53,7 @@ export default function Nav() {
   };
 
   const toggleDropDown = () => {
-    setDropDown(!dropDown);
+    setIsDropdownShowing(!isDropdownShowing);
   };
 
   const handleClickAway = () => {
@@ -115,21 +117,28 @@ export default function Nav() {
               <BellIcon fontSize="default" className="nav__icon bell" />
             </Box>
 
-            <img
-              onMouseEnter={toggleDropDown}
-              onMouseLeave={toggleDropDown}
-              className="nav__avatar"
-              src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-              alt="Profile Pic"
-            />
-
-            <Box mx={1}>
-              <ArrowDropUpIcon
-                className={`nav__icon arrow ${dropDown && 'active'}`}
-                onMouseEnter={toggleDropDown}
-                onMouseLeave={toggleDropDown}
+            <div
+              className="nav__profileContainer"
+              // onMouseEnter={toggleDropDown}
+              // onMouseLeave={toggleDropDown}
+            >
+              <img
+                className="nav__avatar"
+                src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+                alt="Profile Pic"
               />
-            </Box>
+
+              <Box mx={1}>
+                <ArrowDropUpIcon
+                  className={`nav__icon arrow ${isDropdownShowing && 'active'}`}
+                />
+              </Box>
+              {!isDropdownShowing && (
+                <Dropdown>
+                  <div className="nav__dropDown">hello</div>
+                </Dropdown>
+              )}
+            </div>
           </div>
         </div>
       </StyledNav>
