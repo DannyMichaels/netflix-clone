@@ -21,15 +21,21 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
 import { Dropdown, StyledNav } from './nav.styles';
+
+// context
 import { SearchContext } from '../../../../context/search/searchContext';
+import { ProfilesStateContext } from '../../../../context/profiles/profilesContext';
 
 export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
+
   const { search, setSearch, handleSearch, browseName } = useContext(
     SearchContext
   );
+  const { profiles } = useContext(ProfilesStateContext);
+
   const { push } = useHistory();
 
   const onScroll = () => {
@@ -51,10 +57,6 @@ export default function Nav() {
 
   const onSearchClear = () => {
     setSearch('');
-  };
-
-  const toggleDropDown = () => {
-    setIsDropdownShowing(!isDropdownShowing);
   };
 
   const handleOpenDropdown = () => {
@@ -151,15 +153,15 @@ export default function Nav() {
                   <ArrowDropDownIcon className="nav__dropDown--arrow" />
                   <div className="nav__dropDown">
                     <div className="dropDown__items">
-                      {[0, 1, 2, 3].map(() => (
-                        <li>
+                      {profiles.map((user) => (
+                        <li key={user.id}>
                           <img
                             className="nav__avatar"
-                            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-                            alt="Profile Pic"
+                            src={user.imgUrl}
+                            alt={user.name}
                           />
 
-                          <span>username</span>
+                          <span>{user.name}</span>
                         </li>
                       ))}
                       <li>
