@@ -109,13 +109,10 @@ export const Dropdown = styled.div`
   .nav__dropDown {
     transition: all 0.2s ease-in;
     position: absolute;
-    min-width: 5em;
+    min-width: 10em;
     top: 3em;
     right: 2em;
     z-index: 5;
-    box-shadow: -3px 5px 17px 1px ${COLORS.BLACK};
-    border-radius: 4px;
-    padding: 1em;
     opacity: ${({ isActive }) => (isActive ? 0.8 : 0)};
     opacity: ${({ background, isActive }) => background && isActive && 0.9};
     background: ${COLORS.BLACK};
@@ -124,7 +121,19 @@ export const Dropdown = styled.div`
       opacity: 0.96;
     }
 
+    .hr {
+      color: #999;
+      background: #999;
+      width: 100%;
+      height: 0.1em;
+      opacity: 0.6;
+      z-index: 6;
+      margin: 0;
+    }
+
     .dropDown__items {
+      padding: 1em;
+
       color: white;
       display: flex;
       flex-direction: column;
@@ -147,9 +156,15 @@ export const Dropdown = styled.div`
     }
   }
 
+  .dropDown__items:not(:first-of-type) {
+    li {
+      font-weight: 500;
+    }
+  }
+
   .nav__dropDown--arrow {
     position: absolute;
-    top: 1em;
+    top: 0.9em;
     color: white;
     z-index: 6;
     transform: rotate(180deg);

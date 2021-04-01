@@ -154,6 +154,19 @@ export default function Nav() {
                           <span>username</span>
                         </li>
                       ))}
+                      <li>
+                        <span>Manage Profiles</span>
+                      </li>
+                    </div>
+                    <div className="hr" />
+                    <div className="dropDown__items">
+                      {['Account', 'Help Center', 'Sign out of Netflix'].map(
+                        (text) => (
+                          <li>
+                            <span>{text}</span>
+                          </li>
+                        )
+                      )}
                     </div>
                   </div>
                 </Dropdown>
