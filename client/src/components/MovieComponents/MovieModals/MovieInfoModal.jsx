@@ -5,7 +5,8 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
+import BootstrapTooltip from '../../shared/Tooltip/BootstrapTooltip';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
@@ -258,7 +259,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                             {getReleaseYear(recommendedMovie)}
                           </h4>
 
-                          <div style={{ boxSizing: 'inherit' }}>
+                          <BootstrapTooltip
+                            placement="top"
+                            title="Add to My List"
+                          >
                             <div className="icon">
                               <svg viewBox="0 0 24 24">
                                 <path
@@ -267,7 +271,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                                 />
                               </svg>
                             </div>
-                          </div>
+                          </BootstrapTooltip>
                         </div>
                         <p
                           onClick={() =>
