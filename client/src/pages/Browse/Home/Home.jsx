@@ -45,10 +45,6 @@ export default function Home() {
 
   const moviesJSX = !search ? ROWS : RESULTS;
 
-  if (moviesAreLoading) {
-    return <NetflixLoading />;
-  }
-
   return (
     <Layout>
       <Banner />
