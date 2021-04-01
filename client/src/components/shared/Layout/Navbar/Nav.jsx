@@ -17,6 +17,7 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import BellIcon from '@material-ui/icons/Notifications';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
 import { Dropdown, StyledNav } from './nav.styles';
@@ -119,8 +120,8 @@ export default function Nav() {
 
             <div
               className="nav__profileContainer"
-              // onMouseEnter={toggleDropDown}
-              // onMouseLeave={toggleDropDown}
+              onMouseEnter={toggleDropDown}
+              onMouseLeave={toggleDropDown}
             >
               <img
                 className="nav__avatar"
@@ -133,11 +134,20 @@ export default function Nav() {
                   className={`nav__icon arrow ${isDropdownShowing && 'active'}`}
                 />
               </Box>
-              {!isDropdownShowing && (
-                <Dropdown>
-                  <div className="nav__dropDown">hello</div>
+
+              <>
+                <Dropdown
+                  isActive={isDropdownShowing}
+                  background={isBackgroundShowing}
+                >
+                  <ArrowDropDownIcon className="nav__dropDown--arrow" />
+                  <div className="nav__dropDown">
+                    <div className="dropDown__items">
+                      <li>test</li>
+                    </div>
+                  </div>
                 </Dropdown>
-              )}
+              </>
             </div>
           </div>
         </div>

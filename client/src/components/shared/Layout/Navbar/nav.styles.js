@@ -105,20 +105,39 @@ export const StyledNav = styled.nav`
   }
 `;
 
-export const Dropdown = styled(Card)`
-  position: absolute;
-  min-width: 5em;
-  top: 45px;
-  right: 2em;
-  z-index: 5;
-  box-shadow: -3px 5px 17px 1px #000;
-  .MuiPaper-root {
-    background: black;
-    background-color: #999;
+export const Dropdown = styled.div`
+  .nav__dropDown {
+    transition: all 0.2s ease-in;
+    position: absolute;
+    min-width: 5em;
+    top: 3em;
+    right: 2em;
+    z-index: 5;
+    box-shadow: -3px 5px 17px 1px ${COLORS.BLACK};
+    border-radius: 4px;
+    padding: 1em;
+    opacity: ${({ isActive }) => (isActive ? 0.8 : 0)};
+    opacity: ${({ background, isActive }) => background && isActive && 0.9};
+    background: ${COLORS.BLACK};
+
+    .dropDown__items {
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      list-style-type: none;
+    }
   }
-  .dropdown-items {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
+
+  .nav__dropDown--arrow {
+    position: absolute;
+    top: 1em;
+    color: white;
+    z-index: 6;
+    transform: rotate(180deg);
+    font-size: 2rem;
+    left: 0;
+    opacity: ${({ isActive }) => (isActive ? 0.8 : 0)};
+    transition: all 0.2s ease-in;
   }
 `;
