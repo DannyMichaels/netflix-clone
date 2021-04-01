@@ -7,7 +7,7 @@ import { COLORS } from '../../../utils/generalUtils';
 const Wrapper = styled.div`
   background: ${COLORS.BLACK};
 
-  /* new */
+  // how to center a div : ^)
   display: flex;
   width: 100vw;
   height: 100vh;
