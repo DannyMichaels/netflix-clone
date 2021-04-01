@@ -11,13 +11,9 @@ import { movieRows } from './home.utils';
 
 // context
 import { SearchContext } from '../../../context/search/searchContext';
-import { MoviesStateContext } from '../../../context/movies/moviesContext';
-import { CircularProgressLoading } from '../../../components/shared/Loading/CircularProgressLoading';
-import NetflixLoading from '../../../components/shared/Loading/NetflixLoading';
 
 export default function Home() {
   const { search, setBrowseName } = useContext(SearchContext);
-  const { moviesAreLoading } = useContext(MoviesStateContext);
 
   const isMounted = useRef(true);
 
