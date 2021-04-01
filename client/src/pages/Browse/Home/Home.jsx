@@ -13,6 +13,7 @@ import { movieRows } from './home.utils';
 import { SearchContext } from '../../../context/search/searchContext';
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../../components/shared/Loading/CircularProgressLoading';
+import NetflixLoading from '../../../components/shared/Loading/NetflixLoading';
 
 export default function Home() {
   const { search, setBrowseName } = useContext(SearchContext);
@@ -44,21 +45,8 @@ export default function Home() {
 
   const moviesJSX = !search ? ROWS : RESULTS;
 
-  if (!moviesAreLoading) {
-    return (
-      <div style={{ height: '100vh', background: '#000' }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          <CircularProgressLoading />
-        </div>
-      </div>
-    );
+  if (moviesAreLoading) {
+    return <NetflixLoading />;
   }
 
   return (
