@@ -25,6 +25,7 @@ import { Dropdown, StyledNav } from './nav.styles';
 // context
 import { SearchContext } from '../../../../context/search/searchContext';
 import { ProfilesStateContext } from '../../../../context/profiles/profilesContext';
+import { CurrentProfileContext } from '../../../../context/profiles/CurrentProfileContext';
 
 export default function Nav() {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
@@ -34,7 +35,9 @@ export default function Nav() {
   const { search, setSearch, handleSearch, browseName } = useContext(
     SearchContext
   );
+
   const { profiles } = useContext(ProfilesStateContext);
+  const [currentProfile] = useContext(CurrentProfileContext);
 
   const { push } = useHistory();
 
@@ -70,8 +73,6 @@ export default function Nav() {
   const handleClickAway = () => {
     search ? setSearchMode(true) : setSearchMode(false);
   };
-
-  console.log({ profiles });
 
   return (
     <>
@@ -137,8 +138,8 @@ export default function Nav() {
             >
               <img
                 className="nav__avatar"
-                src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-                alt="Profile Pic"
+                src={currentProfile.imgUrl}
+                alt={`${currentProfile.name}'s avatar`}
               />
 
               <Box mx={1}>

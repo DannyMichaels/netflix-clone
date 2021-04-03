@@ -1,4 +1,4 @@
-import React, { useMemo, createContext, useReducer, useState } from 'react';
+import React, { useMemo, createContext, useReducer } from 'react';
 
 // utils
 import { getRandomId } from '../../utils/generateId';
