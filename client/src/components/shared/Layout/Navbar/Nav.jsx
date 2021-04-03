@@ -71,6 +71,8 @@ export default function Nav() {
     search ? setSearchMode(true) : setSearchMode(false);
   };
 
+  console.log({ profiles });
+
   return (
     <>
       <StyledNav
@@ -153,7 +155,7 @@ export default function Nav() {
                   <ArrowDropDownIcon className="nav__dropDown--arrow" />
                   <div className="nav__dropDown">
                     <div className="dropDown__items">
-                      {profiles.map((user) => (
+                      {profiles?.map((user) => (
                         <li key={user.id}>
                           <img
                             className="nav__avatar"

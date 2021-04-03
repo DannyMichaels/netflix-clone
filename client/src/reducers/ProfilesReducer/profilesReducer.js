@@ -1,4 +1,3 @@
-import { getRandomId } from '../../utils/generateId';
 import {
   ADD_PROFILE,
   FETCH_PROFILES,

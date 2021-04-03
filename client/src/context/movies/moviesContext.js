@@ -5,8 +5,11 @@ import { getAllGenres, getAllMovies } from '../../services/movies';
 import { movieRows } from '../../pages/Browse/Home/home.utils';
 
 // reducer
-import { movieReducer } from '../../reducers/movieReducer';
-import { FETCH_GENRES, FETCH_MOVIES } from './movieReducerTypes';
+import { movieReducer } from '../../reducers/moviesReducer/movieReducer';
+import {
+  FETCH_GENRES,
+  FETCH_MOVIES,
+} from '../../reducers/moviesReducer/movieReducerTypes';
 
 export const MoviesStateContext = createContext();
 export const MoviesDispatchContext = createContext();

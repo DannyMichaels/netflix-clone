@@ -1,11 +1,11 @@
-import React, { useMemo, createContext, useReducer } from 'react';
+import React, { useMemo, createContext, useReducer, useState } from 'react';
 
 // utils
 import { getRandomId } from '../../utils/generateId';
 
 // reducer
-import { profilesReducer } from './profilesReducer';
-import { FETCH_PROFILES } from './profilesReducerTypes';
+import { profilesReducer } from '../../reducers/ProfilesReducer/profilesReducer';
+import { FETCH_PROFILES } from '../../reducers/ProfilesReducer/profilesReducerTypes';
 
 export const ProfilesStateContext = createContext();
 export const ProfilesDispatchContext = createContext();

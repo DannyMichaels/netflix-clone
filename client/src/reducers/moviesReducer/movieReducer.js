@@ -1,7 +1,4 @@
-import {
-  FETCH_MOVIES,
-  FETCH_GENRES,
-} from '../context/movies/movieReducerTypes';
+import { FETCH_MOVIES, FETCH_GENRES } from './movieReducerTypes';
 
 export const movieReducer = (state, action) => {
   switch (action.type) {
