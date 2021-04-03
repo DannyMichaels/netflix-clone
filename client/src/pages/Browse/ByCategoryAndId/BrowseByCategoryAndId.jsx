@@ -20,7 +20,7 @@ import {
 } from '../../../services/movies';
 
 // styles
-import { InnerColumn } from '../../../styled-components/InnerColumn';
+import { InnerColumn } from '../../../components/shared/styled-components/InnerColumn';
 
 export default function BrowseByCategoryAndId() {
   const [movies, setMovies] = useState([]);
