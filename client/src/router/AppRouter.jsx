@@ -14,7 +14,6 @@ const AppRouter = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={ROUTES.SELECT_PROFILE} component={ProfileSelect} />
-
       <Route exact path={ROUTES.BROWSE_ALL} component={Home} />
       <Route
         path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}

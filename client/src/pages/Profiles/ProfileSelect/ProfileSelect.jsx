@@ -8,6 +8,9 @@ import { COLORS } from '../../../utils/generalUtils';
 
 // styles
 import styled from 'styled-components';
+import { CurrentProfileContext } from '../../../context/profiles/CurrentProfileContext';
+import { ROUTES } from '../../../utils/navigation';
+import { useHistory } from 'react-router';
 
 const Wrapper = styled.div`
   display: flex;
@@ -34,6 +37,7 @@ const Wrapper = styled.div`
 
   .profiles__list {
     list-style-type: none;
+    padding: 0;
     margin: 2em 0;
     opacity: 1;
     transition: opacity 0.4s ease-out;
@@ -59,18 +63,47 @@ const Wrapper = styled.div`
         border: none;
         border: 0.15em solid transparent;
       }
+
+      .profile__name {
+        line-height: 1.2em;
+        min-height: 1.8em;
+        color: grey;
+        display: block;
+        text-align: center;
+        font-size: 1.3vw;
+        margin: 0.6em 0;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
       &:hover {
         cursor: pointer;
-
         img {
           border: 0.15em solid #fff;
         }
+
+        .profile__name {
+          color: #fff;
+        }
       }
+      /* --- */
     }
   }
 `;
+
 export default function ProfileSelect() {
+  const [currentProfile, setCurrentProfile] = useContext(CurrentProfileContext);
   const { profiles } = useContext(ProfilesStateContext);
+
+  const { push } = useHistory();
+
+  const onSelect = (user) => {
+    setCurrentProfile(user);
+    localStorage.setItem('currentProfile', JSON.stringify(user));
+    push(ROUTES.BROWSE_ALL);
+  };
+
   return (
     <Wrapper>
       <div className="profiles__container">
@@ -78,8 +111,9 @@ export default function ProfileSelect() {
 
         <ul className="profiles__list">
           {profiles.map((user) => (
-            <li>
+            <li onClick={() => onSelect(user)} key={user.id}>
               <img src={user.imgUrl} alt={user.name} />
+              <span className="profile__name">{user.name}</span>
             </li>
           ))}
         </ul>

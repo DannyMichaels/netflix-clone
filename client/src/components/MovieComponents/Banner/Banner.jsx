@@ -14,7 +14,7 @@ import PlayIcon from '@material-ui/icons/PlayArrow';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 
 //styles
-import { StyledBanner } from './banner.styles';
+import { StyledBanner } from './Banner.styles';
 import { SearchContext } from '../../../context/search/searchContext';
 
 export default function Banner() {

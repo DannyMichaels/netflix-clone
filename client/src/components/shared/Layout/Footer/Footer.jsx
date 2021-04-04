@@ -11,7 +11,7 @@ import { getServiceCode } from '../../../../utils/getServiceCode';
 import { getRandomId } from '../../../../utils/generateId';
 
 // styles
-import { StyledFooter } from './footer.styles';
+import { StyledFooter } from './Footer.styles';
 
 const socialLinks = [
   {

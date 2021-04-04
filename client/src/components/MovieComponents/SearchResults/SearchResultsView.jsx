@@ -7,7 +7,7 @@ import { baseImgUrl } from '../../../utils/generalUtils';
 import MovieCard from '../MovieCard/MovieCard';
 
 //styles
-import { InnerColumn } from './searchResults.styles';
+import { InnerColumn } from './SearchResults.styles';
 
 export default function SearchResultsView() {
   const { queriedMovies } = useContext(SearchContext);

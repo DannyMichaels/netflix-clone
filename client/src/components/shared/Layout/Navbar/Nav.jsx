@@ -20,7 +20,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
-import { Dropdown, StyledNav } from './nav.styles';
+import { Dropdown, StyledNav } from './Nav.styles';
 
 // context
 import { SearchContext } from '../../../../context/search/searchContext';
