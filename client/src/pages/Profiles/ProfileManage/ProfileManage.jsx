@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from 'react';
 // utils
 import { ROUTES } from '../../../utils/navigation';
 import { Redirect, useHistory } from 'react-router-dom';
+import { languages } from '../../../utils/generalUtils';
+import { makeArrayFromString } from '../../../utils/makeArrayFromString';
 
 // components
 import { Wrapper } from './ProfileManage.styles';
@@ -51,10 +53,12 @@ export default function ProfileManage({ location: { state } }) {
 
   if (!state) return <Redirect to={ROUTES.SELECT_PROFILE} />;
 
+  const listItemLanguages = makeArrayFromString(languages, 'matchOnlyLetters');
+
   return (
     <>
       <Nav onlyLogo />
-      <Wrapper>
+      <Wrapper isDropdownShowing={isDropdownShowing}>
         <div className="manageProfile__centeredDiv">
           <div className="manageProfile__actionsContainer">
             <h1>Edit Profile</h1>
@@ -101,6 +105,14 @@ export default function ProfileManage({ location: { state } }) {
                         {profileFormData?.language}
 
                         <span className="manageProfile__dropdown--arrow" />
+                      </div>
+
+                      <div className="manageProfile__dropdown--submenu">
+                        <ul>
+                          {listItemLanguages.map((text) => (
+                            <li>{text}</li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   </div>

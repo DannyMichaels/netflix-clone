@@ -236,6 +236,7 @@ export const Wrapper = styled.div`
             background-color: ${COLORS.BRIGHT_BLACK};
             filter: contrast(80%);
           }
+
           &:focus {
             outline: none;
           }
@@ -249,6 +250,59 @@ export const Wrapper = styled.div`
             right: 10px;
             top: 44%;
             width: 0;
+          }
+        }
+      }
+      .manageProfile__dropdown--submenu {
+        opacity: ${({ isDropdownShowing }) => (isDropdownShowing ? 1 : 0)};
+        transition-duration: 150ms;
+        overflow-x: hidden;
+        z-index: 2;
+        padding: 0;
+        margin: 0;
+        top: 2.5rem;
+        left: 0;
+        font-size: 14px;
+        box-sizing: border-box;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.9);
+        font-size: 13px;
+        line-height: 21px;
+        border: solid 1px rgba(255, 255, 255, 0.15);
+        padding: 20px;
+        overflow-y: scroll;
+        max-height: 50vh;
+        width: 350px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        ul {
+          display: flex;
+          margin: 0;
+          padding: 0;
+          max-height: 300px;
+          width: 350px;
+          flex-flow: column wrap;
+          /* padding: 2em; */
+          flex-basis: 30%;
+
+          list-style-type: none;
+
+          li {
+            flex: 0.5;
+            padding: 0;
+            line-height: 24px;
+            display: block;
+            cursor: pointer;
+            color: ${COLORS.WHITE};
+            box-sizing: border-box;
+            position: relative;
+
+            &:hover {
+              text-decoration: underline;
+            }
           }
         }
       }

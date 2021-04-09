@@ -13,3 +13,36 @@ export const COLORS = {
   GREEN: '#46d369',
   RED: '#E50914',
 };
+
+export const languages = `
+0: "Bahasa Indonesia"
+1: "Bahasa Melayu"
+2: "Dansk"
+3: "Deutsch"
+4: "English"
+5: "Español"
+6: "Français"
+7: "Hrvatski"
+8: "Italiano"
+9: "Kiswahili"
+10: "Magyar"
+11: "Nederlands"
+12: "Norsk bokmål"
+13: "Polski"
+14: "Português"
+15: "Română"
+16: "Suomi"
+17: "Svenska"
+18: "Tiếng Việt"
+19: "Türkçe"
+20: "Čeština"
+21: "Ελληνικά"
+22: "Русский"
+23: "עברית"
+24: "العربية"
+25: "हिन्दी"
+26: "ไทย"
+27: "中文"
+28: "日本語"
+29: "한국어"
+  `;
