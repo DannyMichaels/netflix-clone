@@ -81,6 +81,15 @@ export default function Nav({ onlyLogo }) {
     push(ROUTES.SELECT_PROFILE);
   };
 
+  const onRedirectToManageProfile = () => {
+    push({
+      pathname: ROUTES.SELECT_PROFILE,
+      state: {
+        manageModeProps: true,
+      },
+    });
+  };
+
   return (
     <>
       <StyledNav
@@ -182,7 +191,9 @@ export default function Nav({ onlyLogo }) {
                             </li>
                           ))}
                           <li>
-                            <span>Manage Profiles</span>
+                            <span onClick={onRedirectToManageProfile}>
+                              Manage Profiles
+                            </span>
                           </li>
                         </div>
                         <div className="hr" />
