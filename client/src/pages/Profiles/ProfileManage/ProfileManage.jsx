@@ -14,6 +14,7 @@ import { UPDATE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReduce
 
 export default function ProfileManage({ location: { state } }) {
   const [profileFormData, setProfileFormData] = useState(null);
+  const [isDropdownShowing, setIsDropdownShowing] = useState(false);
   const dispatch = useContext(ProfilesDispatchContext);
   const { profile } = state;
   const { push } = useHistory();
@@ -24,6 +25,10 @@ export default function ProfileManage({ location: { state } }) {
     const { isKid, name, imgUrl, language } = profile;
     setProfileFormData({ name, isKid, image: imgUrl, language });
   }, [profile]);
+
+  const toggleDropdown = () => {
+    setIsDropdownShowing(isDropdownShowing ? false : true);
+  };
 
   const handleChange = ({ target: { name, value } }) => {
     setProfileFormData((prevState) => ({
@@ -71,7 +76,7 @@ export default function ProfileManage({ location: { state } }) {
                   <label htmlFor="name">Profile Name</label>
                   <input
                     name="name"
-                    value={profileFormData.name}
+                    value={profileFormData?.name}
                     onChange={handleChange}
                   />
                 </div>
@@ -81,6 +86,23 @@ export default function ProfileManage({ location: { state } }) {
                     <h2 className="manageProfile__dropdown--label">
                       Language:
                     </h2>
+
+                    <div
+                      cols={2}
+                      className="manageProfile__dropdown--nfDropDown"
+                    >
+                      <div
+                        role="button"
+                        tabindex="0"
+                        onClick={toggleDropdown}
+                        aria-expanded={isDropdownShowing}
+                        className="manageProfile__dropdown--header"
+                      >
+                        {profileFormData?.language}
+
+                        <span className="manageProfile__dropdown--arrow" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

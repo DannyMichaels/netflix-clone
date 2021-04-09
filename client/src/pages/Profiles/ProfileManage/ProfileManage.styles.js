@@ -182,6 +182,12 @@ export const Wrapper = styled.div`
       }
     }
 
+    .manageProfile__edit--dropdowns,
+    .manageProfile__edit--dropdown,
+    .manageProfile__dropdown--nfDropDown {
+      min-width: 18rem;
+    }
+
     .manageProfile__edit--dropdowns {
       display: flex;
       flex-direction: column;
@@ -196,6 +202,53 @@ export const Wrapper = styled.div`
           font-weight: 400;
           @media screen and (max-width: 1000px) {
             font-size: 13px;
+          }
+        }
+      }
+
+      .manageProfile__dropdown--nfDropDown {
+        position: relative;
+        text-align: left;
+
+        .manageProfile__dropdown--header {
+          height: 2.5rem;
+          padding-left: 10px;
+          line-height: 2.5rem;
+          letter-spacing: 1px;
+          /* font-size: 1.25rem; */
+          cursor: pointer;
+          font-size: clamp(0.6rem, 2vw, 1.25rem);
+          font-weight: 700;
+
+          box-sizing: border-box;
+          border: 1px solid rgba(255, 255, 255, 0.9);
+          display: inline-block;
+          color: #fff;
+          background-color: ${COLORS.BLACK};
+
+          appearance: none;
+
+          border-radius: 0;
+          position: relative;
+          padding-right: 50px;
+
+          &:hover {
+            background-color: ${COLORS.BRIGHT_BLACK};
+            filter: contrast(80%);
+          }
+          &:focus {
+            outline: none;
+          }
+
+          .manageProfile__dropdown--arrow {
+            border-color: #fff transparent transparent;
+            border-style: solid;
+            border-width: 5px 5px 0;
+            height: 0;
+            position: absolute;
+            right: 10px;
+            top: 44%;
+            width: 0;
           }
         }
       }
