@@ -1,8 +1,11 @@
 import { useContext, useState } from 'react';
 
 // context
-import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
-import { CurrentProfileContext } from '../../../context/profiles/CurrentProfileContext';
+import {
+  ProfilesDispatchContext,
+  ProfilesStateContext,
+} from '../../../context/profiles/profilesContext';
+import { SELECT_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
 
 // utils
 import { ROUTES } from '../../../utils/navigation';
@@ -19,9 +22,8 @@ export default function ProfileSelect({ location: { state } }) {
     return state?.manageModeProps ? true : false;
   });
 
-  const [, setCurrentProfile] = useContext(CurrentProfileContext);
-
   const { profiles } = useContext(ProfilesStateContext);
+  const dispatch = useContext(ProfilesDispatchContext);
 
   const { push } = useHistory();
 
@@ -35,8 +37,8 @@ export default function ProfileSelect({ location: { state } }) {
       });
     }
 
-    setCurrentProfile(user);
-    localStorage.setItem('selectedProfile', JSON.stringify(user));
+    dispatch({ type: SELECT_PROFILE, payload: user });
+
     push(ROUTES.BROWSE_ALL);
   };
 

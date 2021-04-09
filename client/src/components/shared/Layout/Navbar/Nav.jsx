@@ -24,8 +24,11 @@ import { Dropdown, StyledNav } from './Nav.styles';
 
 // context
 import { SearchContext } from '../../../../context/search/searchContext';
-import { ProfilesStateContext } from '../../../../context/profiles/profilesContext';
-import { CurrentProfileContext } from '../../../../context/profiles/CurrentProfileContext';
+import {
+  ProfilesDispatchContext,
+  ProfilesStateContext,
+} from '../../../../context/profiles/profilesContext';
+import { SIGN_OUT } from '../../../../reducers/ProfilesReducer/profilesReducerTypes';
 
 export default function Nav({ onlyLogo }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
@@ -36,8 +39,8 @@ export default function Nav({ onlyLogo }) {
     SearchContext
   );
 
-  const { profiles } = useContext(ProfilesStateContext);
-  const [currentProfile, setCurrentProfile] = useContext(CurrentProfileContext);
+  const { profiles, currentProfile } = useContext(ProfilesStateContext);
+  const dispatch = useContext(ProfilesDispatchContext);
 
   const { push } = useHistory();
 
@@ -76,7 +79,7 @@ export default function Nav({ onlyLogo }) {
 
   const onSignOut = async (text) => {
     if (!text.includes('Sign out of Netflix')) return;
-    setCurrentProfile(null);
+    dispatch({ type: SIGN_OUT });
     localStorage.setItem('selectedProfile', null);
     push(ROUTES.SELECT_PROFILE);
   };

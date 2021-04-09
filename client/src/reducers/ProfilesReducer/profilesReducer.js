@@ -3,6 +3,7 @@ import {
   FETCH_PROFILES,
   REMOVE_PROFILE,
   UPDATE_PROFILE,
+  SELECT_PROFILE,
   SIGN_OUT,
 } from './profilesReducerTypes';
 
@@ -33,9 +34,9 @@ export const profilesReducer = (state, action) => {
 
     case ADD_PROFILE:
       const newProfiles = [...state.profiles, payload];
-      localStorage.setItem('profiles', JSON.stringify(Array(newProfiles)));
+      localStorage.setItem('profiles', JSON.stringify(newProfiles));
 
-      return { ...state, profiles: Array(newProfiles) };
+      return { ...state, profiles: newProfiles };
 
     case UPDATE_PROFILE:
       const updatedProfiles = state.profiles.map((user) =>
@@ -43,19 +44,19 @@ export const profilesReducer = (state, action) => {
       );
 
       localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
-
       return { ...state, profiles: updatedProfiles };
 
     case REMOVE_PROFILE:
-      const filteredProfiles = {
-        ...state,
-        profiles: state.profiles.filter(
-          (user) => user.id !== String(payload.id)
-        ),
-      };
+      const filteredProfiles = state.profiles.filter(
+        (user) => user.id !== String(payload.id)
+      );
 
       localStorage.setItem('profiles', JSON.stringify(filteredProfiles));
-      return filteredProfiles;
+      return { ...state, profiles: filteredProfiles };
+
+    case SELECT_PROFILE:
+      localStorage.setItem('selectedProfile', JSON.stringify(payload));
+      return { ...state, currentProfile: payload };
 
     case SIGN_OUT:
       localStorage.setItem('selectedProfile', null);
