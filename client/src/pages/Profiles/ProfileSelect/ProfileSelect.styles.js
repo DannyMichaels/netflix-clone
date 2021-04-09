@@ -71,6 +71,22 @@ export const Wrapper = styled.div`
 `;
 
 export const UserIcon = styled.li`
+  &:hover {
+    .profile__userImage:after {
+      content: '';
+      display: block;
+      -webkit-border-radius: 4px;
+      -moz-border-radius: 4px;
+      border-radius: 4px;
+      border: 0.12rem solid white;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+  }
+
   .profiles__avatarWrapper {
     display: block;
     position: relative;
@@ -99,22 +115,6 @@ export const UserIcon = styled.li`
     border: none;
     background-image: ${({ userImg }) => `url(${userImg})`};
     opacity: ${({ manageMode }) => manageMode && '.5'};
-
-    &:hover {
-      &:after {
-        content: '';
-        display: block;
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        border-radius: 4px;
-        border: 0.12rem solid white;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-      }
-    }
   }
 
   .profile__pencilIcon {
