@@ -8,7 +8,7 @@ import {
 } from './profilesReducerTypes';
 
 const getCurrentProfile = (state) => {
-  const selectedProfile = localStorage.getItem('selectedProfile');
+  const selectedProfile = localStorage.getItem('currentProfile');
   const parsedProfile = JSON.parse(selectedProfile);
 
   if (parsedProfile !== null) {
@@ -16,7 +16,7 @@ const getCurrentProfile = (state) => {
   }
 
   const defaultProfile = state.profiles.find((_, idx) => idx === 0);
-  localStorage.setItem('selectedProfile', JSON.stringify(defaultProfile));
+  localStorage.setItem('currentProfile', JSON.stringify(defaultProfile));
   return defaultProfile;
 };
 
@@ -42,8 +42,11 @@ export const profilesReducer = (state, action) => {
       const updatedProfiles = state.profiles.map((user) =>
         user.id === String(payload.id) ? payload : user
       );
-
       localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
+      if (payload.id === state.currentProfile.id) {
+        localStorage.setItem('currentProfile', JSON.stringify(payload));
+        return { ...state, profiles: updatedProfiles, currentProfile: payload };
+      }
       return { ...state, profiles: updatedProfiles };
 
     case REMOVE_PROFILE:
@@ -55,12 +58,13 @@ export const profilesReducer = (state, action) => {
       return { ...state, profiles: filteredProfiles };
 
     case SELECT_PROFILE:
-      localStorage.setItem('selectedProfile', JSON.stringify(payload));
+      localStorage.setItem('currentProfile', JSON.stringify(payload));
       return { ...state, currentProfile: payload };
 
     case SIGN_OUT:
-      localStorage.setItem('selectedProfile', null);
+      localStorage.setItem('currentProfile', null);
       return { ...state, currentProfile: null };
+
     default:
       return state;
   }

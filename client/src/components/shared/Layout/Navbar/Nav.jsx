@@ -80,7 +80,6 @@ export default function Nav({ onlyLogo }) {
   const onSignOut = async (text) => {
     if (!text.includes('Sign out of Netflix')) return;
     dispatch({ type: SIGN_OUT });
-    localStorage.setItem('selectedProfile', null);
     push(ROUTES.SELECT_PROFILE);
   };
 

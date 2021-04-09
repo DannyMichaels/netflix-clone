@@ -2,7 +2,7 @@ import { Redirect, Route } from 'react-router';
 import { ROUTES } from '../utils/navigation';
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-  const selectedProfile = localStorage.getItem('selectedProfile');
+  const selectedProfile = localStorage.getItem('currentProfile');
 
   return (
     <Route
