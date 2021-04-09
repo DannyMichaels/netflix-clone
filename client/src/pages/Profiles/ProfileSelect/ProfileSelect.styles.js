@@ -97,8 +97,8 @@ export const UserIcon = styled.li`
     -moz-border-radius: 4px;
     border-radius: 4px;
     border: none;
-
     background-image: ${({ userImg }) => `url(${userImg})`};
+    opacity: ${({ manageMode }) => manageMode && '.5'};
 
     &:hover {
       &:after {
@@ -115,6 +115,24 @@ export const UserIcon = styled.li`
         left: 0;
       }
     }
+  }
+
+  .profile__pencilIcon {
+    color: ${COLORS.WHITE};
+    border: 1px solid ${COLORS.WHITE};
+    border-radius: 50%;
+    padding: 0.2em;
+  }
+
+  .profiles__pencilIcon--overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .profile__name {

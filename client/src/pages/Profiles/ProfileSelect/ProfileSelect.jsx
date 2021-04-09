@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+
 // context
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
 import { CurrentProfileContext } from '../../../context/profiles/CurrentProfileContext';
@@ -6,6 +7,9 @@ import { CurrentProfileContext } from '../../../context/profiles/CurrentProfileC
 // utils
 import { ROUTES } from '../../../utils/navigation';
 import { useHistory } from 'react-router';
+
+// icons
+import PencilIcon from '@material-ui/icons/Create';
 
 // styles
 import { UserIcon, Wrapper } from './ProfileSelect.styles';
@@ -31,16 +35,25 @@ export default function ProfileSelect() {
 
         <ul className="profiles__list">
           {profiles.map((user) => (
-            <div className="profiles__avatarWrapper">
-              <UserIcon
-                onClick={() => onSelect(user)}
-                key={user.id}
-                userImg={user.imgUrl}
-              >
+            <UserIcon
+              onClick={() => onSelect(user)}
+              manageMode={manageMode}
+              key={user.id}
+              userImg={user.imgUrl}
+            >
+              <div className="profiles__avatarWrapper">
                 <div className="profile__userImage" alt={user.name} />
-                <span className="profile__name">{user.name}</span>
-              </UserIcon>
-            </div>
+                {manageMode && (
+                  <div className="profiles__pencilIcon--overlay">
+                    <PencilIcon
+                      className="profile__pencilIcon"
+                      fontSize="small"
+                    />
+                  </div>
+                )}
+              </div>
+              <span className="profile__name">{user.name}</span>
+            </UserIcon>
           ))}
         </ul>
         <div
