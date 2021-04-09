@@ -18,6 +18,7 @@ export default function ProfilesContextProvider({ children }) {
       imgUrl:
         'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
       isKid: false,
+      language: 'English',
       list: [],
     },
   ];
