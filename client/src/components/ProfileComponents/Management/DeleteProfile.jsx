@@ -1,7 +1,28 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router';
+
+// reducer/context
+import {
+  ProfilesDispatchContext,
+  ProfilesStateContext,
+} from '../../../context/profiles/profilesContext';
+import { REMOVE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
+
+// utils
+import { ROUTES } from '../../../utils/navigation';
 
 export default function DeleteProfile({ stateProps }) {
-  const { profileFormData, setManageMode } = stateProps;
+  const { profileFormData, setManageMode, profile } = stateProps;
+
+  const dispatch = useContext(ProfilesDispatchContext);
+  const { profiles } = useContext(ProfilesStateContext);
+
+  const { push } = useHistory();
+
+  const onDelete = async () => {
+    dispatch({ type: REMOVE_PROFILE, payload: profile });
+    push(ROUTES.SELECT_PROFILE);
+  };
 
   return (
     <div className="manageProfile__actionsContainer">
@@ -33,7 +54,15 @@ export default function DeleteProfile({ stateProps }) {
           KEEP PROFILE
         </button>
 
-        <button className="profile__button">DELETE PROFILE</button>
+        <button
+          className="profile__button"
+          onClick={onDelete}
+          disabled={profiles.length <= 1}
+        >
+          {profiles.length <= 1
+            ? 'cannot delete last profile'
+            : ' DELETE PROFILE'}
+        </button>
       </div>
     </div>
   );
