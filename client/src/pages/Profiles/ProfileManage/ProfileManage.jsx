@@ -1,25 +1,21 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // utils
 import { ROUTES } from '../../../utils/navigation';
-import { Redirect, useHistory } from 'react-router-dom';
-import { languages } from '../../../utils/generalUtils';
-import { makeArrayFromString } from '../../../utils/makeArrayFromString';
+import { Redirect } from 'react-router-dom';
 
 // components
 import { Wrapper } from './ProfileManage.styles';
 import Nav from '../../../components/shared/Layout/Navbar/Nav';
-import { ProfilesDispatchContext } from '../../../context/profiles/profilesContext';
-
-// context/reducers
-import { UPDATE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
+import EditProfileForm from '../../../components/ProfileComponents/Management/EditProfileForm';
+import DeleteProfile from '../../../components/ProfileComponents/Management/DeleteProfile';
 
 export default function ProfileManage({ location: { state } }) {
   const [profileFormData, setProfileFormData] = useState(null);
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
-  const dispatch = useContext(ProfilesDispatchContext);
+  const [manageMode, setManageMode] = useState('edit');
+
   const { profile } = state;
-  const { push } = useHistory();
 
   useEffect(() => {
     if (Object.keys(profile) === 0) return;
@@ -28,10 +24,6 @@ export default function ProfileManage({ location: { state } }) {
     setProfileFormData({ name, isKid, image: imgUrl, language });
   }, [profile]);
 
-  const toggleDropdown = () => {
-    setIsDropdownShowing(isDropdownShowing ? false : true);
-  };
-
   const handleChange = ({ target: { name, value } }) => {
     setProfileFormData((prevState) => ({
       ...prevState,
@@ -39,103 +31,30 @@ export default function ProfileManage({ location: { state } }) {
     }));
   };
 
-  const onSave = async () => {
-    const updatedProfile = {
-      ...profile,
-      ...profileFormData,
-    };
-
-    await dispatch({
-      type: UPDATE_PROFILE,
-      payload: updatedProfile,
-    });
-
-    push(ROUTES.BROWSE_ALL);
-  };
-
   if (!state) return <Redirect to={ROUTES.SELECT_PROFILE} />;
 
-  const listItemLanguages = makeArrayFromString(languages, 'matchOnlyLetters');
+  const stateProps = {
+    profileFormData,
+    setProfileFormData,
+    handleChange,
+    profile,
+    setIsDropdownShowing,
+    isDropdownShowing,
+    setManageMode,
+  };
+
+  const manageJSX =
+    manageMode === 'edit' ? (
+      <EditProfileForm stateProps={stateProps} />
+    ) : (
+      <DeleteProfile stateProps={stateProps} />
+    );
 
   return (
     <>
       <Nav onlyLogo />
       <Wrapper isDropdownShowing={isDropdownShowing}>
-        <div className="manageProfile__centeredDiv">
-          <div className="manageProfile__actionsContainer">
-            <h1>Edit Profile</h1>
-
-            {/*  */}
-            <div className="manageProfile__metaData entry">
-              <div className="profile__avatar">
-                <div className="avatar__box">
-                  <img
-                    src={profileFormData?.image}
-                    alt={profileFormData?.name}
-                    className="avatar__img"
-                  />
-                </div>
-              </div>
-
-              <div className="manageProfile__edit--parent">
-                <div className="manageProfile__edit--inputs">
-                  <label htmlFor="name">Profile Name</label>
-                  <input
-                    name="name"
-                    value={profileFormData?.name}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="manageProfile__edit--dropdowns">
-                  <div className="manageProfile__edit--dropdown">
-                    <h2 className="manageProfile__dropdown--label">
-                      Language:
-                    </h2>
-
-                    <div
-                      cols={2}
-                      className="manageProfile__dropdown--nfDropDown"
-                    >
-                      <div
-                        role="button"
-                        tabindex="0"
-                        onClick={toggleDropdown}
-                        aria-expanded={isDropdownShowing}
-                        className="manageProfile__dropdown--header"
-                      >
-                        {profileFormData?.language}
-
-                        <span className="manageProfile__dropdown--arrow" />
-                      </div>
-
-                      <div className="manageProfile__dropdown--submenu">
-                        <ul>
-                          {listItemLanguages.map((text) => (
-                            <li>{text}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="buttons__container">
-              <button className="profile__button" onClick={onSave}>
-                SAVE
-              </button>
-              <button
-                className="profile__button"
-                onClick={() => push(ROUTES.SELECT_PROFILE)}
-              >
-                CANCEL
-              </button>
-              <button className="profile__button">DELETE PROFILE</button>
-            </div>
-          </div>
-        </div>
+        <div className="manageProfile__centeredDiv">{manageJSX}</div>
       </Wrapper>
     </>
   );

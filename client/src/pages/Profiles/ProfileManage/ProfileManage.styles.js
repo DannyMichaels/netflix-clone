@@ -12,12 +12,6 @@ export const Wrapper = styled.div`
   right: 0;
   bottom: 0;
   text-align: center;
-  z-index: 100;
-  position: absolute;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -54,9 +48,35 @@ export const Wrapper = styled.div`
       margin: 0;
       color: ${COLORS.WHITE};
       font-weight: 400;
+      user-select: none;
 
       @media screen and (max-width: 800px) {
         font-size: 40px;
+      }
+    }
+
+    .profile__deleteWarning {
+      width: 25vw;
+      text-align: initial;
+      display: flex;
+      color: ${COLORS.WHITE};
+      align-items: center;
+      user-select: none;
+    }
+
+    .profile__name {
+      line-height: 1.2em;
+      min-height: 1.8em;
+      color: grey;
+      display: block;
+      text-align: center;
+      font-size: 1.3vw;
+      margin: 0.6em 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+
+      @media screen (max-width: 800px) {
+        font-size: 12px;
       }
     }
 
@@ -123,6 +143,10 @@ export const Wrapper = styled.div`
 
       @media screen and (max-width: 800px) {
         font-size: 13px;
+      }
+
+      &:focus {
+        outline: none;
       }
 
       &:hover {
@@ -273,6 +297,8 @@ export const Wrapper = styled.div`
         overflow-y: scroll;
         max-height: 50vh;
         width: 350px;
+        visibility: ${({ isDropdownShowing }) =>
+          isDropdownShowing ? 'inherit' : 'hidden'};
 
         &::-webkit-scrollbar {
           display: none;
@@ -296,6 +322,9 @@ export const Wrapper = styled.div`
             line-height: 24px;
             display: block;
             cursor: pointer;
+            user-select: ${({ isDropdownShowing }) =>
+              isDropdownShowing ? 'inherit' : 'none'};
+
             color: ${COLORS.WHITE};
             box-sizing: border-box;
             position: relative;

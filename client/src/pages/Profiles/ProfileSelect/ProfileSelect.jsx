@@ -14,9 +14,9 @@ import PencilIcon from '@material-ui/icons/Create';
 // styles
 import { UserIcon, Wrapper } from './ProfileSelect.styles';
 
-export default function ProfileSelect({ manageModeProps }) {
+export default function ProfileSelect({ location: { state } }) {
   const [manageMode, setManageMode] = useState(() => {
-    return manageModeProps ? true : false;
+    return state?.manageModeProps ? true : false;
   });
 
   const [, setCurrentProfile] = useContext(CurrentProfileContext);
