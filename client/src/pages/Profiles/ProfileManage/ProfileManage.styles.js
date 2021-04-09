@@ -100,5 +100,46 @@ export const Wrapper = styled.div`
         border-radius: 4px;
       }
     }
+
+    .buttons__container {
+      display: flex;
+      flex-flow: row wrap;
+    }
+
+    .profile__button {
+      display: block;
+      margin: 2em 0 1em 0;
+      font-size: 1.2vw;
+      border: 1px solid grey;
+      color: grey;
+      text-transform: uppercase;
+      padding: 0.5em 1.5em;
+      letter-spacing: 2px;
+      cursor: pointer;
+      background-color: transparent;
+      display: inline-block;
+      margin-right: 20px;
+      font-weight: 600;
+
+      @media screen and (max-width: 800px) {
+        font-size: 13px;
+      }
+
+      &:hover {
+        border: 1px solid ${COLORS.WHITE};
+        color: ${COLORS.WHITE};
+      }
+
+      &:first-of-type {
+        background-color: ${COLORS.WHITE};
+        color: ${COLORS.BLACK};
+
+        &:hover {
+          background: ${COLORS.RED};
+          color: ${COLORS.WHITE};
+          border: 1px solid ${COLORS.RED};
+        }
+      }
+    }
   }
 `;
