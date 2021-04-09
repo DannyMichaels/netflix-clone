@@ -1,4 +1,4 @@
-import React, { useMemo, createContext, useReducer } from 'react';
+import React, { useMemo, createContext, useReducer, useRef } from 'react';
 
 // utils
 import { getRandomId } from '../../utils/generateId';
@@ -24,6 +24,7 @@ export default function ProfilesContextProvider({ children }) {
   ];
 
   const [state, dispatch] = useReducer(profilesReducer, initialProfilesState);
+  const defaultState = useRef(initialProfilesState);
 
   useMemo(async () => {
     const storedProfiles = localStorage.getItem('profiles');
@@ -34,13 +35,12 @@ export default function ProfilesContextProvider({ children }) {
       });
     }
 
-    localStorage.setItem('profiles', JSON.stringify(initialProfilesState));
+    localStorage.setItem('profiles', JSON.stringify(defaultState.current));
+
     return dispatch({
       type: FETCH_PROFILES,
-      payload: initialProfilesState,
+      payload: defaultState.current,
     });
-
-    //eslint-disable-next-line
   }, []);
 
   return (

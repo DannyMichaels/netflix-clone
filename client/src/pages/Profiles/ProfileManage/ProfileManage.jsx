@@ -40,12 +40,14 @@ export default function ProfileManage({ location: { state } }) {
   };
 
   const onSave = async () => {
+    const updatedProfile = {
+      ...profile,
+      ...profileFormData,
+    };
+
     await dispatch({
       type: UPDATE_PROFILE,
-      payload: {
-        ...profile,
-        profileFormData,
-      },
+      payload: updatedProfile,
     });
 
     push(ROUTES.BROWSE_ALL);
