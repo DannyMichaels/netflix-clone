@@ -37,7 +37,7 @@ export default function Nav() {
   );
 
   const { profiles } = useContext(ProfilesStateContext);
-  const [currentProfile] = useContext(CurrentProfileContext);
+  const [currentProfile, setCurrentProfile] = useContext(CurrentProfileContext);
 
   const { push } = useHistory();
 
@@ -72,6 +72,13 @@ export default function Nav() {
 
   const handleClickAway = () => {
     search ? setSearchMode(true) : setSearchMode(false);
+  };
+
+  const onSignOut = async (text) => {
+    if (!text.includes('Sign out of Netflix')) return;
+    setCurrentProfile(null);
+    localStorage.setItem('selectedProfile', null);
+    push(ROUTES.SELECT_PROFILE);
   };
 
   return (
@@ -175,7 +182,7 @@ export default function Nav() {
                     <div className="dropDown__items">
                       {['Account', 'Help Center', 'Sign out of Netflix'].map(
                         (text) => (
-                          <li>
+                          <li onClick={() => onSignOut(text)}>
                             <span>{text}</span>
                           </li>
                         )

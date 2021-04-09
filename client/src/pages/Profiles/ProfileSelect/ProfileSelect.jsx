@@ -20,7 +20,7 @@ export default function ProfileSelect() {
   const onSelect = (user) => {
     if (manageMode) return;
     setCurrentProfile(user);
-    localStorage.setItem('currentProfile', JSON.stringify(user));
+    localStorage.setItem('selectedProfile', JSON.stringify(user));
     push(ROUTES.BROWSE_ALL);
   };
 
