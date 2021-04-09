@@ -175,6 +175,29 @@ export const Wrapper = styled.div`
         -moz-box-sizing: border-box;
         box-sizing: border-box;
         text-indent: 0.1vw;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+
+    .manageProfile__edit--dropdowns {
+      display: flex;
+      flex-direction: column;
+
+      .manageProfile__edit--dropdown {
+        margin-top: 1rem;
+
+        .manageProfile__dropdown--label {
+          font-size: 1.3vw;
+          margin-bottom: 7px;
+          color: #ccc;
+          font-weight: 400;
+          @media screen and (max-width: 1000px) {
+            font-size: 13px;
+          }
+        }
       }
     }
   }

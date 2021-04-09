@@ -25,8 +25,6 @@ export default function ProfileManage({ location: { state } }) {
     setProfileFormData({ name, isKid, image: imgUrl, language });
   }, [profile]);
 
-  if (!state) return <Redirect to={ROUTES.SELECT_PROFILE} />;
-
   const handleChange = ({ target: { name, value } }) => {
     setProfileFormData((prevState) => ({
       ...prevState,
@@ -45,6 +43,8 @@ export default function ProfileManage({ location: { state } }) {
 
     push(ROUTES.BROWSE_ALL);
   };
+
+  if (!state) return <Redirect to={ROUTES.SELECT_PROFILE} />;
 
   return (
     <>
@@ -75,9 +75,16 @@ export default function ProfileManage({ location: { state } }) {
                     onChange={handleChange}
                   />
                 </div>
+
+                <div className="manageProfile__edit--dropdowns">
+                  <div className="manageProfile__edit--dropdown">
+                    <h2 className="manageProfile__dropdown--label">
+                      Language:
+                    </h2>
+                  </div>
+                </div>
               </div>
             </div>
-            {/*  */}
 
             <div className="buttons__container">
               <button className="profile__button" onClick={onSave}>
