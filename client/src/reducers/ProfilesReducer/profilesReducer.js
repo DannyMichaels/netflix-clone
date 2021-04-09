@@ -14,17 +14,20 @@ export const profilesReducer = (state, action) => {
 
     case ADD_PROFILE:
       const newProfiles = { ...state, profiles: [...state.profiles, payload] };
-      localStorage.setItem('profiles', newProfiles);
+      localStorage.setItem('profiles', JSON.stringify(newProfiles));
       return newProfiles;
 
     case UPDATE_PROFILE:
       const updatedProfiles = {
         ...state,
-        profiles: state.profiles.map((user) =>
+        profiles: state.profiles?.map((user) =>
           user.id === String(payload.id) ? payload : user
         ),
       };
-      localStorage.setItem('profiles', updatedProfiles);
+
+      localStorage.setItem('profiles', JSON.parse(updatedProfiles));
+
+      console.log({ updatedProfiles });
       return updatedProfiles;
 
     case REMOVE_PROFILE:
@@ -35,7 +38,7 @@ export const profilesReducer = (state, action) => {
         ),
       };
 
-      localStorage.setItem('profiles', filteredProfiles);
+      localStorage.setItem('profiles', JSON.stringify(filteredProfiles));
       return filteredProfiles;
 
     default:

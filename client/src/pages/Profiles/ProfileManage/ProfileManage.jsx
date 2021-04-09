@@ -1,17 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 // utils
 import { ROUTES } from '../../../utils/navigation';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 
-// componenst
+// components
 import { Wrapper } from './ProfileManage.styles';
 import Nav from '../../../components/shared/Layout/Navbar/Nav';
+import { ProfilesDispatchContext } from '../../../context/profiles/profilesContext';
+
+// context/reducers
+import { UPDATE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
 
 export default function ProfileManage({ location: { state } }) {
   const [profileFormData, setProfileFormData] = useState(null);
-
+  const dispatch = useContext(ProfilesDispatchContext);
   const { profile } = state;
+  const { push } = useHistory();
 
   useEffect(() => {
     if (Object.keys(profile) === 0) return;
@@ -22,7 +27,17 @@ export default function ProfileManage({ location: { state } }) {
 
   if (!state) return <Redirect to={ROUTES.SELECT_PROFILE} />;
 
-  const onSave = () => {};
+  const onSave = async () => {
+    await dispatch({
+      type: UPDATE_PROFILE,
+      payload: {
+        ...profile,
+        profileFormData,
+      },
+    });
+
+    push(ROUTES.BROWSE_ALL);
+  };
 
   return (
     <>
@@ -47,8 +62,15 @@ export default function ProfileManage({ location: { state } }) {
             {/*  */}
 
             <div className="buttons__container">
-              <button className="profile__button">SAVE</button>
-              <button className="profile__button">CANCEL</button>
+              <button className="profile__button" onClick={onSave}>
+                SAVE
+              </button>
+              <button
+                className="profile__button"
+                onClick={() => push(ROUTES.SELECT_PROFILE)}
+              >
+                CANCEL
+              </button>
               <button className="profile__button">DELETE PROFILE</button>
             </div>
           </div>
