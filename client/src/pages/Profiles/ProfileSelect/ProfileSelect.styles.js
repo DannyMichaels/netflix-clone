@@ -34,56 +34,6 @@ export const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex-flow: row wrap;
-
-    li {
-      img {
-        height: 10vw;
-        width: 10vw;
-        max-height: 200px;
-        max-width: 200px;
-        min-height: 84px;
-        min-width: 84px;
-        box-sizing: border-box;
-        position: relative;
-        text-decoration: none;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-radius: 4px;
-        border: none;
-        border: 0.15em solid transparent;
-      }
-
-      .profile__name {
-        line-height: 1.2em;
-        min-height: 1.8em;
-        color: grey;
-        display: block;
-        text-align: center;
-        font-size: 1.3vw;
-        font-size: 12px;
-
-        margin: 0.6em 0;
-        -o-text-overflow: ellipsis;
-        text-overflow: ellipsis;
-        overflow: hidden;
-
-        @media screen and (min-width: 750px) {
-          font-size: 1.3vw;
-        }
-      }
-
-      &:hover {
-        cursor: pointer;
-        img {
-          border: 0.15em solid #fff;
-        }
-
-        .profile__name {
-          color: #fff;
-        }
-      }
-      /* --- */
-    }
   }
 
   .manage__button {
@@ -118,4 +68,83 @@ export const Wrapper = styled.div`
       font-weight: 700;
     }
   }
+`;
+
+export const UserIcon = styled.li`
+  .profiles__avatarWrapper {
+    display: block;
+    position: relative;
+  }
+
+  .profile__userImage {
+    height: 10vw;
+    width: 10vw;
+    max-height: 200px;
+    max-width: 200px;
+    min-height: 84px;
+    min-width: 84px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    text-decoration: none;
+    background-repeat: no-repeat;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: #333;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: none;
+
+    background-image: ${({ userImg }) => `url(${userImg})`};
+
+    &:hover {
+      &:after {
+        content: '';
+        display: block;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: 0.12rem solid white;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
+
+  .profile__name {
+    line-height: 1.2em;
+    min-height: 1.8em;
+    color: grey;
+    display: block;
+    text-align: center;
+    font-size: 1.3vw;
+    font-size: 12px;
+
+    margin: 0.6em 0;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    @media screen and (min-width: 750px) {
+      font-size: 1.3vw;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    img {
+      border: 0.15em solid #fff;
+    }
+
+    .profile__name {
+      color: #fff;
+    }
+  }
+  /* --- */
 `;

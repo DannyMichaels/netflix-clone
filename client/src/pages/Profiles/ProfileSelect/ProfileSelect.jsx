@@ -8,7 +8,7 @@ import { ROUTES } from '../../../utils/navigation';
 import { useHistory } from 'react-router';
 
 // styles
-import { Wrapper } from './ProfileSelect.styles';
+import { UserIcon, Wrapper } from './ProfileSelect.styles';
 
 export default function ProfileSelect() {
   const [, setCurrentProfile] = useContext(CurrentProfileContext);
@@ -31,10 +31,16 @@ export default function ProfileSelect() {
 
         <ul className="profiles__list">
           {profiles.map((user) => (
-            <li onClick={() => onSelect(user)} key={user.id}>
-              <img src={user.imgUrl} alt={user.name} />
-              <span className="profile__name">{user.name}</span>
-            </li>
+            <div className="profiles__avatarWrapper">
+              <UserIcon
+                onClick={() => onSelect(user)}
+                key={user.id}
+                userImg={user.imgUrl}
+              >
+                <div className="profile__userImage" alt={user.name} />
+                <span className="profile__name">{user.name}</span>
+              </UserIcon>
+            </div>
           ))}
         </ul>
         <div
