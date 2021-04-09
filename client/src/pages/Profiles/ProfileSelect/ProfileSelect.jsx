@@ -14,7 +14,7 @@ import PencilIcon from '@material-ui/icons/Create';
 // styles
 import { UserIcon, Wrapper } from './ProfileSelect.styles';
 
-export default function ProfileSelect() {
+export default function ProfileSelect({ children }) {
   const [, setCurrentProfile] = useContext(CurrentProfileContext);
   const [manageMode, setManageMode] = useState(false);
   const { profiles } = useContext(ProfilesStateContext);
@@ -22,7 +22,15 @@ export default function ProfileSelect() {
   const { push } = useHistory();
 
   const onSelect = (user) => {
-    if (manageMode) return;
+    if (manageMode) {
+      return push({
+        pathname: ROUTES.MANAGE_PROFILE,
+        state: {
+          profile: user,
+        },
+      });
+    }
+
     setCurrentProfile(user);
     localStorage.setItem('selectedProfile', JSON.stringify(user));
     push(ROUTES.BROWSE_ALL);

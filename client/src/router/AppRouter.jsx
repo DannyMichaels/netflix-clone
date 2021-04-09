@@ -9,11 +9,13 @@ import Home from '../pages/Browse/Home/Home';
 import MoviePlaybackView from '../pages/MoviePages/MoviePlaybackView';
 import BrowseByCategoryAndId from '../pages/Browse/ByCategoryAndId/BrowseByCategoryAndId';
 import ProfileSelect from '../pages/Profiles/ProfileSelect/ProfileSelect';
+import ProfileManage from '../pages/Profiles/ProfileManage/ProfileManage';
 
 const AppRouter = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={ROUTES.SELECT_PROFILE} component={ProfileSelect} />
+      <Route exact path={ROUTES.MANAGE_PROFILE} component={ProfileManage} />
       <Route exact path={ROUTES.BROWSE_ALL} component={Home} />
       <Route
         path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}

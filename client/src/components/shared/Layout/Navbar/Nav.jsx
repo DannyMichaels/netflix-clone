@@ -27,7 +27,7 @@ import { SearchContext } from '../../../../context/search/searchContext';
 import { ProfilesStateContext } from '../../../../context/profiles/profilesContext';
 import { CurrentProfileContext } from '../../../../context/profiles/CurrentProfileContext';
 
-export default function Nav() {
+export default function Nav({ onlyLogo }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
@@ -90,109 +90,120 @@ export default function Nav() {
         browseName={browseName}
       >
         <div className="nav__innerColumn">
-          <img
-            onClick={() => push(ROUTES.BROWSE_ALL)}
-            className="nav__logo"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
-            alt="Netflix Logo"
-          />
-          <div className="nav__secondaryNavigation">
-            <ClickAwayListener onClickAway={handleClickAway}>
-              <div className="nav__searchContainer">
-                {!searchMode && (
-                  <SearchIcon
-                    className="nav__icon search"
-                    onClick={toggleSearchMode}
-                  />
-                )}
-                <Input
-                  onChange={handleSearch}
-                  value={search}
-                  placeholder="Titles, people, genres"
-                  className="nav__searchInput"
-                  disableUnderline
-                  startAdornment={
-                    <Box marginLeft={1}>
-                      <InputAdornment position="start">
-                        <SearchIcon
-                          className="nav__icon search"
-                          onClick={toggleSearchMode}
-                        />
-                      </InputAdornment>
-                    </Box>
-                  }
-                  endAdornment={
-                    <Box mx={1}>
-                      <InputAdornment position="end">
-                        <ClearIcon
-                          onClick={onSearchClear}
-                          className="nav__icon"
-                        />
-                      </InputAdornment>
-                    </Box>
-                  }
-                />
-              </div>
-            </ClickAwayListener>
-            <Box mx={2}>
-              <BellIcon fontSize="default" className="nav__icon bell" />
-            </Box>
+          <>
+            <img
+              onClick={() => push(ROUTES.BROWSE_ALL)}
+              className="nav__logo"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
+              alt="Netflix Logo"
+            />
+          </>
 
-            <div
-              className="nav__profileContainer"
-              onMouseEnter={handleOpenDropdown}
-              onMouseLeave={handleCloseDropdown}
-            >
-              <img
-                className="nav__avatar"
-                src={currentProfile.imgUrl}
-                alt={`${currentProfile.name}'s avatar`}
-              />
-
-              <Box mx={1}>
-                <ArrowDropUpIcon
-                  className={`nav__icon arrow ${isDropdownShowing && 'active'}`}
-                />
-              </Box>
-
-              <>
-                <Dropdown
-                  isActive={isDropdownShowing}
-                  background={isBackgroundShowing}
-                >
-                  <ArrowDropDownIcon className="nav__dropDown--arrow" />
-                  <div className="nav__dropDown">
-                    <div className="dropDown__items">
-                      {profiles?.map((user) => (
-                        <li key={user.id}>
-                          <img
-                            className="nav__avatar"
-                            src={user.imgUrl}
-                            alt={user.name}
-                          />
-
-                          <span>{user.name}</span>
-                        </li>
-                      ))}
-                      <li>
-                        <span>Manage Profiles</span>
-                      </li>
-                    </div>
-                    <div className="hr" />
-                    <div className="dropDown__items">
-                      {['Account', 'Help Center', 'Sign out of Netflix'].map(
-                        (text) => (
-                          <li onClick={() => onSignOut(text)}>
-                            <span>{text}</span>
-                          </li>
-                        )
-                      )}
-                    </div>
+          {!onlyLogo && (
+            <>
+              <div className="nav__secondaryNavigation">
+                <ClickAwayListener onClickAway={handleClickAway}>
+                  <div className="nav__searchContainer">
+                    {!searchMode && (
+                      <SearchIcon
+                        className="nav__icon search"
+                        onClick={toggleSearchMode}
+                      />
+                    )}
+                    <Input
+                      onChange={handleSearch}
+                      value={search}
+                      placeholder="Titles, people, genres"
+                      className="nav__searchInput"
+                      disableUnderline
+                      startAdornment={
+                        <Box marginLeft={1}>
+                          <InputAdornment position="start">
+                            <SearchIcon
+                              className="nav__icon search"
+                              onClick={toggleSearchMode}
+                            />
+                          </InputAdornment>
+                        </Box>
+                      }
+                      endAdornment={
+                        <Box mx={1}>
+                          <InputAdornment position="end">
+                            <ClearIcon
+                              onClick={onSearchClear}
+                              className="nav__icon"
+                            />
+                          </InputAdornment>
+                        </Box>
+                      }
+                    />
                   </div>
-                </Dropdown>
-              </>
-            </div>
-          </div>
+                </ClickAwayListener>
+                <Box mx={2}>
+                  <BellIcon fontSize="default" className="nav__icon bell" />
+                </Box>
+
+                <div
+                  className="nav__profileContainer"
+                  onMouseEnter={handleOpenDropdown}
+                  onMouseLeave={handleCloseDropdown}
+                >
+                  <img
+                    className="nav__avatar"
+                    src={currentProfile.imgUrl}
+                    alt={`${currentProfile.name}'s avatar`}
+                  />
+
+                  <Box mx={1}>
+                    <ArrowDropUpIcon
+                      className={`nav__icon arrow ${
+                        isDropdownShowing && 'active'
+                      }`}
+                    />
+                  </Box>
+
+                  <>
+                    <Dropdown
+                      isActive={isDropdownShowing}
+                      background={isBackgroundShowing}
+                    >
+                      <ArrowDropDownIcon className="nav__dropDown--arrow" />
+                      <div className="nav__dropDown">
+                        <div className="dropDown__items">
+                          {profiles?.map((user) => (
+                            <li key={user.id}>
+                              <img
+                                className="nav__avatar"
+                                src={user.imgUrl}
+                                alt={user.name}
+                              />
+
+                              <span>{user.name}</span>
+                            </li>
+                          ))}
+                          <li>
+                            <span>Manage Profiles</span>
+                          </li>
+                        </div>
+                        <div className="hr" />
+                        <div className="dropDown__items">
+                          {[
+                            'Account',
+                            'Help Center',
+                            'Sign out of Netflix',
+                          ].map((text, idx) => (
+                            <li onClick={() => onSignOut(text)} key={idx}>
+                              <span>{text}</span>
+                            </li>
+                          ))}
+                        </div>
+                      </div>
+                    </Dropdown>
+                  </>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </StyledNav>
       {browseName && !search && (
