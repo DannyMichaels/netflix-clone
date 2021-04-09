@@ -35,27 +35,25 @@ export default function ProfileSelect() {
 
         <ul className="profiles__list">
           {profiles.map((user) => (
-            <div className="test">
-              <UserIcon
-                onClick={() => onSelect(user)}
-                manageMode={manageMode}
-                key={user.id}
-                userImg={user.imgUrl}
-              >
-                <div className="profiles__avatarWrapper">
-                  <div className="profile__userImage" alt={user.name} />
-                  {manageMode && (
-                    <div className="profiles__pencilIcon--overlay">
-                      <PencilIcon
-                        className="profile__pencilIcon"
-                        fontSize="small"
-                      />
-                    </div>
-                  )}
-                </div>
-                <span className="profile__name">{user.name}</span>
-              </UserIcon>
-            </div>
+            <UserIcon
+              onClick={() => onSelect(user)}
+              manageMode={manageMode}
+              key={user.id}
+              userImg={user.imgUrl}
+            >
+              <div className="profiles__avatarWrapper">
+                <div className="profile__userImage" alt={user.name} />
+                {manageMode && (
+                  <div className="profiles__pencilIcon--overlay">
+                    <PencilIcon
+                      className="profile__pencilIcon"
+                      fontSize="small"
+                    />
+                  </div>
+                )}
+              </div>
+              <span className="profile__name">{user.name}</span>
+            </UserIcon>
           ))}
         </ul>
         <div
