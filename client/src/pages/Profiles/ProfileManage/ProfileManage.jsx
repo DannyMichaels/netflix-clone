@@ -27,6 +27,13 @@ export default function ProfileManage({ location: { state } }) {
 
   if (!state) return <Redirect to={ROUTES.SELECT_PROFILE} />;
 
+  const handleChange = ({ target: { name, value } }) => {
+    setProfileFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   const onSave = async () => {
     await dispatch({
       type: UPDATE_PROFILE,
@@ -55,6 +62,17 @@ export default function ProfileManage({ location: { state } }) {
                     src={profileFormData?.image}
                     alt={profileFormData?.name}
                     className="avatar__img"
+                  />
+                </div>
+              </div>
+
+              <div className="manageProfile__edit--parent">
+                <div className="manageProfile__edit--inputs">
+                  <label htmlFor="name">Profile Name</label>
+                  <input
+                    name="name"
+                    value={profileFormData.name}
+                    onChange={handleChange}
                   />
                 </div>
               </div>

@@ -142,4 +142,40 @@ export const Wrapper = styled.div`
       }
     }
   }
+
+  .manageProfile__edit--parent {
+    display: block;
+
+    .manageProfile__edit--inputs {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      label {
+        clip: rect(1px 1px 1px 1px) !important;
+        clip: rect(1px, 1px, 1px, 1px) !important;
+        height: 1px !important;
+        overflow: hidden !important;
+        position: absolute !important;
+        white-space: nowrap !important;
+        width: 1px !important;
+      }
+
+      input {
+        width: 18em;
+        height: 2em;
+        background: #666;
+        border: 1px solid transparent;
+        margin: 0 0.8em 0 0;
+        padding: 0.2em 0.6em;
+        color: #fff;
+        font-size: 1.3vw;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        text-indent: 0.1vw;
+      }
+    }
+  }
 `;
