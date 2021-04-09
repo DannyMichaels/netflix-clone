@@ -11,19 +11,24 @@ export const ProfilesStateContext = createContext();
 export const ProfilesDispatchContext = createContext();
 
 export default function ProfilesContextProvider({ children }) {
-  const initialProfilesState = [
-    {
-      id: getRandomId(100),
-      name: 'guest',
-      imgUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
-      isKid: false,
-      language: 'English',
-      list: [],
-    },
-  ];
+  const initialProfilesState = {
+    profiles: [
+      {
+        id: getRandomId(100),
+        name: 'guest',
+        imgUrl:
+          'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
+        isKid: false,
+        language: 'English',
+        list: [],
+      },
+    ],
+    currentProfile: {},
+    profilesAreLoading: true,
+  };
 
   const [state, dispatch] = useReducer(profilesReducer, initialProfilesState);
+
   const defaultState = useRef(initialProfilesState);
 
   useMemo(async () => {
@@ -35,11 +40,14 @@ export default function ProfilesContextProvider({ children }) {
       });
     }
 
-    localStorage.setItem('profiles', JSON.stringify(defaultState.current));
+    localStorage.setItem(
+      'profiles',
+      JSON.stringify(defaultState.current.profiles)
+    );
 
     return dispatch({
       type: FETCH_PROFILES,
-      payload: defaultState.current,
+      payload: defaultState.current.profiles,
     });
   }, []);
 

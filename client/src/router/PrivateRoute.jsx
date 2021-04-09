@@ -4,8 +4,6 @@ import { ROUTES } from '../utils/navigation';
 export default function PrivateRoute({ component: Component, ...rest }) {
   const selectedProfile = localStorage.getItem('selectedProfile');
 
-  console.log({ selectedProfile });
-
   return (
     <Route
       {...rest}
