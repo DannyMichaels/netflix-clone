@@ -22,7 +22,7 @@ export default function ProfileSelect({ location: { state } }) {
     return state?.manageModeProps ? true : false;
   });
 
-  const { profiles } = useContext(ProfilesStateContext);
+  const { profiles, maxProfileLength } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
 
   const { push } = useHistory();
@@ -36,11 +36,13 @@ export default function ProfileSelect({ location: { state } }) {
         },
       });
     }
-
     dispatch({ type: SELECT_PROFILE, payload: user });
-
     push(ROUTES.BROWSE_ALL);
   };
+
+  const remainingProfileSlots = [
+    ...Array(maxProfileLength - profiles.length).keys(),
+  ];
 
   return (
     <Wrapper manageMode={manageMode}>
@@ -67,6 +69,15 @@ export default function ProfileSelect({ location: { state } }) {
                 )}
               </div>
               <span className="profile__name">{user.name}</span>
+            </UserIcon>
+          ))}
+
+          {remainingProfileSlots.map((user) => (
+            <UserIcon onClick={() => onSelect(user)} manageMode={manageMode}>
+              <div className="profiles__avatarWrapper">
+                <div className="profile__userImage" alt="add profile" />
+              </div>
+              <span className="profile__name">Add Profile</span>
             </UserIcon>
           ))}
         </ul>

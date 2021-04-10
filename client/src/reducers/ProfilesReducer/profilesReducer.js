@@ -29,6 +29,7 @@ export const profilesReducer = (state, action) => {
         ...state,
         profiles: payload,
         profilesAreLoading: false,
+        maxProfileLength: 4,
         currentProfile: getCurrentProfile(state),
       };
 

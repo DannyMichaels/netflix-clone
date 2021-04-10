@@ -23,6 +23,7 @@ export default function ProfilesContextProvider({ children }) {
         list: [],
       },
     ],
+    maxProfilesLength: 4,
     currentProfile: {},
     profilesAreLoading: true,
   };

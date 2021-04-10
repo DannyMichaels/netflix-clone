@@ -71,6 +71,10 @@ export const Wrapper = styled.div`
 `;
 
 export const UserIcon = styled.li`
+  &:not(:last-child) {
+    margin: 0 2vw 0 0;
+  }
+
   &:hover {
     .profile__userImage:after {
       content: '';
