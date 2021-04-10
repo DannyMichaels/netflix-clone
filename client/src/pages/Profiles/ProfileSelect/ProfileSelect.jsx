@@ -13,6 +13,7 @@ import { useHistory } from 'react-router';
 
 // icons
 import PencilIcon from '@material-ui/icons/Create';
+import PlusIcon from '@material-ui/icons/AddCircleSharp';
 
 // styles
 import { UserIcon, Wrapper } from './ProfileSelect.styles';
@@ -38,6 +39,10 @@ export default function ProfileSelect({ location: { state } }) {
     }
     dispatch({ type: SELECT_PROFILE, payload: user });
     push(ROUTES.BROWSE_ALL);
+  };
+
+  const onRedirectCreateMode = () => {
+    push(ROUTES.CREATE_PROFILE);
   };
 
   const remainingProfileSlots = [
@@ -72,10 +77,17 @@ export default function ProfileSelect({ location: { state } }) {
             </UserIcon>
           ))}
 
-          {remainingProfileSlots.map((user) => (
-            <UserIcon onClick={() => onSelect(user)} manageMode={manageMode}>
+          {remainingProfileSlots.map(() => (
+            <UserIcon
+              onClick={() => onRedirectCreateMode}
+              manageMode={false}
+              isCreateProfile
+            >
               <div className="profiles__avatarWrapper">
                 <div className="profile__userImage" alt="add profile" />
+                <div className="profiles__pencilIcon--overlay">
+                  <PlusIcon className="profile__addIcon" fontSize="large" />
+                </div>
               </div>
               <span className="profile__name">Add Profile</span>
             </UserIcon>

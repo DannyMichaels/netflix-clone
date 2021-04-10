@@ -76,6 +76,11 @@ export const UserIcon = styled.li`
   }
 
   &:hover {
+    .profile__userImage {
+      background-color: ${({ isCreateProfile }) =>
+        isCreateProfile && COLORS.WHITE};
+    }
+
     .profile__userImage:after {
       content: '';
       display: block;
@@ -112,7 +117,8 @@ export const UserIcon = styled.li`
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    background-color: #333;
+    background-color: ${({ isCreateProfile }) =>
+      isCreateProfile ? 'transparent' : '#333'};
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
@@ -124,6 +130,13 @@ export const UserIcon = styled.li`
   .profile__pencilIcon {
     color: ${COLORS.WHITE};
     border: 1px solid ${COLORS.WHITE};
+    border-radius: 50%;
+    padding: 0.2em;
+  }
+
+  .profile__addIcon {
+    color: ${COLORS.GREY};
+    font-size: 7vw;
     border-radius: 50%;
     padding: 0.2em;
   }
