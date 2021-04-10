@@ -1,5 +1,8 @@
 import { useContext, useState } from 'react';
 
+// components
+import Nav from '../../../components/shared/Layout/Navbar/Nav';
+
 // context
 import {
   ProfilesDispatchContext,
@@ -50,56 +53,61 @@ export default function ProfileSelect({ location: { state } }) {
   ];
 
   return (
-    <Wrapper manageMode={manageMode}>
-      <div className="profiles__container">
-        <div className="profiles__gateLabel">Who's Watching?</div>
+    <>
+      <Nav logoOnly />
 
-        <ul className="profiles__list">
-          {profiles.map((user) => (
-            <UserIcon
-              onClick={() => onSelect(user)}
-              manageMode={manageMode}
-              key={user.id}
-              userImg={user.imgUrl}
-            >
-              <div className="profiles__avatarWrapper">
-                <div className="profile__userImage" alt={user.name} />
-                {manageMode && (
-                  <div className="profiles__pencilIcon--overlay">
-                    <PencilIcon
-                      className="profile__pencilIcon"
-                      fontSize="small"
-                    />
-                  </div>
-                )}
-              </div>
-              <span className="profile__name">{user.name}</span>
-            </UserIcon>
-          ))}
+      <Wrapper manageMode={manageMode}>
+        <div className="profiles__container">
+          <div className="profiles__gateLabel">Who's Watching?</div>
 
-          {remainingProfileSlots.map(() => (
-            <UserIcon
-              onClick={() => onRedirectCreateMode}
-              manageMode={false}
-              isCreateProfile
-            >
-              <div className="profiles__avatarWrapper">
-                <div className="profile__userImage" alt="add profile" />
-                <div className="profiles__pencilIcon--overlay">
-                  <PlusIcon className="profile__addIcon" fontSize="large" />
+          <ul className="profiles__list">
+            {profiles.map((user) => (
+              <UserIcon
+                onClick={() => onSelect(user)}
+                manageMode={manageMode}
+                key={user.id}
+                userImg={user.imgUrl}
+              >
+                <div className="profiles__avatarWrapper">
+                  <div className="profile__userImage" alt={user.name} />
+                  {manageMode && (
+                    <div className="profiles__pencilIcon--overlay">
+                      <PencilIcon
+                        className="profile__pencilIcon"
+                        fontSize="small"
+                      />
+                    </div>
+                  )}
                 </div>
-              </div>
-              <span className="profile__name">Add Profile</span>
-            </UserIcon>
-          ))}
-        </ul>
-        <div
-          className="manage__button"
-          onClick={() => setManageMode(!manageMode)}
-        >
-          {!manageMode ? 'MANAGE PROFILES' : 'DONE'}
+                <span className="profile__name">{user.name}</span>
+              </UserIcon>
+            ))}
+
+            {remainingProfileSlots.map((_, idx) => (
+              <UserIcon
+                onClick={onRedirectCreateMode}
+                manageMode={false}
+                isCreateProfile
+                key={idx}
+              >
+                <div className="profiles__avatarWrapper">
+                  <div className="profile__userImage" alt="add profile" />
+                  <div className="profiles__pencilIcon--overlay">
+                    <PlusIcon className="profile__addIcon" fontSize="large" />
+                  </div>
+                </div>
+                <span className="profile__name">Add Profile</span>
+              </UserIcon>
+            ))}
+          </ul>
+          <div
+            className="manage__button"
+            onClick={() => setManageMode(!manageMode)}
+          >
+            {!manageMode ? 'MANAGE PROFILES' : 'DONE'}
+          </div>
         </div>
-      </div>
-    </Wrapper>
+      </Wrapper>
+    </>
   );
 }

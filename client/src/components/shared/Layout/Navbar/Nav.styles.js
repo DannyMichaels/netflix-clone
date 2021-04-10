@@ -23,7 +23,7 @@ export const StyledNav = styled.nav`
     max-width: 1900px;
     margin-right: auto;
     margin-left: auto;
-    padding: 0 4%;
+    padding: ${({ logoOnly }) => (logoOnly ? 'inherit' : '0 4%')};
   }
 
   .nav__logo {

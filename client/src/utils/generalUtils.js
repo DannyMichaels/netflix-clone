@@ -14,6 +14,13 @@ export const COLORS = {
   RED: '#E50914',
 };
 
+export const IMAGES = {
+  BLUE_AVATAR:
+    'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
+  YELLOW_AVATAR:
+    'https://occ-0-448-444.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABWu33TcylnaLZwSdtgKR6mr0O63afqQLxZbzHYQZLkCJ9bgMTtsf6tzs_ua2BuTpAVPbhxnroiEA-_bqJmKWiXblO9h-.png?r=f71',
+};
+
 export const languages = `
 0: "Bahasa Indonesia"
 1: "Bahasa Melayu"

@@ -6,6 +6,7 @@ import { getRandomId } from '../../utils/generateId';
 // reducer
 import { profilesReducer } from '../../reducers/ProfilesReducer/profilesReducer';
 import { FETCH_PROFILES } from '../../reducers/ProfilesReducer/profilesReducerTypes';
+import { IMAGES } from '../../utils/generalUtils';
 
 export const ProfilesStateContext = createContext();
 export const ProfilesDispatchContext = createContext();
@@ -16,8 +17,7 @@ export default function ProfilesContextProvider({ children }) {
       {
         id: getRandomId(100),
         name: 'guest',
-        imgUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
+        imgUrl: IMAGES.BLUE_AVATAR,
         isKid: false,
         language: 'English',
         list: [],

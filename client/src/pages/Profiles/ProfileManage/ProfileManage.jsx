@@ -24,6 +24,10 @@ export default function ProfileManage({ location: { state } }) {
     setProfileFormData({ name, isKid, image: imgUrl, language });
   }, [profile]);
 
+  useEffect(() => {
+    console.log(window.location);
+  }, []);
+
   const handleChange = ({ target: { name, value } }) => {
     setProfileFormData((prevState) => ({
       ...prevState,
@@ -52,7 +56,7 @@ export default function ProfileManage({ location: { state } }) {
 
   return (
     <>
-      <Nav onlyLogo />
+      <Nav logoOnly />
       <Wrapper isDropdownShowing={isDropdownShowing}>
         <div className="manageProfile__centeredDiv">{manageJSX}</div>
       </Wrapper>

@@ -11,12 +11,15 @@ import BrowseByCategoryAndId from '../pages/Browse/ByCategoryAndId/BrowseByCateg
 import ProfileSelect from '../pages/Profiles/ProfileSelect/ProfileSelect';
 import ProfileManage from '../pages/Profiles/ProfileManage/ProfileManage';
 import PrivateRoute from './PrivateRoute';
+import ProfileCreate from '../pages/Profiles/ProfileCreate/ProfileCreate';
 
 const AppRouter = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={ROUTES.SELECT_PROFILE} component={ProfileSelect} />
       <Route exact path={ROUTES.MANAGE_PROFILE} component={ProfileManage} />
+      <Route exact path={ROUTES.CREATE_PROFILE} component={ProfileCreate} />
+
       <PrivateRoute exact path={ROUTES.BROWSE_ALL} component={Home} />
       <PrivateRoute
         path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}

@@ -30,7 +30,7 @@ import {
 } from '../../../../context/profiles/profilesContext';
 import { SIGN_OUT } from '../../../../reducers/ProfilesReducer/profilesReducerTypes';
 
-export default function Nav({ onlyLogo }) {
+export default function Nav({ logoOnly }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
@@ -99,6 +99,7 @@ export default function Nav({ onlyLogo }) {
         isShowing={isBackgroundShowing}
         searchMode={searchMode}
         browseName={browseName}
+        logoOnly={logoOnly}
       >
         <div className="nav__innerColumn">
           <>
@@ -110,7 +111,7 @@ export default function Nav({ onlyLogo }) {
             />
           </>
 
-          {!onlyLogo && (
+          {!logoOnly && (
             <>
               <div className="nav__secondaryNavigation">
                 <ClickAwayListener onClickAway={handleClickAway}>
