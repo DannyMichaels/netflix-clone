@@ -1,8 +1,13 @@
 import { useContext, useEffect, useState } from 'react'; // give everything without an id it's own unique key prop without using index (which is problematic) or some id generator by using React.Children.
 import { useLocation, useParams } from 'react-router';
 
-// utils
+// utils / services
 import { baseImgUrl } from '../../../utils/generalUtils';
+import {
+  getMoviesByGenreId,
+  getMoviesByPersonId,
+} from '../../../services/movies';
+import { getOnePersonById } from '../../../services/people';
 
 // components
 import Banner from '../../../components/MovieComponents/Banner/Banner';
@@ -13,11 +18,6 @@ import { MoviesStateContext } from '../../../context/movies/moviesContext';
 
 // context
 import { SearchContext } from '../../../context/search/searchContext';
-import {
-  getMoviesByGenreId,
-  getMoviesByPersonId,
-  getOnePersonById,
-} from '../../../services/movies';
 
 // styles
 import { InnerColumn } from '../../../components/shared/styled-components/InnerColumn';
@@ -46,8 +46,7 @@ export default function BrowseByCategoryAndId() {
       }
     };
     fetchMovies();
-    // eslint-disable-next-line
-  }, [id, pathname]);
+  }, [id, pathname, allGenres, setBrowseName]);
 
   const moviesJSX = !search ? (
     <InnerColumn browseName={browseName}>

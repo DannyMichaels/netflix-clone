@@ -1,7 +1,8 @@
 import React, { createContext, useReducer, useMemo, useEffect } from 'react';
 
-// utils
-import { getAllGenres, getAllMovies } from '../../services/movies';
+// utils / services
+import { getAllMovies } from '../../services/movies';
+import { getAllGenres } from '../../services/genres';
 import { movieRows } from '../../pages/Browse/Home/home.utils';
 
 // reducer
