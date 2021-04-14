@@ -10,9 +10,12 @@ export const getAllMovies = async (fetchUrl) => {
   }
 };
 
-export const getSearchedMovies = async (search) => {
-  // TODO: once we have accounts set up, have a terenary opertaror for the users age regarding include adult being true or false
-  const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=false
+export const getSearchedMovies = async (search, isUserAKid) => {
+  // if user/selected profile is a kid then adult movies won't be included "&include_adult={isUserAKid ? false : true}"
+
+  const searchUrl = `/search/movie?api_key=${
+    process.env.REACT_APP_TMDB_API_KEY
+  }&language=en-US&page=1&include_adult=${!isUserAKid}
     &query=${search}`;
 
   const { data } = await api.get(searchUrl);
@@ -55,11 +58,13 @@ export const getCastByMovieId = async (movieId) => {
   }
 };
 
-export const getMoviesByGenreId = async (genreId) => {
+export const getMoviesByGenreId = async (genreId, isUserAKid) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
-      `/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=true&page=1&with_genres=${genreId}`
+      `/discover/movie?api_key=${
+        process.env.REACT_APP_TMDB_API_KEY
+      }&language=en-US&sort_by=popularity.desc&include_adult=${!isUserAKid}&include_video=true&page=1&with_genres=${genreId}`
     );
     return data.results;
   } catch (error) {
@@ -67,11 +72,13 @@ export const getMoviesByGenreId = async (genreId) => {
   }
 };
 
-export const getMoviesByPersonId = async (personId) => {
+export const getMoviesByPersonId = async (personId, isUserAKid) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
-      `/discover/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=true&page=1&with_people=${personId}`
+      `/discover/movie?api_key=${
+        process.env.REACT_APP_TMDB_API_KEY
+      }&language=en-US&sort_by=popularity.desc&include_adult=${!isUserAKid}&include_video=true&page=1&with_people=${personId}`
     );
     return data.results;
   } catch (error) {

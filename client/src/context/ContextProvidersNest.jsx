@@ -5,9 +5,9 @@ import SearchContextProvider from './search/searchContext';
 import ProfilesContextProvider from './profiles/profilesContext';
 
 const providers = [
+  <ProfilesContextProvider />,
   <MoviesContextProvider />,
   <SearchContextProvider />,
-  <ProfilesContextProvider />,
 ];
 
 export const ContextProvidersNest = ({ children }) =>

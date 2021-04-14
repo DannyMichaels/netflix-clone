@@ -1,6 +1,7 @@
 import Levenshtein from 'levenshtein';
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useContext } from 'react';
 import { getSearchedMovies } from '../../services/movies';
+import { ProfilesStateContext } from '../profiles/profilesContext';
 
 export const SearchContext = createContext();
 
@@ -9,9 +10,15 @@ export default function SearchContextProvider({ children }) {
   const [queriedMovies, setQueriedMovies] = useState([]);
   const [browseName, setBrowseName] = useState('');
 
+  const { currentProfile } = useContext(ProfilesStateContext);
+
   const handleSearch = async ({ target: { value: userInput } }) => {
     setSearch(userInput);
-    const searchedMovies = await getSearchedMovies(search);
+
+    const searchedMovies = await getSearchedMovies(
+      search,
+      currentProfile.isKid
+    );
 
     const newQueriedMovies = searchedMovies
       .filter(({ backdrop_path }) => Boolean(backdrop_path)) // don't make a cell for a movie that has images that are undefined.
