@@ -60,7 +60,7 @@ export default function DeleteProfile({ stateProps }) {
           disabled={profiles.length <= 1}
         >
           {profiles.length <= 1
-            ? 'cannot delete only profile'
+            ? 'cannot delete last and only profile'
             : ' DELETE PROFILE'}
         </button>
       </div>

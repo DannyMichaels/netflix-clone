@@ -1,12 +1,20 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router';
-import { ProfilesDispatchContext } from '../../../context/profiles/profilesContext';
+
+// context/reducer
+import {
+  ProfilesDispatchContext,
+  ProfilesStateContext,
+} from '../../../context/profiles/profilesContext';
 import { UPDATE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
+
+// utils
 import { languages } from '../../../utils/generalUtils';
 import { makeArrayFromString } from '../../../utils/makeArrayFromString';
 import { ROUTES } from '../../../utils/navigation';
 
 export default function EditProfileForm({ stateProps }) {
+  const { profiles } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
   const { push } = useHistory();
 
@@ -118,13 +126,14 @@ export default function EditProfileForm({ stateProps }) {
         >
           CANCEL
         </button>
-
-        <button
-          className="profile__button"
-          onClick={() => setManageMode('delete')}
-        >
-          DELETE PROFILE
-        </button>
+        {profiles.length > 1 && (
+          <button
+            className="profile__button"
+            onClick={() => setManageMode('delete')}
+          >
+            DELETE PROFILE
+          </button>
+        )}
       </div>
     </div>
   );
