@@ -26,10 +26,20 @@ export default function ProfileCreate() {
   const { maxProfileLength, profiles } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
 
+  /* in netflix a user doesn't get to pick image in profile creation, 
+  instead it selects an image that hasn't already been used starting from index 0.*/
+
+  const getImage = () => {
+    const usedImages = profiles.map(({ imgUrl }) => imgUrl);
+    for (const image of Object.values(IMAGES)) {
+      if (!usedImages.includes(image)) return image;
+    }
+  };
+
   const [userToCreate, setUserToCreate] = useState({
     name: '',
     isKid: false,
-    imgUrl: IMAGES.YELLOW_AVATAR,
+    imgUrl: getImage(),
   });
 
   const { push } = useHistory();
@@ -104,11 +114,7 @@ export default function ProfileCreate() {
 
                 <div className="manageProfile__optionWrapper">
                   <div className="optionWrapper__addKids--option">
-                    <input
-                      type="checkbox"
-                      checked={userToCreate.isKid}
-                      value={userToCreate.isKid}
-                    />
+                    <input type="checkbox" />
                     <label htmlFor="isKid" onClick={toggleIsKid}>
                       {userToCreate.isKid && (
                         <div>

@@ -21,7 +21,7 @@ export default function ProfileManage({ location: { state } }) {
     if (Object.keys(profile) === 0) return;
 
     const { isKid, name, imgUrl, language } = profile;
-    setProfileFormData({ name, isKid, image: imgUrl, language });
+    setProfileFormData({ name, isKid, imgUrl, language });
   }, [profile]);
 
   const handleChange = ({ target: { name, value } }) => {

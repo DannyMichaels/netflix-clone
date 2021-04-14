@@ -31,7 +31,7 @@ export default function DeleteProfile({ stateProps }) {
         <div className="profile__avatar">
           <div className="avatar__box">
             <img
-              src={profileFormData.image}
+              src={profileFormData.imgUrl}
               alt={profileFormData.name}
               className="avatar__img"
             />
