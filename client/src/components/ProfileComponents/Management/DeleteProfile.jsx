@@ -31,13 +31,13 @@ export default function DeleteProfile({ stateProps }) {
         <div className="profile__avatar">
           <div className="avatar__box">
             <img
-              src={profileFormData?.image}
-              alt={profileFormData?.name}
+              src={profileFormData.image}
+              alt={profileFormData.name}
               className="avatar__img"
             />
           </div>
 
-          <div className="profile__name">{profileFormData?.name}</div>
+          <div className="profile__name">{profileFormData.name}</div>
         </div>
 
         <div className="profile__deleteWarning">
@@ -60,7 +60,7 @@ export default function DeleteProfile({ stateProps }) {
           disabled={profiles.length <= 1}
         >
           {profiles.length <= 1
-            ? 'cannot delete last profile'
+            ? 'cannot delete only profile'
             : ' DELETE PROFILE'}
         </button>
       </div>

@@ -37,7 +37,7 @@ export default function EditProfileForm({ stateProps }) {
       payload: updatedProfile,
     });
 
-    push(ROUTES.BROWSE_ALL);
+    push(ROUTES.SELECT_PROFILE);
   };
 
   return (
@@ -73,7 +73,7 @@ export default function EditProfileForm({ stateProps }) {
               <div cols={2} className="manageProfile__dropdown--nfDropDown">
                 <div
                   role="button"
-                  tabindex="0"
+                  tabIndex="0"
                   onClick={toggleDropdown}
                   aria-expanded={isDropdownShowing}
                   className="manageProfile__dropdown--header"
@@ -85,9 +85,10 @@ export default function EditProfileForm({ stateProps }) {
 
                 <div className="manageProfile__dropdown--submenu">
                   <ul>
-                    {listItemLanguages.map((text) => (
+                    {listItemLanguages.map((text, idx) => (
                       <li
                         name="language"
+                        key={idx}
                         onClick={() => {
                           setProfileFormData((prevState) => ({
                             ...prevState,

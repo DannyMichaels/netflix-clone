@@ -203,6 +203,10 @@ export const Wrapper = styled.div`
         &:focus {
           outline: none;
         }
+
+        @media screen and (max-width: 800px) {
+          font-size: 13px;
+        }
       }
     }
 
@@ -239,7 +243,6 @@ export const Wrapper = styled.div`
           padding-left: 10px;
           line-height: 2.5rem;
           letter-spacing: 1px;
-          /* font-size: 1.25rem; */
           cursor: pointer;
           font-size: clamp(0.6rem, 2vw, 1.25rem);
           font-weight: 700;
@@ -311,7 +314,6 @@ export const Wrapper = styled.div`
           max-height: 300px;
           width: 350px;
           flex-flow: column wrap;
-          /* padding: 2em; */
           flex-basis: 30%;
 
           list-style-type: none;
@@ -336,4 +338,5 @@ export const Wrapper = styled.div`
         }
       }
     }
+  }
 `;

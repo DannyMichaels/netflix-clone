@@ -55,6 +55,21 @@ export const Wrapper = styled.div`
       }
     }
 
+    h2 {
+      font-size: 1.3vw;
+      color: ${COLORS.GREY_H2};
+      font-weight: 400;
+      user-select: none;
+      margin-block-start: 0.83em;
+      margin-block-end: 0.83em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+
+      @media screen and (max-width: 800px) {
+        font-size: 13px;
+      }
+    }
+
     .profile__deleteWarning {
       width: 25vw;
       text-align: initial;
@@ -75,7 +90,7 @@ export const Wrapper = styled.div`
       text-overflow: ellipsis;
       overflow: hidden;
 
-      @media screen (max-width: 800px) {
+      @media screen and (max-width: 800px) {
         font-size: 12px;
       }
     }
@@ -167,8 +182,10 @@ export const Wrapper = styled.div`
     }
   }
 
-  .manageProfile__edit--parent {
-    display: block;
+  .manageProfile__add--parent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     .manageProfile__edit--inputs {
       position: relative;
@@ -193,7 +210,7 @@ export const Wrapper = styled.div`
         border: 1px solid transparent;
         margin: 0 0.8em 0 0;
         padding: 0.2em 0.6em;
-        color: #fff;
+        color: ${COLORS.WHITE};
         font-size: 1.3vw;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
@@ -203,137 +220,15 @@ export const Wrapper = styled.div`
         &:focus {
           outline: none;
         }
-      }
-    }
 
-    .manageProfile__edit--dropdowns,
-    .manageProfile__edit--dropdown,
-    .manageProfile__dropdown--nfDropDown {
-      min-width: 18rem;
-    }
-
-    .manageProfile__edit--dropdowns {
-      display: flex;
-      flex-direction: column;
-
-      .manageProfile__edit--dropdown {
-        margin-top: 1rem;
-
-        .manageProfile__dropdown--label {
-          font-size: 1.3vw;
-          margin-bottom: 7px;
-          color: #ccc;
-          font-weight: 400;
-          @media screen and (max-width: 1000px) {
-            font-size: 13px;
-          }
-        }
-      }
-
-      .manageProfile__dropdown--nfDropDown {
-        position: relative;
-        text-align: left;
-
-        .manageProfile__dropdown--header {
-          height: 2.5rem;
-          padding-left: 10px;
-          line-height: 2.5rem;
-          letter-spacing: 1px;
-          /* font-size: 1.25rem; */
-          cursor: pointer;
-          font-size: clamp(0.6rem, 2vw, 1.25rem);
-          font-weight: 700;
-
-          box-sizing: border-box;
-          border: 1px solid rgba(255, 255, 255, 0.9);
-          display: inline-block;
-          color: #fff;
-          background-color: ${COLORS.BLACK};
-
-          appearance: none;
-
-          border-radius: 0;
-          position: relative;
-          padding-right: 50px;
-
-          &:hover {
-            background-color: ${COLORS.BRIGHT_BLACK};
-            filter: contrast(80%);
-          }
-
-          &:focus {
-            outline: none;
-          }
-
-          .manageProfile__dropdown--arrow {
-            border-color: #fff transparent transparent;
-            border-style: solid;
-            border-width: 5px 5px 0;
-            height: 0;
-            position: absolute;
-            right: 10px;
-            top: 44%;
-            width: 0;
-          }
-        }
-      }
-      .manageProfile__dropdown--submenu {
-        opacity: ${({ isDropdownShowing }) => (isDropdownShowing ? 1 : 0)};
-        transition-duration: 150ms;
-        overflow-x: hidden;
-        z-index: 2;
-        padding: 0;
-        margin: 0;
-        top: 2.5rem;
-        left: 0;
-        font-size: 14px;
-        box-sizing: border-box;
-        position: absolute;
-        background-color: rgba(0, 0, 0, 0.9);
-        font-size: 13px;
-        line-height: 21px;
-        border: solid 1px rgba(255, 255, 255, 0.15);
-        padding: 20px;
-        overflow-y: scroll;
-        max-height: 50vh;
-        width: 350px;
-        visibility: ${({ isDropdownShowing }) =>
-          isDropdownShowing ? 'inherit' : 'hidden'};
-
-        &::-webkit-scrollbar {
-          display: none;
+        &::placeholder {
+          color: #c9c7c7;
         }
 
-        ul {
-          display: flex;
-          margin: 0;
-          padding: 0;
-          max-height: 300px;
-          width: 350px;
-          flex-flow: column wrap;
-          /* padding: 2em; */
-          flex-basis: 30%;
-
-          list-style-type: none;
-
-          li {
-            flex: 0.5;
-            padding: 0;
-            line-height: 24px;
-            display: block;
-            cursor: pointer;
-            user-select: ${({ isDropdownShowing }) =>
-              isDropdownShowing ? 'inherit' : 'none'};
-
-            color: ${COLORS.WHITE};
-            box-sizing: border-box;
-            position: relative;
-
-            &:hover {
-              text-decoration: underline;
-            }
-          }
+        @media screen and (max-width: 800px) {
+          font-size: 13px;
         }
       }
     }
+  }
 `;

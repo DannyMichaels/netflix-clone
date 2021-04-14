@@ -24,10 +24,6 @@ export default function ProfileManage({ location: { state } }) {
     setProfileFormData({ name, isKid, image: imgUrl, language });
   }, [profile]);
 
-  useEffect(() => {
-    console.log(window.location);
-  }, []);
-
   const handleChange = ({ target: { name, value } }) => {
     setProfileFormData((prevState) => ({
       ...prevState,

@@ -7,6 +7,7 @@ export const COLORS = {
   WHITE: '#fff',
   EGGSHELL_WHITE: '#e6e6e6',
   GREY: '#999',
+  GREY_H2: '#666',
   SPAN_GREY: '#777',
   DARK_GREY: '#2f2f2f',
   BRIGHT_GREY: '#d2d2d2;',
