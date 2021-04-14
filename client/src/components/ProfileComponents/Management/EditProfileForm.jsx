@@ -69,7 +69,7 @@ export default function EditProfileForm({ stateProps }) {
             <label htmlFor="name">Profile Name</label>
             <input
               name="name"
-              value={profileFormData?.name}
+              value={profileFormData?.name || ''}
               onChange={handleChange}
             />
           </div>
