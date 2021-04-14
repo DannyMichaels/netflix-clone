@@ -20,6 +20,8 @@ export const IMAGES = {
     'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png',
   YELLOW_AVATAR:
     'https://occ-0-448-444.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABWu33TcylnaLZwSdtgKR6mr0O63afqQLxZbzHYQZLkCJ9bgMTtsf6tzs_ua2BuTpAVPbhxnroiEA-_bqJmKWiXblO9h-.png?r=f71',
+  PENGUIN_YELLOW_BG:
+    'https://mir-s3-cdn-cf.behance.net/project_modules/disp/64623a33850498.56ba69ac2a6f7.png',
 };
 
 export const languages = `

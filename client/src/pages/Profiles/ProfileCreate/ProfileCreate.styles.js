@@ -192,8 +192,9 @@ export const Wrapper = styled.div`
       display: flex;
       flex-direction: row;
       align-items: center;
+      margin-left: 15px;
 
-      label {
+      .manageProfile__name--label {
         clip: rect(1px 1px 1px 1px) !important;
         clip: rect(1px, 1px, 1px, 1px) !important;
         height: 1px !important;
@@ -228,6 +229,62 @@ export const Wrapper = styled.div`
         @media screen and (max-width: 800px) {
           font-size: 13px;
         }
+      }
+    }
+  }
+
+  .manageProfile__optionWrapper {
+    display: block;
+
+    .optionWrapper__addKids--option {
+      display: flex;
+      align-items: center;
+      margin: 5px 0;
+      position: relative;
+
+      div {
+        overflow: hidden;
+
+        .option__checkIcon {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          pointer-events: none;
+          color: #99a1a7;
+        }
+      }
+
+      span {
+        color: ${COLORS.WHITE};
+        font-weight: 400;
+        font-size: 1.3vw;
+
+        @media screen and (max-width: 800px) {
+          font-size: 13px;
+        }
+      }
+
+      input[type='checkbox'] {
+        display: none;
+      }
+
+      input[type='checkbox'] + label {
+        font-size: 7px;
+        border: 1px solid #333;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        display: inline-block;
+        position: relative;
+        margin-right: 0.5em;
+        font-size: 0.8vw;
+        width: 2.5em;
+        height: 2.5em;
+      }
+
+      input[type='checkbox']:checked + label {
+        border: 1px solid #333;
+        color: #99a1a7;
       }
     }
   }

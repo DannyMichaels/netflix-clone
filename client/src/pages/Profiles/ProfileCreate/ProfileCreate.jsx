@@ -15,6 +15,9 @@ import { getRandomId } from '../../../utils/generateId';
 import { ROUTES } from '../../../utils/navigation';
 import { IMAGES } from '../../../utils/generalUtils';
 
+// icons
+import CheckIcon from '@material-ui/icons/Check';
+
 // styles
 import { Wrapper } from './ProfileCreate.styles';
 import { ADD_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
@@ -26,25 +29,37 @@ export default function ProfileCreate() {
   const [userToCreate, setUserToCreate] = useState({
     name: '',
     isKid: false,
-    image: IMAGES.YELLOW_AVATAR,
+    imgUrl: IMAGES.YELLOW_AVATAR,
   });
 
   const { push } = useHistory();
 
-  const handleChange = ({ target: { name, value } }) => {
+  const handleInputChange = ({ target: { name, value } }) => {
     setUserToCreate((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
+  const toggleIsKid = () => {
+    setUserToCreate((prevState) => ({
+      ...prevState,
+      isKid: prevState.isKid ? false : true,
+    }));
+  };
+
   const handleCreate = async () => {
+    if (maxProfileLength === profiles?.length) return;
+
     const createdUser = {
       ...userToCreate,
       id: getRandomId(Math.floor(Math.random() * 100) + 98),
+      language: 'English',
+      list: [],
     };
 
     await dispatch({ type: ADD_PROFILE, payload: createdUser });
+    push(ROUTES.SELECT_PROFILE);
   };
 
   if (maxProfileLength === profiles?.length) {
@@ -63,7 +78,7 @@ export default function ProfileCreate() {
             <div className="profile__avatar">
               <div className="avatar__box">
                 <img
-                  src={userToCreate.image}
+                  src={userToCreate.imgUrl}
                   alt="Profile Avatar"
                   className="avatar__img"
                 />
@@ -72,13 +87,38 @@ export default function ProfileCreate() {
 
             <div className="manageProfile__add--parent">
               <div className="manageProfile__edit--inputs">
-                <label htmlFor="name">Profile Name</label>
+                <label
+                  htmlFor="name"
+                  aria-label="Name"
+                  className="manageProfile__name--label"
+                >
+                  Profile Name
+                </label>
+
                 <input
                   placeholder="Name"
                   name="name"
                   value={userToCreate.name}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                 />
+
+                <div className="manageProfile__optionWrapper">
+                  <div className="optionWrapper__addKids--option">
+                    <input
+                      type="checkbox"
+                      checked={userToCreate.isKid}
+                      value={userToCreate.isKid}
+                    />
+                    <label htmlFor="isKid" onClick={toggleIsKid}>
+                      {userToCreate.isKid && (
+                        <div>
+                          <CheckIcon className="option__checkIcon" />
+                        </div>
+                      )}
+                    </label>
+                    <span tabIndex={0}>Kid?</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

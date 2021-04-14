@@ -73,7 +73,7 @@ export default function EditProfileForm({ stateProps }) {
               <div cols={2} className="manageProfile__dropdown--nfDropDown">
                 <div
                   role="button"
-                  tabIndex="0"
+                  tabIndex={0}
                   onClick={toggleDropdown}
                   aria-expanded={isDropdownShowing}
                   className="manageProfile__dropdown--header"
