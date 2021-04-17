@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef } from 'react';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -22,6 +22,8 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     Math.round(document.body.clientWidth / 200)
   );
 
+  console.log(Math.round(document.body.clientWidth / 200));
+
   const rowRef = useRef(null);
 
   useMemo(async () => {
@@ -31,8 +33,6 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     );
     setMovies(moviesThatHaveImage);
   }, [fetchUrl]);
-
-  useEffect(() => {}, []);
 
   const onScrollNext = () => {
     const visibleElements = rowRef.current.querySelector('.visible');

@@ -28,7 +28,10 @@ import {
   ProfilesDispatchContext,
   ProfilesStateContext,
 } from '../../../../context/profiles/profilesContext';
-import { SIGN_OUT } from '../../../../reducers/ProfilesReducer/profilesReducerTypes';
+import {
+  SELECT_PROFILE,
+  SIGN_OUT,
+} from '../../../../reducers/ProfilesReducer/profilesReducerTypes';
 
 export default function Nav({ logoOnly }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
@@ -75,6 +78,12 @@ export default function Nav({ logoOnly }) {
 
   const handleClickAway = () => {
     search ? setSearchMode(true) : setSearchMode(false);
+  };
+
+  const onSelectProfile = (selectedProfile) => {
+    if (selectedProfile.id === currentProfile.id) return;
+
+    dispatch({ type: SELECT_PROFILE, payload: selectedProfile });
   };
 
   const onSignOut = async (text) => {
@@ -183,7 +192,10 @@ export default function Nav({ logoOnly }) {
                       <div className="nav__dropDown">
                         <div className="dropDown__items">
                           {profiles?.map((user) => (
-                            <li key={user.id}>
+                            <li
+                              key={user.id}
+                              onClick={() => onSelectProfile(user)}
+                            >
                               <img
                                 className="nav__avatar"
                                 src={user.imgUrl}
