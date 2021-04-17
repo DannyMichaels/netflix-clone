@@ -72,6 +72,40 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     }
   };
 
+  const onScrollBack = () => {
+    const visibleElements = rowRef.current.querySelector('.visible');
+    const allPosters = rowRef.current.querySelectorAll('.row__poster');
+
+    for (let i = allPosters.length - 1; i >= 0; i--) {
+      console.log('in i loop');
+      if (allPosters[i].classList.contains('visibile')) {
+        if (
+          i - 1 < allPosters.length &&
+          allPosters[i - 1].classList.contains('visibile')
+        ) {
+          console.log('in if block');
+          allPosters[i].classList.remove('visibile');
+        } else {
+          console.log('in else block');
+          let j = 0;
+          for (j; j < visiblePosterCount && i - j > 0; j++) {
+            console.log('in J for loop', { i, j });
+            allPosters[i - j].classList.add('visibile');
+          }
+          // allPosters[i].scrollIntoViewIfNeeded({
+          //   behavior: 'smooth',
+          //   inline: 'center',
+          // });
+          allPosters[i - j].scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+          });
+          break;
+        }
+      }
+    }
+  };
+
   const CARDS = movies?.map((movie, index) => (
     <MovieCard
       movie={movie}
@@ -90,7 +124,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   return (
     <StyledRow aria-label="movies row" ref={rowRef}>
       <h2 className="row__title">{title}</h2>
-      <button className="slider__nav prev">
+      <button className="slider__nav prev" onClick={onScrollBack}>
         <span className="icon">
           &lt;
           {/* <ArrowBackIcon /> */}

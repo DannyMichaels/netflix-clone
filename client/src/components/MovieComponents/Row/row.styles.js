@@ -7,6 +7,8 @@ export const StyledRow = styled.div`
   /* width: 100%; */
   position: relative;
   scroll-behavior: smooth;
+  overflow-x: hidden;
+  overflow-y: hidden;
 
   /* if the parent element is pos: relative and child is pos: absolute
     the child will be positioned around the parent.
