@@ -34,6 +34,44 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
 
   useEffect(() => {}, []);
 
+  const onScrollNext = () => {
+    const visibleElements = rowRef.current.querySelector('.visible');
+    const allPosters = rowRef.current.querySelectorAll('.row__poster');
+
+    for (let i = 0; i < allPosters.length; i++) {
+      console.log('in i loop');
+      if (allPosters[i].classList.contains('visibile')) {
+        if (
+          i + 1 < allPosters.length &&
+          allPosters[i + 1].classList.contains('visibile')
+        ) {
+          console.log('in if block');
+          allPosters[i].classList.remove('visibile');
+        } else {
+          console.log('in else block');
+
+          for (
+            let j = 0;
+            j < visiblePosterCount && i + j < allPosters.length;
+            j++
+          ) {
+            console.log('in J for loop', { i, j });
+            allPosters[i + j].classList.add('visibile');
+          }
+          // allPosters[i].scrollIntoViewIfNeeded({
+          //   behavior: 'smooth',
+          //   inline: 'center',
+          // });
+          allPosters[i].scrollIntoView({
+            behavior: 'smooth',
+            inline: 'center',
+          });
+          break;
+        }
+      }
+    }
+  };
+
   const CARDS = movies?.map((movie, index) => (
     <MovieCard
       movie={movie}
@@ -60,47 +98,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
         {/* <span className="row__gradient" /> */}
       </button>
       <div className="row__posters">{CARDS}</div>
-      <button
-        className="slider__nav next"
-        onClick={() => {
-          const visibleElements = rowRef.current.querySelector('.visible');
-          const allPosters = rowRef.current.querySelectorAll('.row__poster');
-
-          for (let i = 0; i < allPosters.length; i++) {
-            console.log('in i loop');
-            if (allPosters[i].classList.contains('visibile')) {
-              if (
-                i + 1 < allPosters.length &&
-                allPosters[i + 1].classList.contains('visibile')
-              ) {
-                console.log('in if block');
-                allPosters[i].classList.remove('visibile');
-              } else {
-                console.log('in else block');
-
-                for (
-                  let j = 0;
-                  j < visiblePosterCount && i + j < allPosters.length;
-                  j++
-                ) {
-                  console.log('in J for loop', { i, j });
-                  allPosters[i + j].classList.add('visibile');
-                }
-                allPosters[i].scrollIntoView({
-                  behavior: 'smooth',
-                  inline: 'center',
-                });
-                break;
-              }
-            }
-          }
-          // element.scrollIntoView({
-          //   behavior: 'smooth',
-          //   block: 'end',
-          //   inline: 'nearest',
-          // });
-        }}
-      >
+      <button className="slider__nav next" onClick={onScrollNext}>
         <span className="icon">
           &gt;
           {/* <ArrowForwardIcon /> */}
