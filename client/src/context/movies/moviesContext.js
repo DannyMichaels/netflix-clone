@@ -50,7 +50,6 @@ const MoviesContextProvider = ({ children }) => {
             .catch((err) => console.error(err.message))
       );
     };
-
     getMovies();
   }, []);
 
