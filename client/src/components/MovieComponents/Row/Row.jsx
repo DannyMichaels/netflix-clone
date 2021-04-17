@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -11,11 +11,18 @@ import MovieCard from '../MovieCard/MovieCard';
 import { StyledRow } from './row.styles';
 
 // icons
-import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
+// import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
+// import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
+  const [isVisible, setIsVisible] = useState(5);
+  const [counter, setCounter] = useState(0);
+  const [visiblePosterCount, setVisiblePosterCount] = useState(
+    Math.round(document.body.clientWidth / 200)
+  );
+
+  const rowRef = useRef(null);
 
   useMemo(async () => {
     const movieData = await getAllMovies(fetchUrl);
@@ -25,7 +32,9 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     setMovies(moviesThatHaveImage);
   }, [fetchUrl]);
 
-  const CARDS = movies?.map((movie) => (
+  useEffect(() => {}, []);
+
+  const CARDS = movies?.map((movie, index) => (
     <MovieCard
       movie={movie}
       src={`${baseImgUrl}${
@@ -34,12 +43,14 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       isLargeRow={isLargeRow}
       alt={movie.name}
       key={movie.id}
-      className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
+      className={`row__poster ${isLargeRow && 'row__posterLarge'} ${
+        index < visiblePosterCount ? 'visibile' : ''
+      }`}
     />
   ));
 
   return (
-    <StyledRow aria-label="movies row">
+    <StyledRow aria-label="movies row" ref={rowRef}>
       <h2 className="row__title">{title}</h2>
       <button className="slider__nav prev">
         <span className="icon">
@@ -49,7 +60,47 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
         {/* <span className="row__gradient" /> */}
       </button>
       <div className="row__posters">{CARDS}</div>
-      <button className="slider__nav next">
+      <button
+        className="slider__nav next"
+        onClick={() => {
+          const visibleElements = rowRef.current.querySelector('.visible');
+          const allPosters = rowRef.current.querySelectorAll('.row__poster');
+
+          for (let i = 0; i < allPosters.length; i++) {
+            console.log('in i loop');
+            if (allPosters[i].classList.contains('visibile')) {
+              if (
+                i + 1 < allPosters.length &&
+                allPosters[i + 1].classList.contains('visibile')
+              ) {
+                console.log('in if block');
+                allPosters[i].classList.remove('visibile');
+              } else {
+                console.log('in else block');
+
+                for (
+                  let j = 0;
+                  j < visiblePosterCount && i + j < allPosters.length;
+                  j++
+                ) {
+                  console.log('in J for loop', { i, j });
+                  allPosters[i + j].classList.add('visibile');
+                }
+                allPosters[i].scrollIntoView({
+                  behavior: 'smooth',
+                  inline: 'center',
+                });
+                break;
+              }
+            }
+          }
+          // element.scrollIntoView({
+          //   behavior: 'smooth',
+          //   block: 'end',
+          //   inline: 'nearest',
+          // });
+        }}
+      >
         <span className="icon">
           &gt;
           {/* <ArrowForwardIcon /> */}
