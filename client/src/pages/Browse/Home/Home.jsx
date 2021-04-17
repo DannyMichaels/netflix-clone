@@ -7,7 +7,7 @@ import SearchResultsView from '../../../components/MovieComponents/SearchResults
 import Layout from '../../../components/shared/Layout/Layout';
 
 // utils, helpers and Services
-import { movieRows } from './home.utils';
+import { movieRows } from '../../../utils/movieRequests';
 
 // context
 import { SearchContext } from '../../../context/search/searchContext';

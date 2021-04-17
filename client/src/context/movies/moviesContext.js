@@ -3,7 +3,7 @@ import React, { createContext, useReducer, useMemo, useEffect } from 'react';
 // utils / services
 import { getAllMovies } from '../../services/movies';
 import { getAllGenres } from '../../services/genres';
-import { movieRows } from '../../pages/Browse/Home/home.utils';
+import { movieRows } from '../../utils/movieRequests';
 
 // reducer
 import { movieReducer } from '../../reducers/moviesReducer/movieReducer';

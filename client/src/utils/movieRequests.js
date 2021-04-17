@@ -10,3 +10,38 @@ export const MOVIE_REQUESTS = {
   FETCH_ROMANCE_MOVIES: `/discover/movie?api_key=${API_KEY}&with_genres=10749`,
   FETCH_DOCUMENTARIES: `/discover/movie?api_key=${API_KEY}&with_genres=99`,
 };
+
+export const movieRows = [
+  {
+    title: 'Netflix Originals',
+    fetchUrl: MOVIE_REQUESTS.FETCH_NETFLIX_ORIGINALS,
+  },
+  {
+    title: 'Trending Now',
+    fetchUrl: MOVIE_REQUESTS.FETCH_TRENDING,
+  },
+  {
+    title: 'Top Rated',
+    fetchUrl: MOVIE_REQUESTS.FETCH_TOP_RATED,
+  },
+  {
+    title: 'Action Movies',
+    fetchUrl: MOVIE_REQUESTS.FETCH_ACTION_MOVIES,
+  },
+  {
+    title: 'Comedy Movies',
+    fetchUrl: MOVIE_REQUESTS.FETCH_COMEDY_MOVIES,
+  },
+  {
+    title: 'Horror Movies',
+    fetchUrl: MOVIE_REQUESTS.FETCH_HORROR_MOVIES,
+  },
+  {
+    title: 'Romance Movies',
+    fetchUrl: MOVIE_REQUESTS.FETCH_ROMANCE_MOVIES,
+  },
+  {
+    title: 'Documentaries',
+    fetchUrl: MOVIE_REQUESTS.FETCH_DOCUMENTARIES,
+  },
+];
