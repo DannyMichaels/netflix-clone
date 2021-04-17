@@ -5,9 +5,10 @@ export const StyledNav = styled.nav`
   background: ${({ isShowing }) => isShowing && COLORS.BRIGHT_BLACK};
   top: 0;
   z-index: 1000;
+
   position: ${({ browseName }) => (browseName ? 'relative' : 'fixed')};
   position: ${({ hasBrowseName }) => hasBrowseName && 'sticky'};
-  background: ${({ hasBrowseName }) => hasBrowseName && COLORS.BRIGHT_BLACK};
+  background: ${({ hasBrowseName }) => hasBrowseName && COLORS.BLACK};
   width: 100%;
   display: flex;
   padding: 20px;

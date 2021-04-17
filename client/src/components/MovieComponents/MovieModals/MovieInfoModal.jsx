@@ -13,7 +13,7 @@ import ShowLessIcon from '@material-ui/icons/ExpandLess';
 import ShowMoreIcon from '@material-ui/icons/ExpandMore';
 
 // services and utils
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
 import { baseImgUrl, COLORS } from '../../../utils/generalUtils';
 import { getCastByMovieId, getMoviesByGenreId } from '../../../services/movies';
@@ -49,7 +49,6 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     false
   );
   const isMounted = useRef(true);
-  const { push } = useHistory();
 
   useEffect(() => {
     const loadMovie = async () => {
@@ -93,7 +92,8 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
       setRecommendedMovies(newRecommendedMovies);
     };
     getData(movie);
-  }, [allGenres, movie]);
+    // eslint-disable-next-line
+  }, []);
 
   const VIDEO_PLAYER_OPTIONS = {
     height: '400',
@@ -111,7 +111,6 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   const onRedirect = async (type, id) => {
     setSearch('');
     handleClose();
-    push(`/browse/${type}/${id}`);
   };
 
   const redirectToClickedMovie = async (movie) => {
@@ -195,6 +194,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                   <Fragment key={person.id}>
                     <Link
                       key={person.id}
+                      to={`/browse/person/${person.id}`}
                       onClick={() => onRedirect('person', person.id)}
                     >
                       {person.name}

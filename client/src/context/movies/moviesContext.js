@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useMemo, useEffect } from 'react';
+import { createContext, useReducer, useLayoutEffect, useEffect } from 'react';
 
 // utils / services
 import { getAllMovies } from '../../services/movies';
@@ -24,15 +24,18 @@ const MoviesContextProvider = ({ children }) => {
 
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);
 
-  useMemo(async () => {
-    const { genres } = await getAllGenres();
-    dispatch({
-      type: FETCH_GENRES,
-      payload: genres,
-    });
+  useEffect(() => {
+    const fetchGenres = async () => {
+      const { genres } = await getAllGenres();
+      dispatch({
+        type: FETCH_GENRES,
+        payload: genres,
+      });
+    };
+    fetchGenres();
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getMovies = async () => {
       movieRows.map(
         async ({ fetchUrl }) =>
@@ -48,10 +51,8 @@ const MoviesContextProvider = ({ children }) => {
       );
     };
 
-    if (state.allGenres?.length) {
-      getMovies();
-    }
-  }, [state.allGenres?.length]);
+    getMovies();
+  }, []);
 
   return (
     <MoviesStateContext.Provider value={state}>

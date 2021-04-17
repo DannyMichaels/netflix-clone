@@ -35,6 +35,7 @@ import {
 
 export default function Nav({ logoOnly }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
+
   const [searchMode, setSearchMode] = useState(false);
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
 
@@ -233,7 +234,7 @@ export default function Nav({ logoOnly }) {
         </div>
       </StyledNav>
       {browseName && !search && (
-        <StyledNav hasBrowseName>
+        <StyledNav hasBrowseName isShowing={isBackgroundShowing}>
           <div className="nav__innerColumn">
             <h1 className="nav__browseName">{browseName}</h1>
           </div>

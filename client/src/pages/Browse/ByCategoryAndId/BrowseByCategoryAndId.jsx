@@ -54,12 +54,11 @@ export default function BrowseByCategoryAndId() {
         {movies
           .filter(({ backdrop_path }) => Boolean(backdrop_path))
           .map((movie) => (
-            <picture>
+            <picture key={movie.id}>
               <MovieCard
                 movie={movie}
                 src={`${baseImgUrl}${movie.backdrop_path}`}
                 alt={movie.name}
-                key={movie.id}
                 className="search__searched-movie"
               />
             </picture>

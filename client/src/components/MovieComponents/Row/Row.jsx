@@ -16,8 +16,9 @@ import { StyledRow } from './row.styles';
 
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
-  const [isVisible, setIsVisible] = useState(5);
-  const [counter, setCounter] = useState(0);
+  // const [isVisible, setIsVisible] = useState(5);
+  // const [counter, setCounter] = useState(0);
+
   const [visiblePosterCount, setVisiblePosterCount] = useState(
     Math.round(document.body.clientWidth / 200)
   );
@@ -35,7 +36,8 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   }, [fetchUrl]);
 
   const onScrollNext = () => {
-    const visibleElements = rowRef.current.querySelector('.visible');
+    // const visibleElements = rowRef.current.querySelector('.visible');
+
     const allPosters = rowRef.current.querySelectorAll('.row__poster');
 
     for (let i = 0; i < allPosters.length; i++) {
