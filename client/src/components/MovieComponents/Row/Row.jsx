@@ -10,6 +10,10 @@ import MovieCard from '../MovieCard/MovieCard';
 // styles
 import { StyledRow } from './row.styles';
 
+// icons
+import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
+
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
 
@@ -37,7 +41,21 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   return (
     <StyledRow aria-label="movies row">
       <h2 className="row__title">{title}</h2>
+      <button className="slider__nav prev">
+        <span className="icon">
+          &lt;
+          {/* <ArrowBackIcon /> */}
+        </span>
+        {/* <span className="row__gradient" /> */}
+      </button>
       <div className="row__posters">{CARDS}</div>
+      <button className="slider__nav next">
+        <span className="icon">
+          &gt;
+          {/* <ArrowForwardIcon /> */}
+        </span>
+        {/* <span className="row__gradient" /> */}
+      </button>
     </StyledRow>
   );
 }

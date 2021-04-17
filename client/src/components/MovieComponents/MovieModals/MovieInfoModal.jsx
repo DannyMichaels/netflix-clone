@@ -100,7 +100,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     width: '100%',
     playerVars: {
       autoplay: 1,
-      controls: 0,
+      controls: 1,
     },
   };
 

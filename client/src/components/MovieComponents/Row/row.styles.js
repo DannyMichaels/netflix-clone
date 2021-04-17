@@ -1,8 +1,86 @@
 import styled from 'styled-components';
+import { COLORS } from '../../../utils/generalUtils';
 
 export const StyledRow = styled.div`
   margin: 3vw 0;
   margin-left: 20px;
+  /* width: 100%; */
+  position: relative;
+  /* if the parent element is pos: relative and child is pos: absolute
+    the child will be positioned around the parent.
+    */
+
+  &:hover {
+    .slider__nav {
+      visibility: visible;
+    }
+  }
+
+  .slider__nav {
+    transition: all 0.2s ease-in;
+    visibility: hidden;
+    outline: none;
+    top: 15px;
+    z-index: 3;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    background: rgba(20, 20, 20, 0.5);
+
+    &:hover {
+      background: rgba(20, 20, 20, 0.7);
+
+      .icon {
+        font-size: 1.8rem;
+        font-weight: 700;
+      }
+    }
+
+    border: none;
+    color: ${COLORS.WHITE};
+    width: 4rem;
+
+    .icon {
+      font-size: 1.5rem;
+      transition: all 250ms ease-in-out;
+    }
+
+    &.prev {
+      left: 30px;
+      .row__gradient {
+        background-image: linear-gradient(
+          to right,
+          #111 30%,
+          rgba(24, 24, 24, 0) 100%
+        );
+      }
+    }
+
+    &.next {
+      right: -30px;
+
+      .icon {
+        /* position: relative;
+        right: -100px; */
+      }
+
+      .row__gradient {
+        background-image: linear-gradient(
+          to left,
+          #111 30%,
+          rgba(24, 24, 24, 0) 100%
+        );
+        right: 10px;
+      }
+    }
+
+    .row__gradient {
+      height: 100%;
+      width: 100px;
+      position: relative;
+    }
+  }
 
   &:last-of-type {
     padding-bottom: 50px;
@@ -34,10 +112,7 @@ export const StyledRow = styled.div`
     padding: 20px;
     position: relative;
     outline: 0;
-
     z-index: 2;
-    /* padding: 0 4%; */
-
     padding-left: 4%;
     padding-right: 4%;
   }
