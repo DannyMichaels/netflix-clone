@@ -27,8 +27,9 @@ export default function Home() {
   }, [setBrowseName]);
 
   const ROWS = Children.toArray(
-    movieRows.map(({ title, fetchUrl }) => (
+    movieRows.map(({ title, fetchUrl }, idx) => (
       <Row
+        rowIndex={idx}
         title={title}
         fetchUrl={fetchUrl}
         isLargeRow={title.match(/^netflix originals$/i)}

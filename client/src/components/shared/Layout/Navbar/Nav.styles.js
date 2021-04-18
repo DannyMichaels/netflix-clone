@@ -108,6 +108,7 @@ export const StyledNav = styled.nav`
 `;
 
 export const Dropdown = styled.div`
+  visibility: ${({ isActive }) => (isActive ? 'visible' : 'hidden')};
   .nav__dropDown {
     transition: all 0.2s ease-in;
     position: absolute;

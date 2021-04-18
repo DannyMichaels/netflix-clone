@@ -14,8 +14,9 @@ import { StyledRow } from './row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 
-export default function Row({ title, fetchUrl, isLargeRow }) {
+export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
 
   const rowRef = useRef(null);
 
@@ -34,14 +35,17 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     let availableWidth = document.body.clientWidth;
     let posterWidth = allPosters[0].clientWidth;
     let visibleRange = currentScrollPosition + availableWidth;
+
     let lastVisiblePoster;
     let index = 0;
+
     for (index; index < allPosters.length; index++) {
       if (allPosters[index].offsetLeft + posterWidth >= visibleRange) {
         lastVisiblePoster = allPosters[index];
         break;
       }
     }
+
     if (!lastVisiblePoster && allPosters.length > 0) {
       lastVisiblePoster = allPosters[allPosters.length - 1];
     }
@@ -59,11 +63,14 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
             : elementToScroll.scrollLeft - scrollDistance,
         behavior: 'smooth',
       });
+
+      setCanScrollPrev(rowIndex);
     }
   };
 
-  const CARDS = movies?.map((movie) => (
+  const CARDS = movies?.map((movie, idx) => (
     <MovieCard
+      index={idx}
       movie={movie}
       src={`${baseImgUrl}${
         isLargeRow ? movie.poster_path : movie.backdrop_path
@@ -78,16 +85,18 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   return (
     <StyledRow aria-label="movies row" ref={rowRef}>
       <h2 className="row__title">{title}</h2>
-      <button
-        className="slider__nav prev"
-        onClick={() => onNavigate('backward')}
-      >
-        <span className="icon">
-          {/* &lt; */}
-          <ArrowBackIcon />
-        </span>
-        {/* <span className="row__gradient" /> */}
-      </button>
+      {canScrollPrev === rowIndex && (
+        <button
+          className="slider__nav prev"
+          onClick={() => onNavigate('backward')}
+        >
+          <span className="icon">
+            {/* &lt; */}
+            <ArrowBackIcon />
+          </span>
+          {/* <span className="row__gradient" /> */}
+        </button>
+      )}
       <div className="row__posters">{CARDS}</div>
       <button
         className="slider__nav next"
