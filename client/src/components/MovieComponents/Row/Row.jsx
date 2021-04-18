@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -18,42 +18,50 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [maxScrollNum, setMaxScrollNum] = useState(
+  const [maxScrollPosition, setMaxScrollPosition] = useState(
     Math.round(document.body.clientWidth / 200)
   );
 
+  const [indicators, setIndicators] = useState([]);
+
   const rowRef = useRef(null);
 
-  useMemo(async () => {
-    const movieData = await getAllMovies(fetchUrl);
-    const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
-      Boolean(backdrop_path)
+  const changeMaxScrollPosition = useCallback(() => {
+    console.log(movies.length);
+    console.log({ maxScrollPosition });
+    setMaxScrollPosition(
+      Math.round((movies.length - 1) / (document.body.clientWidth / 200))
     );
-    setMovies(moviesThatHaveImage);
-
-    setMaxScrollNum(
-      Math.round(movies.length / (document.body.clientWidth / 200))
-    );
-  }, [fetchUrl, movies.length]);
-
-  useEffect(() => {
-    const onResize = () => {
-      setMaxScrollNum(
-        Math.round(movies.length / (document.body.clientWidth / 200))
-      );
-    };
-
-    onResize();
-
-    window.addEventListener('resize', onResize);
-    return () => {
-      window.removeEventListener('resize', onResize);
-    };
   }, [movies.length]);
 
+  const createIndicators = useCallback(() => {
+    setIndicators([...new Array(maxScrollPosition).keys()]);
+    console.log({ indicators });
+  }, [maxScrollPosition]);
+
   useEffect(() => {
-    console.log({ activeIndex, maxScrollNum });
-  }, [activeIndex, maxScrollNum]);
+    const fetchData = async () => {
+      const movieData = await getAllMovies(fetchUrl);
+      const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
+        Boolean(backdrop_path)
+      );
+      setMovies(moviesThatHaveImage);
+    };
+    fetchData();
+    changeMaxScrollPosition();
+    createIndicators();
+  }, [fetchUrl, changeMaxScrollPosition, createIndicators]);
+
+  useEffect(() => {
+    window.addEventListener('resize', changeMaxScrollPosition);
+    return () => {
+      window.removeEventListener('resize', changeMaxScrollPosition);
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log({ activeIndex, maxScrollPosition, indicators });
+  }, [activeIndex]);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
@@ -79,8 +87,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
     if (lastVisiblePoster) {
       let scrollDistance =
-        lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft;
-      // lastVisiblePoster.offsetLeft + posterWidth - elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
+        direction === 'forward'
+          ? lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft
+          : lastVisiblePoster.offsetLeft +
+            posterWidth -
+            elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
 
       // elementToScroll.scrollTo({
       //   top: 0,
@@ -100,7 +111,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setCanScrollPrev(rowIndex);
 
       if (direction === 'forward') {
-        if (activeIndex < maxScrollNum) {
+        if (activeIndex < maxScrollPosition) {
           setActiveIndex((prev) => (prev += 1));
         }
       } else {
