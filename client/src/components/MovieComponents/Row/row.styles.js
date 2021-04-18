@@ -14,6 +14,42 @@ export const StyledRow = styled.div`
     the child will be positioned around the parent.
     */
 
+  .row__headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .row__pagination {
+      /* display: flex; */
+      /* align-items: center;
+      align-self: center;
+      margin: -24px 0 12px 0;
+      padding: 0;
+      list-style-type: none;
+      position: absolute;
+      top: 0;
+      right: 4%; */
+      /* display: none; */
+      padding: 0;
+      list-style-type: none;
+
+      width: 100px;
+      position: absolute;
+      right: 0;
+      top: calc(var(--slider-py) - 60px);
+      .indicator {
+        width: 12px;
+        height: 2px;
+        background-color: ${COLORS.TOO_MANY_GREYS};
+        display: inline-block;
+        margin-left: 2px;
+
+        &.active {
+          background-color: #aaa;
+        }
+      }
+    }
+  }
+
   &:hover {
     .slider__nav {
       visibility: visible;

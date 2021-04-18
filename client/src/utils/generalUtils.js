@@ -9,8 +9,9 @@ export const COLORS = {
   GREY: '#999',
   GREY_H2: '#666',
   SPAN_GREY: '#777',
+  TOO_MANY_GREYS: '#4d4d4d',
   DARK_GREY: '#2f2f2f',
-  BRIGHT_GREY: '#d2d2d2;',
+  BRIGHT_GREY: '#d2d2d2',
   GREEN: '#46d369',
   RED: '#E50914',
 };

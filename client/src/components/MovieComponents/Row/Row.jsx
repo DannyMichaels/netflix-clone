@@ -18,25 +18,23 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [indicators, setIndicators] = useState([]);
+
   const [maxScrollPosition, setMaxScrollPosition] = useState(
     Math.round(document.body.clientWidth / 200)
   );
 
-  const [indicators, setIndicators] = useState([]);
-
   const rowRef = useRef(null);
 
   const changeMaxScrollPosition = useCallback(() => {
-    console.log(movies.length);
-    console.log({ maxScrollPosition });
+    let allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
     setMaxScrollPosition(
-      Math.round((movies.length - 1) / (document.body.clientWidth / 200))
+      Math.round(allPosters.length / (document.body.clientWidth / 200) + 1)
     );
   }, [movies.length]);
 
   const createIndicators = useCallback(() => {
     setIndicators([...new Array(maxScrollPosition).keys()]);
-    console.log({ indicators });
   }, [maxScrollPosition]);
 
   useEffect(() => {
@@ -57,18 +55,18 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     return () => {
       window.removeEventListener('resize', changeMaxScrollPosition);
     };
-  }, []);
+  }, [changeMaxScrollPosition]);
 
   useEffect(() => {
-    console.log({ activeIndex, maxScrollPosition, indicators });
-  }, [activeIndex]);
+    console.log({ activeIndex, maxScrollPosition });
+  }, [activeIndex || maxScrollPosition]);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
     const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
     let currentScrollPosition = elementToScroll.scrollLeft;
     let availableWidth = document.body.clientWidth;
-    let posterWidth = allPosters[0].getBoundingClientRect().width;
+    let posterWidth = allPosters[0].clientWidth;
     let visibleRange = currentScrollPosition + availableWidth;
 
     let lastVisiblePoster;
@@ -111,9 +109,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setCanScrollPrev(rowIndex);
 
       if (direction === 'forward') {
-        if (activeIndex < maxScrollPosition) {
-          setActiveIndex((prev) => (prev += 1));
-        }
+        if (activeIndex === maxScrollPosition) return;
+        setActiveIndex((prev) => (prev += 1));
       } else {
         if (activeIndex > 0) {
           setActiveIndex((prev) => (prev -= 1));
@@ -138,7 +135,17 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   return (
     <StyledRow aria-label="movies row" ref={rowRef}>
-      <h2 className="row__title">{title}</h2>
+      <div className="row__headerContainer">
+        <h2 className="row__title">{title}</h2>
+
+        <ul className="row__pagination">
+          {indicators.map((_, idx) => (
+            <li
+              className={`indicator${idx === activeIndex ? ' active' : ''}`}
+            />
+          ))}
+        </ul>
+      </div>
       {canScrollPrev === rowIndex && (
         <button
           className="slider__nav prev"
