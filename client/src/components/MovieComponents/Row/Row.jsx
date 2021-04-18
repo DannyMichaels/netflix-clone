@@ -23,7 +23,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     Math.round(document.body.clientWidth / 200)
   );
 
-  console.log(Math.round(document.body.clientWidth / 200));
+  // console.log(Math.round(document.body.clientWidth / 200));
 
   const rowRef = useRef(null);
 
