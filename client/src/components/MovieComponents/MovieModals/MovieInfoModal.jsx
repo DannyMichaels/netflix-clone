@@ -69,14 +69,15 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   useEffect(() => {
     const getData = async (movie) => {
       if (!movie) return;
-      if (!allGenres) return;
 
-      for (let i = 0; i < allGenres.length; i++) {
-        let foundGenre = allGenres.find(
-          (g) => g.id === Number(movie.genre_ids[i])
-        );
-        if (foundGenre) {
-          setGenres((prevState) => [...prevState, foundGenre]);
+      if (allGenres) {
+        for (let i = 0; i < allGenres.length; i++) {
+          let foundGenre = allGenres.find(
+            (g) => g.id === Number(movie.genre_ids[i])
+          );
+          if (foundGenre) {
+            setGenres((prevState) => [...prevState, foundGenre]);
+          }
         }
       }
 

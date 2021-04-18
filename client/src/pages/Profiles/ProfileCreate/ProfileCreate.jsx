@@ -30,9 +30,12 @@ export default function ProfileCreate() {
   instead it selects an image that hasn't already been used starting from index 0.*/
 
   const getImage = () => {
-    const usedImages = profiles.map(({ imgUrl }) => imgUrl);
+    const usedImages = {};
+
+    profiles.map(({ imgUrl }) => (usedImages[imgUrl] = imgUrl));
+
     for (const image of Object.values(IMAGES)) {
-      if (!usedImages.includes(image)) return image;
+      if (!(image in usedImages)) return image;
     }
   };
 
