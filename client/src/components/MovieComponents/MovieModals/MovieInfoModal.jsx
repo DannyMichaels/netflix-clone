@@ -5,7 +5,6 @@ import { useMovieSelect } from '../../../hooks/useMovieSelect';
 // components
 import Dialog from '@material-ui/core/Dialog';
 import YouTube from 'react-youtube';
-import BootstrapTooltip from '../../shared/Tooltip/BootstrapTooltip';
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
@@ -224,7 +223,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                         >
                           {genre.name}
                           {/* don't show "," if it's the last genre in the list */}
-                          {idx !== genres.length - 1 && ','}
+                          {idx !== [...new Set(genres)].length - 1 && ','}
                         </Link>
                         &nbsp;
                       </Fragment>
