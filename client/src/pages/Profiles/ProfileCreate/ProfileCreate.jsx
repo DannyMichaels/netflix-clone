@@ -33,7 +33,6 @@ export default function ProfileCreate() {
     const usedImages = {};
 
     profiles.map(({ imgUrl }) => (usedImages[imgUrl] = true));
-    console.log({ usedImages });
     for (const image of Object.values(IMAGES)) {
       if (!(image in usedImages)) return image;
     }
