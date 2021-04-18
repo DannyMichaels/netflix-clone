@@ -3,8 +3,8 @@ import { COLORS } from '../../../utils/generalUtils';
 
 export const StyledRow = styled.div`
   margin: 3vw 0;
-  margin-left: 20px;
-  /* width: 100%; */
+  /* margin-left: 20px; */
+  width: 100%;
   position: relative;
   scroll-behavior: smooth;
   overflow-x: hidden;
@@ -29,6 +29,7 @@ export const StyledRow = styled.div`
     position: absolute;
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
     background: rgba(20, 20, 20, 0.5);
 
@@ -53,7 +54,7 @@ export const StyledRow = styled.div`
     }
 
     &.prev {
-      left: 30px;
+      left: 0;
       .row__gradient {
         background-image: linear-gradient(
           to right,
@@ -64,7 +65,7 @@ export const StyledRow = styled.div`
     }
 
     &.next {
-      right: -30px;
+      right: 0;
 
       .icon {
         /* position: relative;
@@ -130,6 +131,7 @@ export const StyledRow = styled.div`
   .row__poster {
     object-fit: contain;
     transition: transform 450ms;
+    /* max-width: 25vw; */
     max-width: 25vw;
     max-height: 140px;
     box-sizing: border-box;

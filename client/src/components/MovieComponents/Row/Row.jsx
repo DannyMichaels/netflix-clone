@@ -48,12 +48,14 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
 
     if (lastVisiblePoster) {
       let scrollDistance =
-        lastVisiblePoster.offsetLeft + posterWidth - elementToScroll.scrollLeft;
+        lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft;
+      // lastVisiblePoster.offsetLeft + posterWidth - elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
+
       elementToScroll.scrollTo({
         top: 0,
         left:
           direction === 'forward'
-            ? elementToScroll.scrollLeft + scrollDistance
+            ? elementToScroll.scrollLeft + scrollDistance - 30 // -30 so last element is visible and looks a bit cut off by the arrow.
             : elementToScroll.scrollLeft - scrollDistance,
         behavior: 'smooth',
       });
