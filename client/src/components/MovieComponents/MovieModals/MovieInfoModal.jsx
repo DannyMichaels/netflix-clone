@@ -48,6 +48,8 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
   const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] = useState(
     false
   );
+  const [isMovieLoaded, setIsMovieLoaded] = useState(false);
+
   const isMounted = useRef(true);
 
   useEffect(() => {
@@ -56,9 +58,12 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
 
       if (open) {
         onSelectMovie(movie);
-        isMounted.current = false;
+
+        setTimeout(() => {
+          setIsMovieLoaded(true);
+        }, 500);
+
         return () => {
-          onSelectMovie(movie);
           isMounted.current = false;
         };
       }
@@ -101,7 +106,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     width: '100%',
     playerVars: {
       autoplay: 1,
-      controls: 1,
+      controls: 0,
     },
   };
 
@@ -156,7 +161,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
       </StyledBox>
 
       <StyledVideo>
-        {trailerUrl ? (
+        {isMovieLoaded ? (
           <YouTube
             videoId={trailerUrl}
             opts={VIDEO_PLAYER_OPTIONS}
