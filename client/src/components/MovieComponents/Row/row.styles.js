@@ -131,7 +131,7 @@ export const StyledRow = styled.div`
     object-fit: contain;
     transition: transform 450ms;
     max-width: 25vw;
-    max-height: 100px;
+    max-height: 140px;
     box-sizing: border-box;
     z-index: 1;
     display: block;
