@@ -37,18 +37,14 @@ const MoviesContextProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     const getMovies = async () => {
-      movieRows.map(
-        async ({ fetchUrl }) =>
-          await getAllMovies(fetchUrl)
-            .then((movieData) =>
-              dispatch({
-                type: FETCH_MOVIES,
-                payload: movieData,
-                moviesAreLoading: false,
-              })
-            )
-            .catch((err) => console.error(err.message))
-      );
+      movieRows.map(async ({ fetchUrl }) => {
+        const movieData = await getAllMovies(fetchUrl);
+        dispatch({
+          type: FETCH_MOVIES,
+          payload: movieData,
+          moviesAreLoading: false,
+        });
+      });
     };
     getMovies();
   }, []);

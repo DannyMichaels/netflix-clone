@@ -11,8 +11,8 @@ import MovieCard from '../MovieCard/MovieCard';
 import { StyledRow } from './row.styles';
 
 // icons
-// import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
-// import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
+import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
@@ -60,10 +60,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
             console.log('in J for loop', { i, j });
             allPosters[i + j].classList.add('visibile');
           }
-          // allPosters[i].scrollIntoViewIfNeeded({
-          //   behavior: 'smooth',
-          //   inline: 'center',
-          // });
+
           allPosters[i].scrollIntoView({
             behavior: 'smooth',
             inline: 'center',
@@ -75,7 +72,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   };
 
   const onScrollBack = () => {
-    const visibleElements = rowRef.current.querySelector('.visible');
+    // const visibleElements = rowRef.current.querySelector('.visible');
     const allPosters = rowRef.current.querySelectorAll('.row__poster');
 
     for (let i = allPosters.length - 1; i >= 0; i--) {
@@ -94,10 +91,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
             console.log('in J for loop', { i, j });
             allPosters[i - j].classList.add('visibile');
           }
-          // allPosters[i].scrollIntoViewIfNeeded({
-          //   behavior: 'smooth',
-          //   inline: 'center',
-          // });
+
           allPosters[i - j].scrollIntoView({
             behavior: 'smooth',
             inline: 'center',
@@ -128,16 +122,16 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       <h2 className="row__title">{title}</h2>
       <button className="slider__nav prev" onClick={onScrollBack}>
         <span className="icon">
-          &lt;
-          {/* <ArrowBackIcon /> */}
+          {/* &lt; */}
+          <ArrowBackIcon />
         </span>
         {/* <span className="row__gradient" /> */}
       </button>
       <div className="row__posters">{CARDS}</div>
       <button className="slider__nav next" onClick={onScrollNext}>
         <span className="icon">
-          &gt;
-          {/* <ArrowForwardIcon /> */}
+          {/* &gt; */}
+          <ArrowForwardIcon />
         </span>
         {/* <span className="row__gradient" /> */}
       </button>

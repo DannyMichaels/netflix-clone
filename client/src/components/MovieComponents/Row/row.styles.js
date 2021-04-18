@@ -36,8 +36,10 @@ export const StyledRow = styled.div`
       background: rgba(20, 20, 20, 0.7);
 
       .icon {
-        font-size: 1.8rem;
-        font-weight: 700;
+        /* font-size: 1.8rem; */
+        transform: scale(1.4);
+
+        /* font-weight: 700; */
       }
     }
 

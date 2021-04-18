@@ -70,7 +70,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     const getData = async (movie) => {
       if (!movie) return;
 
-      if (allGenres) {
+      if (allGenres?.length) {
         for (let i = 0; i < allGenres.length; i++) {
           let foundGenre = allGenres.find(
             (g) => g.id === Number(movie.genre_ids[i])
