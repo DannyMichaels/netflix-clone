@@ -31,6 +31,7 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
+import { AddToListButtonVariationOne } from '../../shared/AddToListButton/AddToListButton';
 
 export default function MovieInfoModal({ movie, open, setOpen }) {
   const {
@@ -264,19 +265,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                             {getReleaseYear(recommendedMovie)}
                           </h4>
 
-                          <BootstrapTooltip
-                            placement="top"
-                            title="Add to My List"
-                          >
-                            <div className="icon">
-                              <svg viewBox="0 0 24 24">
-                                <path
-                                  d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z"
-                                  fill="currentColor"
-                                />
-                              </svg>
-                            </div>
-                          </BootstrapTooltip>
+                          <AddToListButtonVariationOne tooltip />
                         </div>
                         <p
                           onClick={() =>

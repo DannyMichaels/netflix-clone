@@ -60,42 +60,6 @@ export const StyledGrid = styled.div`
             display: flex;
             flex: 1;
           }
-
-          .icon {
-            min-width: 32px;
-            min-height: 32px;
-            max-width: 42px;
-            max-height: 42px;
-
-            border-width: 2px;
-            background-color: rgba(42, 42, 42, 0.6);
-
-            background-color: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-
-            &:hover {
-              transition: all 0.1s ease-in;
-              border: 1px solid white;
-            }
-
-            -webkit-box-align: center;
-            align-items: center;
-            appearance: none;
-            cursor: pointer;
-            display: flex;
-            -webkit-box-pack: center;
-            justify-content: center;
-            opacity: 1;
-            position: relative;
-            will-change: background-color, color;
-            word-break: break-word;
-            white-space: nowrap;
-            border-radius: 50%;
-
-            svg {
-              width: 1em;
-            }
-          }
         }
 
         p {
