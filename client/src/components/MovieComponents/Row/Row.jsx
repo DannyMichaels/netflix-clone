@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -17,6 +17,10 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [maxScrollNum, setMaxScrollNum] = useState(
+    Math.round(document.body.clientWidth / 200)
+  );
 
   const rowRef = useRef(null);
 
@@ -26,14 +30,37 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       Boolean(backdrop_path)
     );
     setMovies(moviesThatHaveImage);
-  }, [fetchUrl]);
+
+    setMaxScrollNum(
+      Math.round(movies.length / (document.body.clientWidth / 200))
+    );
+  }, [fetchUrl, movies.length]);
+
+  useEffect(() => {
+    const onResize = () => {
+      setMaxScrollNum(
+        Math.round(movies.length / (document.body.clientWidth / 200))
+      );
+    };
+
+    onResize();
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, [movies.length]);
+
+  useEffect(() => {
+    console.log({ activeIndex, maxScrollNum });
+  }, [activeIndex, maxScrollNum]);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
     const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
     let currentScrollPosition = elementToScroll.scrollLeft;
     let availableWidth = document.body.clientWidth;
-    let posterWidth = allPosters[0].clientWidth;
+    let posterWidth = allPosters[0].getBoundingClientRect().width;
     let visibleRange = currentScrollPosition + availableWidth;
 
     let lastVisiblePoster;
@@ -55,16 +82,32 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft;
       // lastVisiblePoster.offsetLeft + posterWidth - elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
 
-      elementToScroll.scrollTo({
+      // elementToScroll.scrollTo({
+      //   top: 0,
+      //   left:
+      //     direction === 'forward'
+      //       ? elementToScroll.scrollLeft + scrollDistance - 30 // -30 so last element is visible and looks a bit cut off by the arrow.
+      //       : elementToScroll.scrollLeft - scrollDistance,
+      //   behavior: 'smooth',
+      // });
+
+      elementToScroll.scrollBy({
         top: 0,
-        left:
-          direction === 'forward'
-            ? elementToScroll.scrollLeft + scrollDistance - 30 // -30 so last element is visible and looks a bit cut off by the arrow.
-            : elementToScroll.scrollLeft - scrollDistance,
+        left: direction === 'forward' ? +scrollDistance : -scrollDistance,
         behavior: 'smooth',
       });
 
       setCanScrollPrev(rowIndex);
+
+      if (direction === 'forward') {
+        if (activeIndex < maxScrollNum) {
+          setActiveIndex((prev) => (prev += 1));
+        }
+      } else {
+        if (activeIndex > 0) {
+          setActiveIndex((prev) => (prev -= 1));
+        }
+      }
     }
   };
 
