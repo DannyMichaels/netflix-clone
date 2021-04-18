@@ -35,70 +35,36 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     setMovies(moviesThatHaveImage);
   }, [fetchUrl]);
 
-  const onScrollNext = () => {
-    // const visibleElements = rowRef.current.querySelector('.visible');
-
-    const allPosters = rowRef.current.querySelectorAll('.row__poster');
-
-    for (let i = 0; i < allPosters.length; i++) {
-      console.log('in i loop');
-      if (allPosters[i].classList.contains('visibile')) {
-        if (
-          i + 1 < allPosters.length &&
-          allPosters[i + 1].classList.contains('visibile')
-        ) {
-          console.log('in if block');
-          allPosters[i].classList.remove('visibile');
-        } else {
-          console.log('in else block');
-
-          for (
-            let j = 0;
-            j < visiblePosterCount && i + j < allPosters.length;
-            j++
-          ) {
-            console.log('in J for loop', { i, j });
-            allPosters[i + j].classList.add('visibile');
-          }
-
-          allPosters[i].scrollIntoView({
-            behavior: 'smooth',
-            inline: 'center',
-          });
-          break;
-        }
+  const onNavigate = (direction) => {
+    const elementToScroll = rowRef.current.querySelector('.row__posters');
+    const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
+    let currentScrollPosition = elementToScroll.scrollLeft;
+    let availableWidth = document.body.clientWidth;
+    let posterWidth = allPosters[0].clientWidth;
+    let visibleRange = currentScrollPosition + availableWidth;
+    let lastVisiblePoster;
+    let index = 0;
+    for (index; index < allPosters.length; index++) {
+      if (allPosters[index].offsetLeft + posterWidth >= visibleRange) {
+        lastVisiblePoster = allPosters[index];
+        break;
       }
     }
-  };
+    if (!lastVisiblePoster && allPosters.length > 0) {
+      lastVisiblePoster = allPosters[allPosters.length - 1];
+    }
 
-  const onScrollBack = () => {
-    // const visibleElements = rowRef.current.querySelector('.visible');
-    const allPosters = rowRef.current.querySelectorAll('.row__poster');
-
-    for (let i = allPosters.length - 1; i >= 0; i--) {
-      console.log('in i loop');
-      if (allPosters[i].classList.contains('visibile')) {
-        if (
-          i - 1 < allPosters.length &&
-          allPosters[i - 1].classList.contains('visibile')
-        ) {
-          console.log('in if block');
-          allPosters[i].classList.remove('visibile');
-        } else {
-          console.log('in else block');
-          let j = 0;
-          for (j; j < visiblePosterCount && i - j > 0; j++) {
-            console.log('in J for loop', { i, j });
-            allPosters[i - j].classList.add('visibile');
-          }
-
-          allPosters[i - j].scrollIntoView({
-            behavior: 'smooth',
-            inline: 'center',
-          });
-          break;
-        }
-      }
+    if (lastVisiblePoster) {
+      let scrollDistance =
+        lastVisiblePoster.offsetLeft + posterWidth - elementToScroll.scrollLeft;
+      elementToScroll.scrollTo({
+        top: 0,
+        left:
+          direction === 'forward'
+            ? elementToScroll.scrollLeft + scrollDistance
+            : elementToScroll.scrollLeft - scrollDistance,
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -120,7 +86,10 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
   return (
     <StyledRow aria-label="movies row" ref={rowRef}>
       <h2 className="row__title">{title}</h2>
-      <button className="slider__nav prev" onClick={onScrollBack}>
+      <button
+        className="slider__nav prev"
+        onClick={() => onNavigate('backward')}
+      >
         <span className="icon">
           {/* &lt; */}
           <ArrowBackIcon />
@@ -128,7 +97,10 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
         {/* <span className="row__gradient" /> */}
       </button>
       <div className="row__posters">{CARDS}</div>
-      <button className="slider__nav next" onClick={onScrollNext}>
+      <button
+        className="slider__nav next"
+        onClick={() => onNavigate('forward')}
+      >
         <span className="icon">
           {/* &gt; */}
           <ArrowForwardIcon />
