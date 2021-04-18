@@ -6,7 +6,10 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow }) => {
 
   return (
     <>
-      <div className={`movie__card--parent ${isLargeRow && 'large'}`}>
+      <div
+        className={`movie__card--parent ${isLargeRow && 'large'}`}
+        aria-label={movie.name}
+      >
         <img
           src={src}
           alt={alt}
