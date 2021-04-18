@@ -54,18 +54,18 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
 
   useEffect(() => {
     const loadMovie = async () => {
-      if (!isMounted.current) return;
+      if (isMounted.current) {
+        if (open) {
+          onSelectMovie(movie);
 
-      if (open) {
-        onSelectMovie(movie);
+          setTimeout(() => {
+            setIsMovieLoaded(true);
+          }, 1200);
 
-        setTimeout(() => {
-          setIsMovieLoaded(true);
-        }, 500);
-
-        return () => {
-          isMounted.current = false;
-        };
+          return () => {
+            isMounted.current = false;
+          };
+        }
       }
     };
     loadMovie();
@@ -114,7 +114,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     setOpen(false);
   };
 
-  const onRedirect = async (type, id) => {
+  const onRedirect = async () => {
     setSearch('');
     handleClose();
   };
