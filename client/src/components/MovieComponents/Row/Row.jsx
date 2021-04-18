@@ -16,14 +16,6 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 
 export default function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([]);
-  // const [isVisible, setIsVisible] = useState(5);
-  // const [counter, setCounter] = useState(0);
-
-  const [visiblePosterCount, setVisiblePosterCount] = useState(
-    Math.round(document.body.clientWidth / 200)
-  );
-
-  // console.log(Math.round(document.body.clientWidth / 200));
 
   const rowRef = useRef(null);
 
@@ -68,7 +60,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
     }
   };
 
-  const CARDS = movies?.map((movie, index) => (
+  const CARDS = movies?.map((movie) => (
     <MovieCard
       movie={movie}
       src={`${baseImgUrl}${
@@ -77,9 +69,7 @@ export default function Row({ title, fetchUrl, isLargeRow }) {
       isLargeRow={isLargeRow}
       alt={movie.name}
       key={movie.id}
-      className={`row__poster ${isLargeRow && 'row__posterLarge'} ${
-        index < visiblePosterCount ? 'visibile' : ''
-      }`}
+      className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
     />
   ));
 
