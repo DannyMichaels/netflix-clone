@@ -59,7 +59,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   useEffect(() => {
     console.log({ activeIndex, maxScrollPosition });
-  }, [activeIndex || maxScrollPosition]);
+  }, [activeIndex, maxScrollPosition]);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
