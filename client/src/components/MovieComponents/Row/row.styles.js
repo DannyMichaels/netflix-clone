@@ -151,7 +151,9 @@ export const StyledRow = styled.div`
     box-sizing: border-box;
     display: flex;
     overflow-y: hidden;
-    transition: transform 0.75s ease-in-out;
+    /* transition: transform 0.75s ease-in-out; */
+    transition: transform 0.2s ease-in-out;
+
     transform: ${({ translateXValue }) => `translateX(${translateXValue}px)`};
     padding: 20px;
     position: relative;
