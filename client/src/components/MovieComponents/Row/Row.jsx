@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  Children,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -21,10 +28,14 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [indicators, setIndicators] = useState([]);
   const [moviesLength, setMoviesLength] = useState(0);
   const [translateXValue, setTranslateXValue] = useState(0);
-
+  const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0);
   const [maxScrollPosition, setMaxScrollPosition] = useState(
     Math.round(document.body.clientWidth / 200)
   );
+  const [visiblePosterCount, setVisiblePosterCount] = useState(0);
+
+  const [posterWidth, setPosterWidth] = useState(0);
+  const [moviesUpdated, setMoviesUpdated] = useState(false);
 
   const rowRef = useRef(null);
   const postersRef = useRef(null);
@@ -46,20 +57,56 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
-      const copy = [...moviesThatHaveImage];
-      for (let i = 0; i < 5; i++) {
-        moviesThatHaveImage.push(copy[i]);
-      }
-      for (let i = copy.length - 1; i > copy.length - 1 - 5; i--) {
-        moviesThatHaveImage.unshift(copy[i]);
-      }
-      setMovies(moviesThatHaveImage);
 
-      setMoviesLength(moviesThatHaveImage.length * 250);
-      setTranslateXValue(-5 * 250);
+      setUnclonedMoviesCount(moviesThatHaveImage.length);
+
+      setMovies(moviesThatHaveImage);
     };
     fetchData();
   }, [fetchUrl]);
+
+  useEffect(() => {
+    let result = movies?.length === unclonedMoviesCount;
+
+    if (result && result !== 0) {
+      const copy = [...movies];
+      const newMovies = [...movies];
+
+      let posterWideness = Math.round(
+        postersRef?.current
+          ?.querySelector('.row__poster')
+          ?.getBoundingClientRect()?.width
+      );
+      console.log({ posterWideness });
+
+      setPosterWidth(posterWideness);
+
+      let visiblePosterAmount = Math.round(
+        rowRef?.current?.clientWidth / posterWideness
+      );
+      console.log({ visiblePosterAmount });
+      setVisiblePosterCount(visiblePosterAmount);
+
+      for (let i = 0; i < visiblePosterAmount; i++) {
+        newMovies.push(copy[i]);
+      }
+
+      for (
+        let i = copy.length - 1;
+        i > copy.length - 1 - visiblePosterAmount;
+        i--
+      ) {
+        newMovies.unshift(copy[i]);
+      }
+
+      setMoviesLength(newMovies.length * posterWideness);
+      setTranslateXValue(-visiblePosterAmount * posterWideness);
+      setMoviesUpdated(true);
+      setMovies(newMovies);
+
+      console.log('UPDATED!');
+    }
+  });
 
   useEffect(() => {
     changeMaxScrollPosition();
@@ -73,11 +120,10 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     };
   }, [changeMaxScrollPosition]);
 
-  useEffect(() => {
-    console.log({ activeIndex, maxScrollPosition });
-  }, [activeIndex, maxScrollPosition]);
-
   const onNavigate = (direction) => {
+    const initial = -posterWidth * visiblePosterCount;
+    const actualLast = unclonedMoviesCount * -posterWidth;
+    const lastAllowedPoster = actualLast + initial;
     // const elementToScroll = rowRef.current.querySelector('.row__posters');
     // const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
     // let currentScrollPosition = elementToScroll.scrollLeft;
@@ -125,11 +171,25 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     setCanScrollPrev(rowIndex);
 
     if (direction === 'forward') {
-      setTranslateXValue((prevState) => prevState - 250 * 5);
+      setTranslateXValue((prevState) => {
+        let translateX = prevState - posterWidth * visiblePosterCount;
+        if (translateX < lastAllowedPoster) {
+          return initial;
+        } else {
+          return translateX;
+        }
+      });
       if (activeIndex === maxScrollPosition) return;
       setActiveIndex((prev) => (prev += 1));
     } else {
-      setTranslateXValue((prevState) => prevState + 250 * 5);
+      setTranslateXValue((prevState) => {
+        let translateX = prevState + posterWidth * visiblePosterCount;
+        if (translateX > initial) {
+          return actualLast;
+        } else {
+          return translateX;
+        }
+      });
 
       if (activeIndex > 0) {
         setActiveIndex((prev) => (prev -= 1));
@@ -139,19 +199,25 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   // };
 
-  const CARDS = movies?.map((movie, idx) => (
-    <MovieCard
-      index={idx}
-      movie={movie}
-      src={`${baseImgUrl}${
-        isLargeRow ? movie.poster_path : movie.backdrop_path
-      }`}
-      isLargeRow={isLargeRow}
-      alt={movie.name}
-      key={movie.id}
-      className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
-    />
-  ));
+  const CARDS = Children.toArray(
+    movies?.map((movie, idx) => (
+      <MovieCard
+        index={idx}
+        movie={movie}
+        src={`${baseImgUrl}${
+          isLargeRow ? movie.poster_path : movie.backdrop_path
+        }`}
+        isLargeRow={isLargeRow}
+        alt={movie.name}
+        className={`row__poster ${isLargeRow && 'row__posterLarge'} ${
+          idx < visiblePosterCount ||
+          (idx > movies.length - visiblePosterCount - 1 && idx < movies.length)
+            ? 'cloned'
+            : ''
+        }`}
+      />
+    ))
+  );
 
   return (
     <StyledRow
