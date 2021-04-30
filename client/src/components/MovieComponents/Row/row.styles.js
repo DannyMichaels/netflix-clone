@@ -150,14 +150,16 @@ export const StyledRow = styled.div`
   .row__posters {
     box-sizing: border-box;
     display: flex;
-    overflow-y: hidden;
-    overflow-x: scroll;
+    /* overflow-y: hidden; */
+    /* overflow-x: scroll; */
+    transform: ${({ translateXValue }) => `translateX(${translateXValue}px)`};
     padding: 20px;
     position: relative;
     outline: 0;
     z-index: 2;
     padding-left: 4%;
     padding-right: 4%;
+    width: ${({ moviesLength }) => `${moviesLength}px`};
   }
 
   .row__posters::-webkit-scrollbar {
@@ -168,7 +170,8 @@ export const StyledRow = styled.div`
     object-fit: contain;
     transition: transform 450ms;
     /* max-width: 25vw; */
-    max-width: 25vw;
+    width: 250px;
+    max-width: 250px;
     max-height: 140px;
     box-sizing: border-box;
     z-index: 1;
@@ -182,7 +185,8 @@ export const StyledRow = styled.div`
 
   .row__posterLarge {
     max-height: 200px;
-    max-width: 25vw;
+    width: 250px;
+    max-width: 250px;
     top: 0;
     left: 0;
     transition: transform 450ms;

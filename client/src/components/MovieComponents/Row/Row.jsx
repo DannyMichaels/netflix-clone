@@ -19,12 +19,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [indicators, setIndicators] = useState([]);
+  const [moviesLength, setMoviesLength] = useState(0);
+  const [translateXValue, setTranslateXValue] = useState(0);
 
   const [maxScrollPosition, setMaxScrollPosition] = useState(
     Math.round(document.body.clientWidth / 200)
   );
 
   const rowRef = useRef(null);
+  const postersRef = useRef(null);
 
   const changeMaxScrollPosition = useCallback(() => {
     let allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
@@ -43,12 +46,25 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
+      const copy = [...moviesThatHaveImage];
+      for (let i = 0; i < 5; i++) {
+        moviesThatHaveImage.push(copy[i]);
+      }
+      for (let i = copy.length - 1; i > copy.length - 1 - 5; i--) {
+        moviesThatHaveImage.unshift(copy[i]);
+      }
       setMovies(moviesThatHaveImage);
+
+      setMoviesLength(moviesThatHaveImage.length * 250);
+      setTranslateXValue(-5 * 250);
     };
     fetchData();
+  }, [fetchUrl]);
+
+  useEffect(() => {
     changeMaxScrollPosition();
     createIndicators();
-  }, [fetchUrl, changeMaxScrollPosition, createIndicators]);
+  }, [changeMaxScrollPosition, createIndicators]);
 
   useEffect(() => {
     window.addEventListener('resize', changeMaxScrollPosition);
@@ -62,62 +78,66 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [activeIndex, maxScrollPosition]);
 
   const onNavigate = (direction) => {
-    const elementToScroll = rowRef.current.querySelector('.row__posters');
-    const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
-    let currentScrollPosition = elementToScroll.scrollLeft;
-    let availableWidth = document.body.clientWidth;
-    let posterWidth = allPosters[0].clientWidth;
-    let visibleRange = currentScrollPosition + availableWidth;
+    // const elementToScroll = rowRef.current.querySelector('.row__posters');
+    // const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
+    // let currentScrollPosition = elementToScroll.scrollLeft;
+    // let availableWidth = document.body.clientWidth;
+    // let posterWidth = allPosters[0].clientWidth;
+    // let visibleRange = currentScrollPosition + availableWidth;
 
-    let lastVisiblePoster;
-    let index = 0;
+    // let lastVisiblePoster;
+    // let index = 0;
 
-    for (index; index < allPosters.length; index++) {
-      if (allPosters[index].offsetLeft + posterWidth >= visibleRange) {
-        lastVisiblePoster = allPosters[index];
-        break;
-      }
-    }
+    // for (index; index < allPosters.length; index++) {
+    //   if (allPosters[index].offsetLeft + posterWidth >= visibleRange) {
+    //     lastVisiblePoster = allPosters[index];
+    //     break;
+    //   }
+    // }
 
-    if (!lastVisiblePoster && allPosters.length > 0) {
-      lastVisiblePoster = allPosters[allPosters.length - 1];
-    }
+    // if (!lastVisiblePoster && allPosters.length > 0) {
+    //   lastVisiblePoster = allPosters[allPosters.length - 1];
+    // }
 
-    if (lastVisiblePoster) {
-      let scrollDistance =
-        direction === 'forward'
-          ? lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft
-          : lastVisiblePoster.offsetLeft +
-            posterWidth -
-            elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
+    // if (lastVisiblePoster) {
+    //   let scrollDistance =
+    //     direction === 'forward'
+    //       ? lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft
+    //       : lastVisiblePoster.offsetLeft +
+    //         posterWidth -
+    //         elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
 
-      // elementToScroll.scrollTo({
-      //   top: 0,
-      //   left:
-      //     direction === 'forward'
-      //       ? elementToScroll.scrollLeft + scrollDistance - 30 // -30 so last element is visible and looks a bit cut off by the arrow.
-      //       : elementToScroll.scrollLeft - scrollDistance,
-      //   behavior: 'smooth',
-      // });
+    // elementToScroll.scrollTo({
+    //   top: 0,
+    //   left:
+    //     direction === 'forward'
+    //       ? elementToScroll.scrollLeft + scrollDistance - 30 // -30 so last element is visible and looks a bit cut off by the arrow.
+    //       : elementToScroll.scrollLeft - scrollDistance,
+    //   behavior: 'smooth',
+    // });
 
-      elementToScroll.scrollBy({
-        top: 0,
-        left: direction === 'forward' ? +scrollDistance : -scrollDistance,
-        behavior: 'smooth',
-      });
+    // elementToScroll.scrollBy({
+    //   top: 0,
+    //   left: direction === 'forward' ? +scrollDistance : -scrollDistance,
+    //   behavior: 'smooth',
+    // });
 
-      setCanScrollPrev(rowIndex);
+    setCanScrollPrev(rowIndex);
 
-      if (direction === 'forward') {
-        if (activeIndex === maxScrollPosition) return;
-        setActiveIndex((prev) => (prev += 1));
-      } else {
-        if (activeIndex > 0) {
-          setActiveIndex((prev) => (prev -= 1));
-        }
+    if (direction === 'forward') {
+      setTranslateXValue((prevState) => prevState - 250 * 5);
+      if (activeIndex === maxScrollPosition) return;
+      setActiveIndex((prev) => (prev += 1));
+    } else {
+      setTranslateXValue((prevState) => prevState + 250 * 5);
+
+      if (activeIndex > 0) {
+        setActiveIndex((prev) => (prev -= 1));
       }
     }
   };
+
+  // };
 
   const CARDS = movies?.map((movie, idx) => (
     <MovieCard
@@ -134,7 +154,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   ));
 
   return (
-    <StyledRow aria-label="movies row" ref={rowRef}>
+    <StyledRow
+      aria-label="movies row"
+      ref={rowRef}
+      moviesLength={moviesLength}
+      translateXValue={translateXValue}
+    >
       <div className="row__headerContainer">
         <h2 className="row__title">{title}</h2>
 
@@ -158,7 +183,9 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           {/* <span className="row__gradient" /> */}
         </button>
       )}
-      <div className="row__posters">{CARDS}</div>
+      <div className="row__posters" ref={postersRef}>
+        {CARDS}
+      </div>
       <button
         className="slider__nav next"
         onClick={() => onNavigate('forward')}
