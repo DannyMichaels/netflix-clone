@@ -27,7 +27,7 @@ export default function MyList() {
     };
   }, [setBrowseName]);
 
-  let movies = currentProfile.list;
+  let movies = [...new Set(currentProfile.list)];
 
   return (
     <Layout>

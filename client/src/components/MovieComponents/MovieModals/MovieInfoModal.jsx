@@ -30,7 +30,12 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
-import { AddToListButtonVariationOne } from '../../shared/AddToListButton/AddToListButton';
+import { AddToListButtonVariationOne as AddToListBtn } from '../../shared/AddToListButton/AddToListButton';
+import {
+  ProfilesDispatchContext,
+  ProfilesStateContext,
+} from '../../../context/profiles/profilesContext';
+import { UPDATE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
 
 export default function MovieInfoModal({ movie, open, setOpen }) {
   const {
@@ -49,6 +54,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     false
   );
   const [isMovieLoaded, setIsMovieLoaded] = useState(false);
+
+  const { currentProfile } = useContext(ProfilesStateContext);
+
+  const dispatch = useContext(ProfilesDispatchContext);
 
   const isMounted = useRef(true);
 
@@ -123,6 +132,19 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     setSelectedMovie('');
     setTrailerUrl('');
     return onPlayMovie(movie);
+  };
+
+  const onAddToList = async (movieToAdd) => {
+    if (currentProfile?.list?.find((movie) => movie.id === movieToAdd.id)) {
+      return;
+    }
+
+    const updatedProfile = {
+      ...currentProfile,
+      list: [...currentProfile.list, movieToAdd],
+    };
+
+    dispatch({ type: UPDATE_PROFILE, payload: updatedProfile });
   };
 
   const sectionDividerJSX = (state, setState) => (
@@ -276,7 +298,10 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                             {getReleaseYear(recommendedMovie)}
                           </h4>
 
-                          <AddToListButtonVariationOne tooltip />
+                          <AddToListBtn
+                            tooltip
+                            onClick={() => onAddToList(recommendedMovie)}
+                          />
                         </div>
                         <p
                           onClick={() =>
