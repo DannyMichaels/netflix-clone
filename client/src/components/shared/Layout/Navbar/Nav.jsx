@@ -20,7 +20,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 // styles
-import { Dropdown, StyledNav } from './Nav.styles';
+import { Dropdown, SecondaryNav, StyledNav } from './Nav.styles';
 
 // context
 import { SearchContext } from '../../../../context/search/searchContext';
@@ -234,11 +234,11 @@ export default function Nav({ logoOnly }) {
         </div>
       </StyledNav>
       {browseName && !search && (
-        <StyledNav hasBrowseName isShowing={isBackgroundShowing}>
+        <SecondaryNav hasBrowseName isShowing={isBackgroundShowing}>
           <div className="nav__innerColumn">
             <h1 className="nav__browseName">{browseName}</h1>
           </div>
-        </StyledNav>
+        </SecondaryNav>
       )}
     </>
   );

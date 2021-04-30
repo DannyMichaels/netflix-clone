@@ -5,10 +5,8 @@ export const StyledNav = styled.nav`
   background: ${({ isShowing }) => isShowing && COLORS.BRIGHT_BLACK};
   top: 0;
   z-index: 1000;
-
   position: ${({ browseName }) => (browseName ? 'relative' : 'fixed')};
-  position: ${({ hasBrowseName }) => hasBrowseName && 'sticky'};
-  background: ${({ hasBrowseName }) => hasBrowseName && COLORS.BLACK};
+
   width: 100%;
   display: flex;
   padding: 20px;
@@ -175,5 +173,47 @@ export const Dropdown = styled.div`
     left: 0;
     opacity: ${({ isActive }) => (isActive ? 0.8 : 0)};
     transition: all 0.2s ease-in;
+  }
+`;
+
+export const SecondaryNav = styled.nav`
+  top: 0;
+  z-index: 1;
+
+  position: ${({ browseName }) => (browseName ? 'relative' : 'fixed')};
+  position: ${({ hasBrowseName }) => hasBrowseName && 'sticky'};
+  background: ${({ hasBrowseName }) => hasBrowseName && COLORS.BLACK};
+
+  width: 100%;
+  display: flex;
+  padding: 20px;
+  height: 30px;
+  transition-timing-function: ease-in;
+  transition: all 0.5s;
+
+  .nav__innerColumn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 98%;
+    max-width: 1900px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: ${({ logoOnly }) => (logoOnly ? 'inherit' : '0 4%')};
+  }
+
+  .nav__logo {
+    width: 80px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  .nav__browseName {
+    color: #fff;
+    font-size: 2.5rem;
+    font-size: clamp(1rem, 2vw, 2.5rem);
   }
 `;
