@@ -195,39 +195,51 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
             </div>
             <div className="metaData__right">
               <div className="metaData__right--tags cast">
-                <span>Cast:&nbsp;</span>
-                {cast.map((person, idx) => (
-                  <Fragment key={person.id}>
-                    <Link
-                      key={person.id}
-                      to={`/browse/person/${person.id}`}
-                      onClick={() => onRedirect('person', person.id)}
-                    >
-                      {person.name}
-                      {idx !== cast.length - 1 && ','}
-                    </Link>
-                    &nbsp;
-                  </Fragment>
-                ))}
-              </div>
-
-              <div className="metaData__right--tags genres">
-                <span>Genres:&nbsp;</span>
-                {[...new Set(genres)].map(
-                  (genre, idx) =>
-                    genre && (
-                      <Fragment key={genre.id}>
+                {cast.length ? (
+                  <>
+                    <span>Cast:&nbsp;</span>
+                    {cast.map((person, idx) => (
+                      <Fragment key={person.id}>
                         <Link
-                          to={`/browse/genre/${genre.id}`}
-                          onClick={() => onRedirect('genre', genre.id)}
+                          key={person.id}
+                          to={`/browse/person/${person.id}`}
+                          onClick={() => onRedirect('person', person.id)}
                         >
-                          {genre.name}
-                          {/* don't show "," if it's the last genre in the list */}
-                          {idx !== [...new Set(genres)].length - 1 && ','}
+                          {person.name}
+                          {idx !== cast.length - 1 && ','}
                         </Link>
                         &nbsp;
                       </Fragment>
-                    )
+                    ))}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+
+              <div className="metaData__right--tags genres">
+                {genres.length ? (
+                  <>
+                    <span>Genres:&nbsp;</span>
+                    {[...new Set(genres)].map(
+                      (genre, idx) =>
+                        genre && (
+                          <Fragment key={genre.id}>
+                            <Link
+                              to={`/browse/genre/${genre.id}`}
+                              onClick={() => onRedirect('genre', genre.id)}
+                            >
+                              {genre.name}
+                              {/* don't show "," if it's the last genre in the list */}
+                              {idx !== [...new Set(genres)].length - 1 && ','}
+                            </Link>
+                            &nbsp;
+                          </Fragment>
+                        )
+                    )}
+                  </>
+                ) : (
+                  <></>
                 )}
               </div>
             </div>

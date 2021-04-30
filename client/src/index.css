@@ -10,7 +10,13 @@ body {
 }
 
 .layout {
+  display: flex;
   min-height: 100vh;
+  flex-direction: column;
+}
+
+.layout__children {
+  flex: 1;
 }
 
 code {

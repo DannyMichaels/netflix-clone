@@ -50,7 +50,7 @@ export default function BrowseByCategoryAndId() {
 
   const moviesJSX = !search ? (
     <InnerColumn browseName={browseName}>
-      <ul className="search__searchList">
+      <ul className="movie__list">
         {movies
           .filter(({ backdrop_path }) => Boolean(backdrop_path))
           .map((movie) => (

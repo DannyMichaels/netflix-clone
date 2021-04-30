@@ -215,5 +215,6 @@ export const SecondaryNav = styled.nav`
     color: #fff;
     font-size: 2.5rem;
     font-size: clamp(1rem, 2vw, 2.5rem);
+    user-select: none;
   }
 `;

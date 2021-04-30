@@ -6,6 +6,9 @@ export const StyledFooter = styled.footer`
     max-width: 980px;
     margin: 20px auto 0;
     padding: 0 4% 0.3%;
+    position: relative;
+    bottom: 0;
+    left: 0;
   }
 
   .footer__link-wrapper {

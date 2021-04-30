@@ -12,6 +12,7 @@ import ProfileSelect from '../pages/Profiles/ProfileSelect/ProfileSelect';
 import ProfileManage from '../pages/Profiles/ProfileManage/ProfileManage';
 import PrivateRoute from './PrivateRoute';
 import ProfileCreate from '../pages/Profiles/ProfileCreate/ProfileCreate';
+import MyList from '../pages/Browse/MyList/MyList';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -25,6 +26,7 @@ const AppRouter = () => (
         path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}
         component={BrowseByCategoryAndId}
       />
+      <PrivateRoute exact path={ROUTES.MY_LIST} component={MyList} />
       <PrivateRoute
         path={ROUTES.MOVIE_PLAYBACK}
         component={MoviePlaybackView}
