@@ -150,8 +150,8 @@ export const StyledRow = styled.div`
   .row__posters {
     box-sizing: border-box;
     display: flex;
-    /* overflow-y: hidden; */
-    /* overflow-x: scroll; */
+    overflow-y: hidden;
+    transition: transform 0.75s ease-in-out;
     transform: ${({ translateXValue }) => `translateX(${translateXValue}px)`};
     padding: 20px;
     position: relative;
