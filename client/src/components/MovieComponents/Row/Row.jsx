@@ -125,11 +125,25 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     setCanScrollPrev(rowIndex);
 
     if (direction === 'forward') {
-      setTranslateXValue((prevState) => prevState - 250 * 5);
+      setTranslateXValue((prevState) => {
+        let translateX = prevState - 250 * 5;
+        if (translateX < lastAllowedPoster) {
+          return initial;
+        } else {
+          return translateX;
+        }
+      });
       if (activeIndex === maxScrollPosition) return;
       setActiveIndex((prev) => (prev += 1));
     } else {
-      setTranslateXValue((prevState) => prevState + 250 * 5);
+      setTranslateXValue((prevState) => {
+        let translateX = prevState + 250 * 5;
+        if (translateX > initial) {
+          return actualLast;
+        } else {
+          return translateX;
+        }
+      });
 
       if (activeIndex > 0) {
         setActiveIndex((prev) => (prev -= 1));
