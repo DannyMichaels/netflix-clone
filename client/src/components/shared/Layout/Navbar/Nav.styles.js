@@ -25,6 +25,42 @@ export const StyledNav = styled.nav`
     padding: ${({ logoOnly }) => (logoOnly ? 'inherit' : '0 4%')};
   }
 
+  .nav__left {
+    display: flex;
+    flex-flow: row-nowrap;
+    align-items: center;
+    .nav__left--linkList {
+      display: flex;
+      align-items: center;
+      flex-flow: row-nowrap;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-left: 18px;
+
+        a {
+          display: block;
+          color: #fff;
+          text-decoration: none;
+
+          &.active {
+            font-weight: bold;
+          }
+        }
+
+        &:hover {
+          a {
+            transition: color 0.4s ease-in-out;
+
+            color: #e5e5e5;
+          }
+        }
+      }
+    }
+  }
+
   .nav__logo {
     width: 80px;
     object-fit: contain;
@@ -180,7 +216,6 @@ export const SecondaryNav = styled.nav`
   top: 0;
   z-index: 1;
 
-  position: ${({ browseName }) => (browseName ? 'relative' : 'fixed')};
   position: ${({ hasBrowseName }) => hasBrowseName && 'sticky'};
   background: ${({ hasBrowseName }) => hasBrowseName && COLORS.BLACK};
 
@@ -200,15 +235,6 @@ export const SecondaryNav = styled.nav`
     margin-right: auto;
     margin-left: auto;
     padding: ${({ logoOnly }) => (logoOnly ? 'inherit' : '0 4%')};
-  }
-
-  .nav__logo {
-    width: 80px;
-    object-fit: contain;
-    display: inline-block;
-    vertical-align: middle;
-    cursor: pointer;
-    margin-right: 5px;
   }
 
   .nav__browseName {

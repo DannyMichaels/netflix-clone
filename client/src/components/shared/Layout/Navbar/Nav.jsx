@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 // utils
 import { ROUTES } from '../../../../utils/navigation';
@@ -32,12 +32,15 @@ import {
   SELECT_PROFILE,
   SIGN_OUT,
 } from '../../../../reducers/ProfilesReducer/profilesReducerTypes';
+import { Link } from 'react-router-dom';
 
 export default function Nav({ logoOnly }) {
   const [isBackgroundShowing, setIsBackgroundShowing] = useState(false);
 
   const [searchMode, setSearchMode] = useState(false);
   const [isDropdownShowing, setIsDropdownShowing] = useState(false);
+
+  const { pathname } = useLocation();
 
   const { search, setSearch, handleSearch, browseName } = useContext(
     SearchContext
@@ -112,15 +115,30 @@ export default function Nav({ logoOnly }) {
         logoOnly={logoOnly}
       >
         <div className="nav__innerColumn">
-          <>
+          <div className="nav__left">
             <img
               onClick={() => push(ROUTES.BROWSE_ALL)}
               className="nav__logo"
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
               alt="Netflix Logo"
             />
-          </>
 
+            <ul className="nav__left--linkList">
+              {[
+                { text: 'Home', route: ROUTES.BROWSE_ALL },
+                { text: 'TV Shows', route: '#' },
+                { text: 'Movies', route: '#' },
+                { text: 'New & Popular', route: '#' },
+                { text: 'My List', route: ROUTES.MY_LIST },
+              ].map(({ text, route }) => (
+                <li>
+                  <Link className={pathname === route && 'active'} to={route}>
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
           {!logoOnly && (
             <>
               <div className="nav__secondaryNavigation">
