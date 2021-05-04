@@ -30,14 +30,17 @@ import {
 import { MoviesStateContext } from '../../../context/movies/moviesContext';
 import { CircularProgressLoading } from '../../shared/Loading/CircularProgressLoading';
 import { SearchContext } from '../../../context/search/searchContext';
-import { AddToListButtonVariationOne as AddToListBtn } from '../../shared/AddToListButton/AddToListButton';
+import {
+  AddToListButtonVariationOne as AddToListBtn,
+  RemoveFromListButton as RemoveFromListBtn,
+} from '../../shared/AddToListButton/AddToListButton';
 import {
   ProfilesDispatchContext,
   ProfilesStateContext,
 } from '../../../context/profiles/profilesContext';
 import { UPDATE_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
 
-export default function MovieInfoModal({ movie, open, setOpen }) {
+export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
   const {
     onSelectMovie,
     trailerUrl,
@@ -65,7 +68,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     const loadMovie = async () => {
       if (isMounted.current) {
         if (open) {
-          onSelectMovie(movie);
+          onSelectMovie(movieToPlay);
 
           setTimeout(() => {
             setIsMovieLoaded(true);
@@ -78,16 +81,16 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
       }
     };
     loadMovie();
-  }, [movie, onSelectMovie, open]);
+  }, [movieToPlay, onSelectMovie, open]);
 
   useEffect(() => {
-    const getData = async (movie) => {
-      if (!movie) return;
+    const getData = async () => {
+      if (!movieToPlay) return;
 
       if (allGenres?.length) {
         for (let i = 0; i < allGenres.length; i++) {
           let foundGenre = allGenres.find(
-            (g) => g.id === Number(movie.genre_ids[i])
+            (g) => g.id === Number(movieToPlay.genre_ids[i])
           );
           if (foundGenre) {
             setGenres((prevState) => [...prevState, foundGenre]);
@@ -95,10 +98,12 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
         }
       }
 
-      const castData = await getCastByMovieId(movie.id);
+      const castData = await getCastByMovieId(movieToPlay.id);
       setCast(castData);
 
-      const recommendedData = await getMoviesByGenreId(movie.genre_ids[0]);
+      const recommendedData = await getMoviesByGenreId(
+        movieToPlay.genre_ids[0]
+      );
 
       const newRecommendedMovies = recommendedData.filter(
         ({ backdrop_path, overview }) => Boolean(backdrop_path && overview)
@@ -106,7 +111,7 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
 
       setRecommendedMovies(newRecommendedMovies);
     };
-    getData(movie);
+    getData();
     // eslint-disable-next-line
   }, []);
 
@@ -138,10 +143,19 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     if (currentProfile?.list?.find((movie) => movie.id === movieToAdd.id)) {
       return;
     }
-
     const updatedProfile = {
       ...currentProfile,
       list: [...currentProfile.list, movieToAdd],
+    };
+    dispatch({ type: UPDATE_PROFILE, payload: updatedProfile });
+  };
+
+  const onRemoveFromList = async (movieToRemove) => {
+    const updatedProfile = {
+      ...currentProfile,
+      list: currentProfile.list.filter(
+        (movie) => movie.id !== movieToRemove.id
+      ),
     };
 
     dispatch({ type: UPDATE_PROFILE, payload: updatedProfile });
@@ -166,11 +180,11 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
     <Dialog
       fullWidth
       onClose={handleClose}
-      aria-labelledby={movie?.title}
+      aria-labelledby={movieToPlay?.title}
       open={open}
       maxWidth="md"
       scroll="body"
-      id={movie?.id}
+      id={movieToPlay?.id}
       PaperProps={{
         style: {
           backgroundColor: COLORS.VERY_BRIGHT_BLACK,
@@ -206,12 +220,14 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                 <div className="metaData__firstLine">
                   <div className="movie__scoreContainer">
                     <span className="movie__score">
-                      {movie?.vote_average * 10}% match
+                      {movieToPlay?.vote_average * 10}% match
                     </span>
                   </div>
                 </div>
                 <div className="metaData__secondLine">
-                  <div className="movie__year">{getReleaseYear(movie)}</div>
+                  <div className="movie__year">
+                    {getReleaseYear(movieToPlay)}
+                  </div>
                 </div>
               </div>
             </div>
@@ -297,11 +313,19 @@ export default function MovieInfoModal({ movie, open, setOpen }) {
                           >
                             {getReleaseYear(recommendedMovie)}
                           </h4>
-
-                          <AddToListBtn
-                            tooltip
-                            onClick={() => onAddToList(recommendedMovie)}
-                          />
+                          {currentProfile?.list?.find(
+                            (movie) => movie.id === recommendedMovie.id
+                          ) ? (
+                            <RemoveFromListBtn
+                              tooltip
+                              onClick={() => onRemoveFromList(recommendedMovie)}
+                            />
+                          ) : (
+                            <AddToListBtn
+                              tooltip
+                              onClick={() => onAddToList(recommendedMovie)}
+                            />
+                          )}
                         </div>
                         <p
                           onClick={() =>

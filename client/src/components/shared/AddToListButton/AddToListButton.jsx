@@ -37,9 +37,9 @@ const Div = styled.div`
   }
 `;
 
-const TooltipNest = ({ tooltip, children }) =>
+const TooltipNest = ({ tooltip, children, title }) =>
   tooltip ? (
-    <BootstrapTooltip placement="top" title="Add to My List">
+    <BootstrapTooltip placement="top" title={title}>
       {children}
     </BootstrapTooltip>
   ) : (
@@ -47,10 +47,23 @@ const TooltipNest = ({ tooltip, children }) =>
   );
 
 export const AddToListButtonVariationOne = ({ tooltip, onClick }) => (
-  <TooltipNest tooltip={tooltip}>
+  <TooltipNest tooltip={tooltip} title="Add to My List">
     <Div className="icon" onClick={onClick || ''}>
       <svg viewBox="0 0 24 24">
         <path d="M13 11h8v2h-8v8h-2v-8H3v-2h8V3h2v8z" fill="currentColor" />
+      </svg>
+    </Div>
+  </TooltipNest>
+);
+
+export const RemoveFromListButton = ({ tooltip, onClick }) => (
+  <TooltipNest tooltip={tooltip} title="Remove from My List">
+    <Div className="icon" onClick={onClick || ''}>
+      <svg viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M3.707 12.293l-1.414 1.414L8 19.414 21.707 5.707l-1.414-1.414L8 16.586z"
+        />
       </svg>
     </Div>
   </TooltipNest>

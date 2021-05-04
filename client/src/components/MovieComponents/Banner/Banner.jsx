@@ -70,7 +70,7 @@ export default function Banner() {
         <MovieInfoModal
           open={isModalOpen === movie?.id}
           setOpen={setIsModalOpen}
-          movie={movie}
+          movieToPlay={movie}
         />
       </>
     )
