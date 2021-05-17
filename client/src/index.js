@@ -4,11 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ContextProvidersNest } from './context/ContextProvidersNest';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
-  <ContextProvidersNest>
-    <App />
-  </ContextProvidersNest>,
+  <Router>
+    <ContextProvidersNest>
+      <App />
+    </ContextProvidersNest>
+  </Router>,
   document.getElementById('root')
 );
 
