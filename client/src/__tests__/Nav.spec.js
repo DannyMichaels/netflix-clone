@@ -31,3 +31,17 @@ describe('Navbar left', () => {
     expect(navLogo.src).toBe(NETFLIX_LOGO);
   });
 });
+
+describe('Navbar right', () => {
+  it('contains the search bar', () => {
+    const { container } = superRender(Nav);
+    const navRight = container.querySelector('.nav__secondaryNavigation');
+    const searchContainer = navRight.querySelector('.nav__searchContainer');
+    expect(searchContainer).toBeInTheDocument();
+  });
+  it('contains profiles', () => {
+    const { container } = superRender(Nav);
+    const profilesContainer = container.querySelector('.nav__profileContainer');
+    expect(profilesContainer).toBeInTheDocument();
+  });
+});
