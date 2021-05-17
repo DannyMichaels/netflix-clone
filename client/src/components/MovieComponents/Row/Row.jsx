@@ -31,7 +31,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     setMaxScrollPosition(
       Math.round(allPosters.length / (document.body.clientWidth / 200) + 1)
     );
-  }, [movies.length]);
+  }, []);
 
   const createIndicators = useCallback(() => {
     setIndicators([...new Array(maxScrollPosition).keys()]);
