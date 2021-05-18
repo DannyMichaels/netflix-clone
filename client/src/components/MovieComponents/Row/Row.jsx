@@ -141,7 +141,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           <span className="icon">
             <ArrowBackIcon />
           </span>
-          {/* <span className="row__gradient" /> */}
         </button>
       )}
       <div className="row__posters">{CARDS}</div>
