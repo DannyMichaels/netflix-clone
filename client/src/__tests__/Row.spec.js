@@ -1,5 +1,5 @@
 import Row from '../components/MovieComponents/Row/Row';
-import { testRender } from './_testUtils';
+import { testRender } from '../utils/_testUtils';
 
 describe('Row left', () => {
   it('renders a row with movie posters in it', () => {
