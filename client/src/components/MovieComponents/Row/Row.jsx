@@ -34,7 +34,9 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, []);
 
   const createIndicators = useCallback(() => {
-    setIndicators([...new Array(maxScrollPosition).keys()]);
+    if (maxScrollPosition) {
+      setIndicators([...new Array(maxScrollPosition).keys()]);
+    }
   }, [maxScrollPosition]);
 
   useEffect(() => {
@@ -128,6 +130,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         <ul className="row__pagination">
           {indicators.map((_, idx) => (
             <li
+              key={idx}
               className={`indicator${idx === activeIndex ? ' active' : ''}`}
             />
           ))}

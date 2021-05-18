@@ -1,16 +1,10 @@
-import { render } from '@testing-library/react';
-import Nav from '../components/shared/Layout/Navbar/Nav';
-import { Router, Route } from 'react-router';
-import { createMemoryHistory } from 'history';
-import { ContextProvidersNest } from '../context/ContextProvidersNest';
+import Row from '../components/MovieComponents/Row/Row';
+import { testRender } from './_testUtils';
 
-const history = createMemoryHistory();
-
-const superRender = (Component) =>
-  render(
-    <Router history={history}>
-      <ContextProvidersNest>
-        <Route component={Component} />
-      </ContextProvidersNest>
-    </Router>
-  );
+describe('Row left', () => {
+  it('renders a row with movie posters in it', () => {
+    const { container } = testRender(Row);
+    let rowPosters = container.querySelector('.row__posters');
+    expect(rowPosters).toBeInTheDocument();
+  });
+});
