@@ -44,7 +44,7 @@ export const profilesReducer = (state, action) => {
         user.id === String(payload.id) ? payload : user
       );
       localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
-      if (payload.id === state.currentProfile.id) {
+      if (payload?.id === state.currentProfile?.id) {
         localStorage.setItem('currentProfile', JSON.stringify(payload));
         return { ...state, profiles: updatedProfiles, currentProfile: payload };
       }
