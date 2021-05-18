@@ -139,7 +139,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           onClick={() => onNavigate('backward')}
         >
           <span className="icon">
-            {/* &lt; */}
             <ArrowBackIcon />
           </span>
           {/* <span className="row__gradient" /> */}
@@ -151,10 +150,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         onClick={() => onNavigate('forward')}
       >
         <span className="icon">
-          {/* &gt; */}
           <ArrowForwardIcon />
         </span>
-        {/* <span className="row__gradient" /> */}
       </button>
     </StyledRow>
   );
