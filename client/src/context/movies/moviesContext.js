@@ -49,10 +49,6 @@ const MoviesContextProvider = ({ children }) => {
     getMovies();
   }, []);
 
-  useEffect(() => {
-    console.log({ state });
-  }, [state]);
-
   return (
     <MoviesStateContext.Provider value={state}>
       <MoviesDispatchContext.Provider value={dispatch}>
