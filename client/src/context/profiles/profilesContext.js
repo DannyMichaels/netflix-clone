@@ -16,7 +16,7 @@ export default function ProfilesContextProvider({ children }) {
     profiles: [
       {
         id: getRandomId(100),
-        name: 'guest',
+        name: 'Guest',
         imgUrl: IMAGES.BLUE_AVATAR,
         isKid: false,
         language: 'English',
