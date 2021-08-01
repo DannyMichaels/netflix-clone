@@ -1,3 +1,9 @@
+/**
+ * @method makeArrayFromString
+ * @param {String} str
+ * @param {String} matchType
+ * @return {Array} takes a string and returns an array.
+ */
 export const makeArrayFromString = (str, matchType) => {
   return Array.from(str.split(' ')).map((w) => {
     return matchType === 'matchOnlyLetters'
