@@ -3,11 +3,11 @@ const idMaker = () => () => Math.ceil(Math.random() * 100);
 const generateId = idMaker();
 
 /**
+ * Takes a number (length) and will return a string.
  * @method makeid
  * @param {Number} length
  * @return {String}
  */
-
 const makeid = (length) => {
   //stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   let result = '';
@@ -19,12 +19,13 @@ const makeid = (length) => {
   }
   return result;
 };
+
 /**
+ * Takes a string and converts it to kebab-case
  * @method toKebabCase
  * @param {String} str
  * @return {String}
  */
-
 const toKebabCase = (str) =>
   str &&
   str
@@ -33,6 +34,7 @@ const toKebabCase = (str) =>
     .join('-');
 
 /**
+ * Return a random id based on length param.
  * @method getRandomId
  * @param {Number} length
  * @return {string}

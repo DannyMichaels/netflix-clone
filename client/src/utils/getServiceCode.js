@@ -1,4 +1,5 @@
 /**
+ * Takes a number and puts dashes inbetween each 3 for example: 123-456
  * @method generateServiceCode
  * @param {Number} nums
  * @return {String}
@@ -13,6 +14,7 @@ const generateServiceCode = (nums) => {
 };
 
 /**
+ * Returns a random integer between min and max
  * @method getRandomInt
  * @param {Number} min
  * @param {Number} max
@@ -24,6 +26,7 @@ const getRandomInt = (min, max) => {
 }; //The maximum is exclusive and the minimum is inclusive
 
 /**
+ * Creates a serviceCode thanks to getRandomInt and generateServiceCode functions.
  * @method getServiceCode
  * @return {String}
  */
