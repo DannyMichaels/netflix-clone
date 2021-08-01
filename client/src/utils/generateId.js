@@ -2,6 +2,12 @@ const idMaker = () => () => Math.ceil(Math.random() * 100);
 
 const generateId = idMaker();
 
+/**
+ * @method makeid
+ * @param {Number} length
+ * @return {String}
+ */
+
 const makeid = (length) => {
   //stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   let result = '';
@@ -13,6 +19,11 @@ const makeid = (length) => {
   }
   return result;
 };
+/**
+ * @method toKebabCase
+ * @param {String} str
+ * @return {String}
+ */
 
 const toKebabCase = (str) =>
   str &&
@@ -21,5 +32,10 @@ const toKebabCase = (str) =>
     .map((x) => x.toLowerCase())
     .join('-');
 
+/**
+ * @method getRandomId
+ * @param {Number} length
+ * @return {string}
+ */
 export const getRandomId = (length) =>
   toKebabCase(makeid(length)) + generateId();
