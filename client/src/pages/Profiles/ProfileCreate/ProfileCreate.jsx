@@ -61,7 +61,9 @@ export default function ProfileCreate() {
     }));
   };
 
-  const handleCreate = async () => {
+  const handleCreate = async (e) => {
+    e.preventDefault();
+
     if (maxProfileLength === profiles?.length) return;
 
     const createdUser = {
@@ -83,7 +85,10 @@ export default function ProfileCreate() {
     <>
       <Nav logoOnly />
       <Wrapper>
-        <div className="manageProfile__actionsContainer">
+        <form
+          className="manageProfile__actionsContainer"
+          onSubmit={handleCreate}
+        >
           <h1>Add Profile</h1>
           <h2>Add a profile for another person watching Netflix.</h2>
 
@@ -111,6 +116,7 @@ export default function ProfileCreate() {
                 <input
                   placeholder="Name"
                   name="name"
+                  required
                   value={userToCreate.name}
                   onChange={handleInputChange}
                 />
@@ -140,7 +146,7 @@ export default function ProfileCreate() {
           </div>
 
           <div className="buttons__container">
-            <button className="profile__button" onClick={handleCreate}>
+            <button className="profile__button" type="submit">
               SAVE
             </button>
             <button
@@ -150,7 +156,7 @@ export default function ProfileCreate() {
               CANCEL
             </button>
           </div>
-        </div>
+        </form>
       </Wrapper>
     </>
   );

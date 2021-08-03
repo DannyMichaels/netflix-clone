@@ -53,7 +53,10 @@ export default function ProfileManage({ location: { state } }) {
   return (
     <>
       <Nav logoOnly />
-      <Wrapper isDropdownShowing={isDropdownShowing}>
+      <Wrapper
+        isDropdownShowing={isDropdownShowing}
+        id="manageProfile__wrapper"
+      >
         <div className="manageProfile__centeredDiv">{manageJSX}</div>
       </Wrapper>
     </>

@@ -34,7 +34,9 @@ export default function EditProfileForm({ stateProps }) {
     setIsDropdownShowing(isDropdownShowing ? false : true);
   };
 
-  const onSave = async () => {
+  const onSave = async (e) => {
+    e.preventDefault();
+
     const updatedProfile = {
       ...profile,
       ...profileFormData,
@@ -49,10 +51,9 @@ export default function EditProfileForm({ stateProps }) {
   };
 
   return (
-    <div className="manageProfile__actionsContainer">
+    <form className="manageProfile__actionsContainer" onSubmit={onSave}>
       <h1>Edit Profile</h1>
 
-      {/*  */}
       <div className="manageProfile__metaData entry">
         <div className="profile__avatar">
           <div className="avatar__box">
@@ -69,6 +70,7 @@ export default function EditProfileForm({ stateProps }) {
             <label htmlFor="name">Profile Name</label>
             <input
               name="name"
+              required
               value={profileFormData?.name || ''}
               onChange={handleChange}
             />
@@ -117,7 +119,7 @@ export default function EditProfileForm({ stateProps }) {
       </div>
 
       <div className="buttons__container">
-        <button className="profile__button" onClick={onSave}>
+        <button className="profile__button" type="submit">
           SAVE
         </button>
         <button
@@ -135,6 +137,6 @@ export default function EditProfileForm({ stateProps }) {
           </button>
         )}
       </div>
-    </div>
+    </form>
   );
 }
