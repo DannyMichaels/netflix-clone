@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useMemo } from 'react';
 
 // components
 import Nav from '../../../components/shared/Layout/Navbar/Nav';
@@ -40,6 +40,7 @@ export default function ProfileSelect({ location: { state } }) {
         },
       });
     }
+
     dispatch({ type: SELECT_PROFILE, payload: user });
     push(ROUTES.BROWSE_ALL);
   };
@@ -48,20 +49,21 @@ export default function ProfileSelect({ location: { state } }) {
     push(ROUTES.CREATE_PROFILE);
   };
 
-  const remainingProfileSlots = [
-    ...Array(maxProfileLength - profiles.length).keys(),
-  ];
+  const remainingProfileSlots = useMemo(
+    () => maxProfileLength - profiles.length,
+    [profiles, maxProfileLength]
+  );
 
   return (
     <>
       <Nav logoOnly />
 
-      <Wrapper manageMode={manageMode}>
+      <Wrapper manageMode={manageMode} id="profileSelect__wrapper">
         <div className="profiles__container">
           <div className="profiles__gateLabel">Who's Watching?</div>
 
           <ul className="profiles__list">
-            {profiles.map((user) => (
+            {profiles?.map((user) => (
               <UserIcon
                 onClick={() => onSelect(user)}
                 manageMode={manageMode}
@@ -83,12 +85,19 @@ export default function ProfileSelect({ location: { state } }) {
               </UserIcon>
             ))}
 
-            {remainingProfileSlots.map((_, idx) => (
+            {/* netflix just shows 1 extra profile slot next to existing ones to create. */}
+            {/*  previous approach was really nice but not accuracte:
+                        const remainingProfileSlots = [
+                         ...Array(maxProfileLength - profiles.length).keys(),
+                      ];
+                      remainingProfileSlots.map((_, idx) => <UserIcon>...etc</UserIcon>)
+           */}
+
+            {remainingProfileSlots !== 0 ? (
               <UserIcon
                 onClick={onRedirectCreateMode}
                 manageMode={false}
                 isCreateProfile
-                key={idx}
               >
                 <div className="profiles__avatarWrapper">
                   <div className="profile__userImage" alt="add profile" />
@@ -98,7 +107,9 @@ export default function ProfileSelect({ location: { state } }) {
                 </div>
                 <span className="profile__name">Add Profile</span>
               </UserIcon>
-            ))}
+            ) : (
+              <></>
+            )}
           </ul>
           <div
             className="manage__button"
