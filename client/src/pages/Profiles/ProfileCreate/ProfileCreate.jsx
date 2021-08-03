@@ -120,7 +120,6 @@ export default function ProfileCreate() {
                     <input type="checkbox" />
                     <BootstrapTooltip
                       placement="top"
-                      // fontSize="4rem"
                       fontWeight="400"
                       title={`
                     If selected, this profile will only see TV shows and movies rated for ages 12 and under.`}
