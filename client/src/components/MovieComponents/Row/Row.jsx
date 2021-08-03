@@ -43,7 +43,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const movieData = await getAllMovies(fetchUrl, currentProfile.isKid);
+      const movieData = await getAllMovies(fetchUrl, currentProfile?.isKid);
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
