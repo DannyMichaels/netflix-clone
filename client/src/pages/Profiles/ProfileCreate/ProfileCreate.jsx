@@ -21,6 +21,7 @@ import CheckIcon from '@material-ui/icons/Check';
 // styles
 import { Wrapper } from './ProfileCreate.styles';
 import { ADD_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
+import BootstrapTooltip from '../../../components/shared/Tooltip/BootstrapTooltip';
 
 export default function ProfileCreate() {
   const { maxProfileLength, profiles } = useContext(ProfilesStateContext);
@@ -117,13 +118,21 @@ export default function ProfileCreate() {
                 <div className="manageProfile__optionWrapper">
                   <div className="optionWrapper__addKids--option">
                     <input type="checkbox" />
-                    <label htmlFor="isKid" onClick={toggleIsKid}>
-                      {userToCreate.isKid && (
-                        <div>
-                          <CheckIcon className="option__checkIcon" />
-                        </div>
-                      )}
-                    </label>
+                    <BootstrapTooltip
+                      placement="top"
+                      // fontSize="4rem"
+                      fontWeight="400"
+                      title={`
+                    If selected, this profile will only see TV shows and movies rated for ages 12 and under.`}
+                    >
+                      <label htmlFor="isKid" onClick={toggleIsKid}>
+                        {userToCreate.isKid && (
+                          <div>
+                            <CheckIcon className="option__checkIcon" />
+                          </div>
+                        )}
+                      </label>
+                    </BootstrapTooltip>
                     <span tabIndex={0}>Kid?</span>
                   </div>
                 </div>
