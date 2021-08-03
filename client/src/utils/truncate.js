@@ -2,7 +2,7 @@
  * @method truncate
  * @param {String} str
  * @param {Number} n
- * @return {Result}
+ * @return {string}
  */
 export const truncate = (str, n) => {
   if (typeof str === 'string') {
