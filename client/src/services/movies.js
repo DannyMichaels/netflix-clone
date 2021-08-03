@@ -1,21 +1,19 @@
 import { MOVIE_REQUESTS as REQUESTS } from '../utils/movieRequests';
 import { TMDB_API as api } from './apiConfig';
 
-export const getAllMovies = async (fetchUrl) => {
+export const getAllMovies = async (fetchUrl, isUserAKid = false) => {
   try {
-    const { data } = await api.get(fetchUrl);
+    const { data } = await api.get(`${fetchUrl}&include_adult=${isUserAKid}`);
     return data.results;
   } catch (error) {
     throw error;
   }
 };
 
-export const getSearchedMovies = async (search, isUserAKid) => {
+export const getSearchedMovies = async (search, isUserAKid = false) => {
   // if user/selected profile is a kid then adult movies won't be included "&include_adult={isUserAKid ? false : true}"
 
-  const searchUrl = `/search/movie?api_key=${
-    process.env.REACT_APP_TMDB_API_KEY
-  }&language=en-US&page=1&include_adult=${!isUserAKid}
+  const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=${isUserAKid}
     &query=${search}`;
 
   const { data } = await api.get(searchUrl);

@@ -1,4 +1,10 @@
-import { createContext, useReducer, useLayoutEffect, useEffect } from 'react';
+import {
+  createContext,
+  useReducer,
+  useLayoutEffect,
+  useEffect,
+  useContext,
+} from 'react';
 
 // utils / services
 import { getAllMovies } from '../../services/movies';
@@ -11,6 +17,7 @@ import {
   FETCH_GENRES,
   FETCH_MOVIES,
 } from '../../reducers/moviesReducer/movieReducerTypes';
+import { ProfilesStateContext } from '../profiles/profilesContext';
 
 export const MoviesStateContext = createContext();
 export const MoviesDispatchContext = createContext();
@@ -23,6 +30,7 @@ const MoviesContextProvider = ({ children }) => {
   };
 
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);
+  const { currentProfile } = useContext(ProfilesStateContext);
 
   useEffect(() => {
     const fetchGenres = async () => {
@@ -38,7 +46,7 @@ const MoviesContextProvider = ({ children }) => {
   useLayoutEffect(() => {
     const getMovies = async () => {
       movieRows.map(async ({ fetchUrl }) => {
-        const movieData = await getAllMovies(fetchUrl);
+        const movieData = await getAllMovies(fetchUrl, currentProfile?.isKid);
         dispatch({
           type: FETCH_MOVIES,
           payload: movieData,
@@ -47,6 +55,8 @@ const MoviesContextProvider = ({ children }) => {
       });
     };
     getMovies();
+
+    // eslint-disable-next-line
   }, []);
 
   return (

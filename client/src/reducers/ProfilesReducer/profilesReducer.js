@@ -12,11 +12,11 @@ const getCurrentProfile = (state) => {
   const parsedProfile = JSON.parse(selectedProfile);
 
   if (parsedProfile !== null) {
-    return JSON.parse(selectedProfile);
+    return parsedProfile;
   }
 
   const defaultProfile = state.profiles.find((_, idx) => idx === 0);
-  localStorage.setItem('currentProfile', JSON.stringify(defaultProfile));
+
   return defaultProfile;
 };
 
@@ -35,7 +35,6 @@ export const profilesReducer = (state, action) => {
 
     case ADD_PROFILE:
       const newProfiles = [...state.profiles, payload];
-      localStorage.setItem('profiles', JSON.stringify(newProfiles));
 
       return { ...state, profiles: newProfiles };
 
@@ -43,9 +42,8 @@ export const profilesReducer = (state, action) => {
       const updatedProfiles = state.profiles.map((user) =>
         user.id === String(payload.id) ? payload : user
       );
-      localStorage.setItem('profiles', JSON.stringify(updatedProfiles));
+
       if (payload?.id === state.currentProfile?.id) {
-        localStorage.setItem('currentProfile', JSON.stringify(payload));
         return { ...state, profiles: updatedProfiles, currentProfile: payload };
       }
       return { ...state, profiles: updatedProfiles };
@@ -56,19 +54,15 @@ export const profilesReducer = (state, action) => {
       );
 
       if (payload?.id === state.currentProfile?.id) {
-        localStorage.setItem('currentProfile', null);
         return { ...state, profiles: filteredProfiles, currentProfile: null };
       }
 
-      localStorage.setItem('profiles', JSON.stringify(filteredProfiles));
       return { ...state, profiles: filteredProfiles };
 
     case SELECT_PROFILE:
-      localStorage.setItem('currentProfile', JSON.stringify(payload));
       return { ...state, currentProfile: payload };
 
     case SIGN_OUT:
-      localStorage.setItem('currentProfile', null);
       return { ...state, currentProfile: null };
 
     default:

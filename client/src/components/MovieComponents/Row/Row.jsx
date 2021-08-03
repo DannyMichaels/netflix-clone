@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useContext } from 'react';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -13,12 +13,14 @@ import { StyledRow } from './row.styles';
 // icons
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
+import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [indicators, setIndicators] = useState([]);
+  const { currentProfile } = useContext(ProfilesStateContext);
 
   const [maxScrollPosition, setMaxScrollPosition] = useState(
     Math.round(document.body.clientWidth / 200)
@@ -41,7 +43,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const movieData = await getAllMovies(fetchUrl);
+      const movieData = await getAllMovies(fetchUrl, currentProfile.isKid);
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
@@ -50,7 +52,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     fetchData();
     changeMaxScrollPosition();
     createIndicators();
-  }, [fetchUrl, changeMaxScrollPosition, createIndicators]);
+  }, [fetchUrl, changeMaxScrollPosition, createIndicators, currentProfile]);
 
   useEffect(() => {
     window.addEventListener('resize', changeMaxScrollPosition);

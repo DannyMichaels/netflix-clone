@@ -1,4 +1,4 @@
-import React, { useMemo, createContext, useReducer, useRef } from 'react';
+import React, { createContext, useReducer, useRef, useEffect } from 'react';
 
 // utils
 import { getRandomId } from '../../utils/generateId';
@@ -7,6 +7,7 @@ import { getRandomId } from '../../utils/generateId';
 import { profilesReducer } from '../../reducers/ProfilesReducer/profilesReducer';
 import { FETCH_PROFILES } from '../../reducers/ProfilesReducer/profilesReducerTypes';
 import { IMAGES } from '../../utils/generalUtils';
+import { merge } from 'lodash';
 
 export const ProfilesStateContext = createContext();
 export const ProfilesDispatchContext = createContext();
@@ -32,25 +33,35 @@ export default function ProfilesContextProvider({ children }) {
 
   const defaultState = useRef(initialProfilesState);
 
-  useMemo(async () => {
-    const storedProfiles = localStorage.getItem('profiles');
-    if (storedProfiles !== null) {
-      return dispatch({
-        type: FETCH_PROFILES,
-        payload: JSON.parse(storedProfiles),
-      });
-    }
+  useEffect(() => {
+    const loadState = async () => {
+      if (JSON.parse(localStorage.getItem('profiles') !== null)) {
+        try {
+          merge(state, JSON.parse(localStorage.getItem('profiles')));
+        } catch (e) {
+          console.error('ERROR:', e);
+        }
 
-    localStorage.setItem(
-      'profiles',
-      JSON.stringify(defaultState.current.profiles)
-    );
+        return state;
+      } else {
+        localStorage.setItem(
+          'profiles',
+          JSON.stringify(defaultState.current.profiles)
+        );
 
-    return dispatch({
-      type: FETCH_PROFILES,
-      payload: defaultState.current.profiles,
-    });
+        return dispatch({
+          type: FETCH_PROFILES,
+          payload: defaultState.current.profiles,
+        });
+      }
+    };
+    loadState();
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('profiles', JSON.stringify(state));
+  }, [state]);
 
   return (
     <ProfilesStateContext.Provider value={state}>
