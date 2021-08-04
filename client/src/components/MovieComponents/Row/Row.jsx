@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useContext } from 'react';
+import useResize from '../../../hooks/useResize';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -14,7 +15,6 @@ import { StyledRow } from './row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
-import useResize from '../../../hooks/useResize';
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
