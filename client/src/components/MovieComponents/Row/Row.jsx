@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useContext } from 'react';
+import useResize from '../../../hooks/useResize';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -54,12 +55,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     createIndicators();
   }, [fetchUrl, changeMaxScrollPosition, createIndicators, currentProfile]);
 
-  useEffect(() => {
-    window.addEventListener('resize', changeMaxScrollPosition);
-    return () => {
-      window.removeEventListener('resize', changeMaxScrollPosition);
-    };
-  }, [changeMaxScrollPosition]);
+  useResize(changeMaxScrollPosition);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
