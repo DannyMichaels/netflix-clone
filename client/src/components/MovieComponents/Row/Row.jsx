@@ -14,6 +14,7 @@ import { StyledRow } from './row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
+import useResize from '../../../hooks/useResize';
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
@@ -54,12 +55,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     createIndicators();
   }, [fetchUrl, changeMaxScrollPosition, createIndicators, currentProfile]);
 
-  useEffect(() => {
-    window.addEventListener('resize', changeMaxScrollPosition);
-    return () => {
-      window.removeEventListener('resize', changeMaxScrollPosition);
-    };
-  }, [changeMaxScrollPosition]);
+  useResize(changeMaxScrollPosition);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
