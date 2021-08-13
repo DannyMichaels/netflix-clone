@@ -44,7 +44,7 @@ export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
   const {
     onSelectMovie,
     trailerUrl,
-    onPlayMovie,
+    playMovie,
     setTrailerUrl,
     setSelectedMovie,
   } = useMovieSelect();
@@ -136,7 +136,7 @@ export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
   const redirectToClickedMovie = async (movie) => {
     setSelectedMovie('');
     setTrailerUrl('');
-    return onPlayMovie(movie);
+    return playMovie(movie);
   };
 
   const onAddToList = async (movieToAdd) => {
