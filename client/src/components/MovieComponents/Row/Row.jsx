@@ -16,31 +16,47 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
 
+const FALLBACK_POSTER_IMG =
+  'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
+
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [indicators, setIndicators] = useState([]);
   const { currentProfile } = useContext(ProfilesStateContext);
-
+  const [posterWidth, setPosterWidth] = useState(0);
   const [maxScrollPosition, setMaxScrollPosition] = useState(
     Math.round(document.body.clientWidth / 200)
   );
+  const [indicators, setIndicators] = useState([]);
 
+  const postersRef = useRef(null);
   const rowRef = useRef(null);
 
   const changeMaxScrollPosition = useCallback(() => {
     let allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
     setMaxScrollPosition(
-      Math.round(allPosters.length / (document.body.clientWidth / 200) + 1)
+      Math.round(
+        allPosters.length / (document.body.clientWidth / posterWidth) + 1
+      )
     );
-  }, []);
+  }, [posterWidth]);
 
   const createIndicators = useCallback(() => {
     if (maxScrollPosition) {
       setIndicators([...new Array(maxScrollPosition).keys()]);
     }
   }, [maxScrollPosition]);
+
+  const getPosterWidth = useCallback(() => {
+    let posterWideness = Math.round(
+      postersRef?.current
+        ?.querySelector('.row__poster')
+        ?.getBoundingClientRect()?.width
+    );
+
+    setPosterWidth(posterWideness);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,11 +67,18 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setMovies(moviesThatHaveImage);
     };
     fetchData();
-    changeMaxScrollPosition();
-    createIndicators();
-  }, [fetchUrl, changeMaxScrollPosition, createIndicators, currentProfile]);
+  }, [fetchUrl, currentProfile]);
+
+  useEffect(() => {
+    if (movies.length) {
+      getPosterWidth();
+      changeMaxScrollPosition();
+      createIndicators();
+    }
+  }, [movies, changeMaxScrollPosition, createIndicators, getPosterWidth]);
 
   useResize(changeMaxScrollPosition);
+  useResize(getPosterWidth);
 
   const onNavigate = (direction) => {
     const elementToScroll = rowRef.current.querySelector('.row__posters');
@@ -106,19 +129,36 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     }
   };
 
-  const CARDS = movies?.map((movie, idx) => (
-    <MovieCard
-      index={idx}
-      movie={movie}
-      src={`${baseImgUrl}${
-        isLargeRow ? movie.poster_path : movie.backdrop_path
-      }`}
-      isLargeRow={isLargeRow}
-      alt={movie.name}
-      key={movie.id}
-      className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
-    />
-  ));
+  const CARDS =
+    movies.length > 0 ? (
+      movies?.map((movie, idx) => (
+        <MovieCard
+          index={idx}
+          movie={movie}
+          src={`${baseImgUrl}${
+            isLargeRow ? movie.poster_path : movie.backdrop_path
+          }`}
+          isLargeRow={isLargeRow}
+          alt={movie.name}
+          key={movie.id}
+          className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
+        />
+      ))
+    ) : (
+      <MovieCard
+        index={0}
+        movie={{
+          name: 'test',
+          id: 0,
+          genre_ids: [10749, 16, 18],
+        }}
+        src={FALLBACK_POSTER_IMG}
+        isLargeRow={isLargeRow}
+        alt={'test'}
+        key={'test' + 0}
+        className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
+      />
+    );
 
   return (
     <StyledRow aria-label="movies row" ref={rowRef}>
@@ -144,7 +184,9 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           </span>
         </button>
       )}
-      <div className="row__posters">{CARDS}</div>
+      <div className="row__posters" ref={postersRef}>
+        {CARDS}
+      </div>
       <button
         className="slider__nav next"
         onClick={() => onNavigate('forward')}
