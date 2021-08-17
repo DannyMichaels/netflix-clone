@@ -20,7 +20,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [indicators, setIndicators] = useState([]);
+  const [indicators, setIndicators] = useState([...new Array(Math.round(document.body.clientWidth / 200)).keys()]);
   const { currentProfile } = useContext(ProfilesStateContext);
 
   const [maxScrollPosition, setMaxScrollPosition] = useState(
