@@ -130,9 +130,12 @@ export default function Nav({ logoOnly }) {
                 { text: 'Movies', route: '#' },
                 { text: 'New & Popular', route: '#' },
                 { text: 'My List', route: ROUTES.MY_LIST },
-              ].map(({ text, route }) => (
-                <li>
-                  <Link className={pathname === route && 'active'} to={route}>
+              ].map(({ text, route }, idx) => (
+                <li key={idx}>
+                  <Link
+                    className={pathname === route ? 'active' : ''}
+                    to={route}
+                  >
                     {text}
                   </Link>
                 </li>
@@ -197,7 +200,7 @@ export default function Nav({ logoOnly }) {
                   <Box mx={1}>
                     <ArrowDropUpIcon
                       className={`nav__icon arrow ${
-                        isDropdownShowing && 'active'
+                        isDropdownShowing ? 'active' : ''
                       }`}
                     />
                   </Box>

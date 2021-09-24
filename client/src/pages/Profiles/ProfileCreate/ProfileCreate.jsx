@@ -21,6 +21,7 @@ import CheckIcon from '@material-ui/icons/Check';
 // styles
 import { Wrapper } from './ProfileCreate.styles';
 import { ADD_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
+import BootstrapTooltip from '../../../components/shared/Tooltip/BootstrapTooltip';
 
 export default function ProfileCreate() {
   const { maxProfileLength, profiles } = useContext(ProfilesStateContext);
@@ -60,7 +61,9 @@ export default function ProfileCreate() {
     }));
   };
 
-  const handleCreate = async () => {
+  const handleCreate = async (e) => {
+    e.preventDefault();
+
     if (maxProfileLength === profiles?.length) return;
 
     const createdUser = {
@@ -82,7 +85,10 @@ export default function ProfileCreate() {
     <>
       <Nav logoOnly />
       <Wrapper>
-        <div className="manageProfile__actionsContainer">
+        <form
+          className="manageProfile__actionsContainer"
+          onSubmit={handleCreate}
+        >
           <h1>Add Profile</h1>
           <h2>Add a profile for another person watching Netflix.</h2>
 
@@ -110,6 +116,7 @@ export default function ProfileCreate() {
                 <input
                   placeholder="Name"
                   name="name"
+                  required
                   value={userToCreate.name}
                   onChange={handleInputChange}
                 />
@@ -117,13 +124,20 @@ export default function ProfileCreate() {
                 <div className="manageProfile__optionWrapper">
                   <div className="optionWrapper__addKids--option">
                     <input type="checkbox" />
-                    <label htmlFor="isKid" onClick={toggleIsKid}>
-                      {userToCreate.isKid && (
-                        <div>
-                          <CheckIcon className="option__checkIcon" />
-                        </div>
-                      )}
-                    </label>
+                    <BootstrapTooltip
+                      placement="top"
+                      fontWeight="400"
+                      title={`
+                    If selected, this profile will only see TV shows and movies rated for ages 12 and under.`}
+                    >
+                      <label htmlFor="isKid" onClick={toggleIsKid}>
+                        {userToCreate.isKid && (
+                          <div>
+                            <CheckIcon className="option__checkIcon" />
+                          </div>
+                        )}
+                      </label>
+                    </BootstrapTooltip>
                     <span tabIndex={0}>Kid?</span>
                   </div>
                 </div>
@@ -132,7 +146,7 @@ export default function ProfileCreate() {
           </div>
 
           <div className="buttons__container">
-            <button className="profile__button" onClick={handleCreate}>
+            <button className="profile__button" type="submit">
               SAVE
             </button>
             <button
@@ -142,7 +156,7 @@ export default function ProfileCreate() {
               CANCEL
             </button>
           </div>
-        </div>
+        </form>
       </Wrapper>
     </>
   );

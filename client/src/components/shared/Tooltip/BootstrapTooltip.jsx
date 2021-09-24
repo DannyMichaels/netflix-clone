@@ -7,16 +7,16 @@ const useStylesBootstrap = makeStyles((theme) => ({
   },
   tooltip: {
     color: COLORS.BLACK,
-    fontSize: 'clamp(0.8rem, 4vw, 1rem)',
+    fontSize: (props) => props.fontSize || 'clamp(0.8rem, 4vw, 1rem)',
     border: `1px solid ${COLORS.WHITE}`,
-    fontWeight: 700,
+    fontWeight: (props) => props.fontWeight || 700,
     backgroundColor: theme.palette.common.white,
     boxShadow: `1px 2px 4px 1px ${COLORS.VERY_BRIGHT_BLACK} `,
   },
 }));
 
 export default function BootstrapTooltip(props) {
-  const classes = useStylesBootstrap();
+  const classes = useStylesBootstrap(props);
 
   return <Tooltip arrow classes={classes} {...props} />;
 }

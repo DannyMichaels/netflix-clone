@@ -22,7 +22,7 @@ export const useMovieSelect = () => {
 
   useEffect(() => {
     if (trailerUrl && selectedMovie && canRedirect.current) {
-      // push to MoviePlayBackView.jsx if onPlayMovie ran.
+      // push to MoviePlayBackView.jsx if playMovie ran.
       push({
         pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
         state: {
@@ -40,7 +40,7 @@ export const useMovieSelect = () => {
     setTrailerUrl(fetchedUrl);
   }, []);
 
-  const onPlayMovie = async (movie) => {
+  const playMovie = async (movie) => {
     onSelectMovie(movie);
     canRedirect.current = true;
   };
@@ -51,7 +51,7 @@ export const useMovieSelect = () => {
     trailerUrl,
     setTrailerUrl,
     onSelectMovie,
-    onPlayMovie,
+    playMovie,
     canRedirect,
   };
 };

@@ -4,8 +4,10 @@ import {
   useRef,
   useEffect,
   useCallback,
+  useContext,
   useLayoutEffect,
 } from 'react';
+import useResize from '../../../hooks/useResize';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -20,6 +22,10 @@ import { StyledRow } from './row.styles';
 // icons
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
+import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
+
+const FALLBACK_POSTER_IMG =
+  'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]);
@@ -36,24 +42,39 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   const [posterWidth, setPosterWidth] = useState(0);
   const [moviesUpdated, setMoviesUpdated] = useState(false);
+  const { currentProfile } = useContext(ProfilesStateContext);
 
-  const rowRef = useRef(null);
   const postersRef = useRef(null);
+  const rowRef = useRef(null);
 
   const changeMaxScrollPosition = useCallback(() => {
     let allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
     setMaxScrollPosition(
-      Math.round(allPosters.length / (document.body.clientWidth / 200) + 1)
+      Math.round(
+        allPosters.length / (document.body.clientWidth / posterWidth) + 1
+      )
     );
-  }, [movies.length]);
+  }, [posterWidth]);
 
   const createIndicators = useCallback(() => {
-    setIndicators([...new Array(maxScrollPosition).keys()]);
+    if (maxScrollPosition) {
+      setIndicators([...new Array(maxScrollPosition).keys()]);
+    }
   }, [maxScrollPosition]);
+
+  const getPosterWidth = useCallback(() => {
+    let posterWideness = Math.round(
+      postersRef?.current
+        ?.querySelector('.row__poster')
+        ?.getBoundingClientRect()?.width
+    );
+
+    setPosterWidth(posterWideness);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const movieData = await getAllMovies(fetchUrl);
+      const movieData = await getAllMovies(fetchUrl, currentProfile?.isKid);
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
@@ -63,7 +84,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setMovies(moviesThatHaveImage);
     };
     fetchData();
-  }, [fetchUrl]);
+  }, [fetchUrl, currentProfile?.isKid]);
 
   useEffect(() => {
     let result = movies?.length === unclonedMoviesCount;
@@ -114,11 +135,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [changeMaxScrollPosition, createIndicators]);
 
   useEffect(() => {
-    window.addEventListener('resize', changeMaxScrollPosition);
-    return () => {
-      window.removeEventListener('resize', changeMaxScrollPosition);
-    };
-  }, [changeMaxScrollPosition]);
+    if (movies.length) {
+      getPosterWidth();
+      changeMaxScrollPosition();
+      createIndicators();
+    }
+  }, [movies, changeMaxScrollPosition, createIndicators, getPosterWidth]);
+
+  useResize(changeMaxScrollPosition);
+  useResize(getPosterWidth);
 
   const onNavigate = (direction) => {
     const initial = -posterWidth * visiblePosterCount;
@@ -197,27 +222,46 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     }
   };
 
-  // };
-
-  const CARDS = Children.toArray(
-    movies?.map((movie, idx) => (
+  const CARDS =
+    movies.length > 0 ? (
+      Children.toArray(
+        movies?.map(
+          (movie, idx) =>
+            movie && (
+              <MovieCard
+                index={idx}
+                movie={movie}
+                src={`${baseImgUrl}${
+                  isLargeRow ? movie.poster_path : movie.backdrop_path
+                }`}
+                isLargeRow={isLargeRow}
+                alt={movie.name}
+                className={`row__poster ${isLargeRow && 'row__posterLarge'} ${
+                  idx < visiblePosterCount ||
+                  (idx > movies.length - visiblePosterCount - 1 &&
+                    idx < movies.length)
+                    ? 'cloned'
+                    : ''
+                }`}
+              />
+            )
+        )
+      )
+    ) : (
       <MovieCard
-        index={idx}
-        movie={movie}
-        src={`${baseImgUrl}${
-          isLargeRow ? movie.poster_path : movie.backdrop_path
-        }`}
+        index={0}
+        movie={{
+          name: 'test',
+          id: 0,
+          genre_ids: [10749, 16, 18],
+        }}
+        src={FALLBACK_POSTER_IMG}
         isLargeRow={isLargeRow}
-        alt={movie.name}
-        className={`row__poster ${isLargeRow && 'row__posterLarge'} ${
-          idx < visiblePosterCount ||
-          (idx > movies.length - visiblePosterCount - 1 && idx < movies.length)
-            ? 'cloned'
-            : ''
-        }`}
+        alt={'test'}
+        key={'test' + 0}
+        className={`row__poster ${isLargeRow && 'row__posterLarge'}`}
       />
-    ))
-  );
+    );
 
   return (
     <StyledRow
@@ -232,6 +276,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         <ul className="row__pagination">
           {indicators.map((_, idx) => (
             <li
+              key={idx}
               className={`indicator${idx === activeIndex ? ' active' : ''}`}
             />
           ))}
@@ -243,10 +288,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           onClick={() => onNavigate('backward')}
         >
           <span className="icon">
-            {/* &lt; */}
             <ArrowBackIcon />
           </span>
-          {/* <span className="row__gradient" /> */}
         </button>
       )}
       <div className="row__posters" ref={postersRef}>
@@ -257,10 +300,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         onClick={() => onNavigate('forward')}
       >
         <span className="icon">
-          {/* &gt; */}
           <ArrowForwardIcon />
         </span>
-        {/* <span className="row__gradient" /> */}
       </button>
     </StyledRow>
   );

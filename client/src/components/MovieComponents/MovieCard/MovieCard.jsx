@@ -21,7 +21,7 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow, index }) => {
       <MovieInfoModal
         open={isModalOpen === movie?.id}
         setOpen={setIsModalOpen}
-        movie={movie}
+        movieToPlay={movie}
       />
     </>
   );

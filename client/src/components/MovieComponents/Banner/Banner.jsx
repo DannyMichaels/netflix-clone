@@ -21,7 +21,7 @@ export default function Banner() {
   const [movie, setMovie] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { browseName } = useContext(SearchContext);
-  const { onPlayMovie } = useMovieSelect();
+  const { playMovie } = useMovieSelect();
 
   useMemo(async () => {
     const oneMovie = await getOneRandomMovie();
@@ -51,7 +51,7 @@ export default function Banner() {
             <div className="banner__buttons">
               <button
                 className="banner__button"
-                onClick={() => onPlayMovie(movie)}
+                onClick={() => playMovie(movie)}
               >
                 <PlayIcon fontSize="small" />
                 &nbsp;
@@ -70,7 +70,7 @@ export default function Banner() {
         <MovieInfoModal
           open={isModalOpen === movie?.id}
           setOpen={setIsModalOpen}
-          movie={movie}
+          movieToPlay={movie}
         />
       </>
     )
