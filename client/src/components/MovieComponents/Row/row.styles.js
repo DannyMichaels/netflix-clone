@@ -154,7 +154,7 @@ export const StyledRow = styled.div`
     transition: ${({ skipTransition }) =>
       skipTransition
         ? 'none'
-        : 'transform 0.75s ease-in-out'}; // this is for when it jumps back to beginning of slide when you press forward or backwards on last poster
+        : 'transform 750ms ease-in-out'}; // this is for when it jumps back to beginning of slide when you press forward or backwards on last poster
     transform: ${({ translateXValue }) => `translateX(${translateXValue}px)`};
     padding: 20px;
     position: relative;

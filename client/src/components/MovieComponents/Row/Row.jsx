@@ -86,13 +86,13 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setUnclonedMoviesCount(moviesThatHaveImage.length);
 
       setMovies(moviesThatHaveImage);
-      setMoviesLoaded(true);
+      setMoviesLoaded(rowIndex);
     };
     fetchData();
-  }, [fetchUrl, currentProfile?.isKid]);
+  }, [fetchUrl, currentProfile?.isKid, rowIndex]);
 
   useLayoutEffect(() => {
-    if (moviesLoaded) {
+    if (moviesLoaded === rowIndex) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
@@ -107,7 +107,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       let visiblePosterAmount = Math.round(
         rowRef?.current?.clientWidth / posterWideness
       );
-      console.log({ visiblePosterAmount });
+
       setVisiblePosterCount(visiblePosterAmount);
 
       //  add to end of array
@@ -131,13 +131,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
       console.log('UPDATED!');
     }
-  }, [moviesLoaded]);
+  }, [moviesLoaded, rowIndex]);
 
   useEffect(() => {
     if (skipTransition) {
       setTimeout(() => {
-        // this.animating = false;
-
         setSkipTransition(false);
       }, 10);
     }
@@ -163,7 +161,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     let visiblePosterAmount = Math.round(
       rowRef?.current?.clientWidth / posterWidth
     );
-    console.log({ visiblePosterAmount });
     setVisiblePosterCount(visiblePosterAmount);
   });
 
@@ -172,7 +169,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
     const initial = -posterWidth * visiblePosterCount;
     const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
-    const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
+    // const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
 
     setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
 
@@ -190,20 +187,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             setSkipTransition(true);
             setTranslateXValue(initial);
             timeoutInProgress.current = false;
-          }, 800);
+          }, 750);
 
           setActiveIndex(0);
 
           return translateX;
         } else {
-          timeoutInProgress.current = true;
-
-          setTimeout(() => {
-            console.log('timeout called2');
-
-            timeoutInProgress.current = false;
-          }, 800);
-
           setActiveIndex((prev) => (prev += 1));
 
           return translateX;
@@ -222,7 +211,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             setSkipTransition(true);
             setTranslateXValue(lastAllowedUnclonedPoster);
             timeoutInProgress.current = false;
-          }, 800);
+          }, 750);
 
           return translateX;
         } else {
@@ -300,6 +289,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       </div>
       {canScrollPrev === rowIndex && (
         <button
+          style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
+          disabled={timeoutInProgress.current}
           className="slider__nav prev"
           onClick={() => onNavigate('backward')}
         >
@@ -312,6 +303,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         {CARDS}
       </div>
       <button
+        style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
+        disabled={timeoutInProgress.current}
         className="slider__nav next"
         onClick={() => onNavigate('forward')}
       >
