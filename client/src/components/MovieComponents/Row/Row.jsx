@@ -211,16 +211,13 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             timeoutInProgress.current = false;
           }, 750);
 
+          setActiveIndex(indicators.length - 1);
           return translateX;
         } else {
+          setActiveIndex((prev) => (prev -= 1));
           return translateX;
         }
       });
-
-      if (activeIndex > 0) {
-        // active index is for the little indicators at the top right
-        setActiveIndex((prev) => (prev -= 1));
-      }
     }
   };
 
