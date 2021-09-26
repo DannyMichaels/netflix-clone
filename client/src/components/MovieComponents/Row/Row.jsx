@@ -8,11 +8,11 @@ import {
   useLayoutEffect,
 } from 'react';
 import useResize from '../../../hooks/useResize';
-import useBoundingBox from './../../../hooks/useBoundingBox';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
 import { baseImgUrl } from '../../../utils/generalUtils';
+import devLog from './../../../utils/devLog'; // developer environment console logs
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
@@ -166,7 +166,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
     const initial = -posterWidth * visiblePosterCount;
     const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
-    const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
+    // const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
 
     setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
 
@@ -175,12 +175,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setTranslateXValue((prevState) => {
         let translateX = prevState - posterWidth * visiblePosterCount;
         if (translateX < lastAllowedUnclonedPoster) {
-          console.log('SKIPPING TRANSITION');
+          devLog('SKIPPING TRANSITION');
 
           timeoutInProgress.current = true;
 
           setTimeout(() => {
-            console.log('timeout called');
+            devLog('timeout called');
             setSkipTransition(true);
             setTranslateXValue(initial);
             timeoutInProgress.current = false;
@@ -204,7 +204,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           timeoutInProgress.current = true;
 
           setTimeout(() => {
-            console.log('timeout called');
+            devLog('timeout called');
             setSkipTransition(true);
             setTranslateXValue(lastAllowedUnclonedPoster);
             timeoutInProgress.current = false;
