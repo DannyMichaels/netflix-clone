@@ -45,6 +45,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [posterWidth, setPosterWidth] = useState(0);
   const [moviesUpdated, setMoviesUpdated] = useState(false);
   const { currentProfile } = useContext(ProfilesStateContext);
+  const [moviesLoaded, setMoviesLoaded] = useState(false);
 
   const postersRef = useRef(null);
   const rowRef = useRef(null);
@@ -85,14 +86,13 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setUnclonedMoviesCount(moviesThatHaveImage.length);
 
       setMovies(moviesThatHaveImage);
+      setMoviesLoaded(true);
     };
     fetchData();
   }, [fetchUrl, currentProfile?.isKid]);
 
-  useEffect(() => {
-    let result = movies?.length === unclonedMoviesCount;
-
-    if (result && result !== 0) {
+  useLayoutEffect(() => {
+    if (moviesLoaded) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
@@ -101,7 +101,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           ?.querySelector('.row__poster')
           ?.getBoundingClientRect()?.width
       );
-      console.log({ posterWideness }); // prev: 250
 
       setPosterWidth(posterWideness);
 
@@ -132,7 +131,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
       console.log('UPDATED!');
     }
-  });
+  }, [moviesLoaded]);
 
   useEffect(() => {
     if (skipTransition) {
@@ -191,11 +190,20 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             setSkipTransition(true);
             setTranslateXValue(initial);
             timeoutInProgress.current = false;
-          }, 600);
+          }, 800);
+
           setActiveIndex(0);
 
           return translateX;
         } else {
+          timeoutInProgress.current = true;
+
+          setTimeout(() => {
+            console.log('timeout called2');
+
+            timeoutInProgress.current = false;
+          }, 800);
+
           setActiveIndex((prev) => (prev += 1));
 
           return translateX;
@@ -214,7 +222,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             setSkipTransition(true);
             setTranslateXValue(lastAllowedUnclonedPoster);
             timeoutInProgress.current = false;
-          }, 600);
+          }, 800);
 
           return translateX;
         } else {
