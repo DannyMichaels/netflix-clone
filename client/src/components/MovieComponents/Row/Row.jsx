@@ -161,6 +161,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           return translateX;
         }
       });
+
+      // the active index lines have to be refactored for this infinite scroll
       if (activeIndex === maxScrollPosition) return;
       setActiveIndex((prev) => (prev += 1));
     } else {
@@ -174,6 +176,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       });
 
       if (activeIndex > 0) {
+        // active index is for the little indicators at the top right
         setActiveIndex((prev) => (prev -= 1));
       }
     }
