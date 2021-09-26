@@ -42,7 +42,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [visiblePosterCount, setVisiblePosterCount] = useState(0);
 
   const [skipTransition, setSkipTransition] = useState(false);
-  const [isClickingButton, setIsClickingButton] = useState(false);
   const [posterWidth, setPosterWidth] = useState(0);
   const [moviesUpdated, setMoviesUpdated] = useState(false);
   const { currentProfile } = useContext(ProfilesStateContext);
@@ -145,8 +144,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     }
   });
 
-  console.log({ timeoutInProgress });
-
   useEffect(() => {
     changeMaxScrollPosition();
     createIndicators();
@@ -171,142 +168,66 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     setVisiblePosterCount(visiblePosterAmount);
   });
 
-  useEffect(() => console.log({ translateXValue }), [translateXValue]);
+  const onNavigate = (direction) => {
+    if (timeoutInProgress.current) return;
 
-  const onNavigate = useCallback(
-    async (direction) => {
-      if (timeoutInProgress.current) return;
+    const initial = -posterWidth * visiblePosterCount;
+    const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
+    const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
 
-      const initial = -posterWidth * visiblePosterCount;
-      const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
-      const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
+    setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
 
-      setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
+    if (direction === 'forward') {
+      // for going forward
+      setTranslateXValue((prevState) => {
+        let translateX = prevState - posterWidth * visiblePosterCount;
+        if (translateX < lastAllowedUnclonedPoster) {
+          console.log('SKIPPING TRANSITION');
 
-      if (direction === 'forward') {
-        // for going forward
-        setTranslateXValue((prevState) => {
-          let translateX = prevState - posterWidth * visiblePosterCount;
-          if (translateX < lastAllowedUnclonedPoster) {
-            console.log('SKIPPING TRANSITION');
+          timeoutInProgress.current = true;
 
-            timeoutInProgress.current = true;
-
-            setTimeout(() => {
-              console.log('timeout called');
-              setSkipTransition(true);
-              setTranslateXValue(initial);
-              timeoutInProgress.current = false;
-            }, 600);
-            setActiveIndex(0);
-
-            return translateX;
-          } else {
-            setActiveIndex((prev) => (prev += 1));
-
-            return translateX;
-          }
-        });
-      } else {
-        //  for going back
-        setTranslateXValue((prevState) => {
-          let translateX = prevState + posterWidth * visiblePosterCount;
-
-          if (translateX > initial) {
+          setTimeout(() => {
+            console.log('timeout called');
             setSkipTransition(true);
+            setTranslateXValue(initial);
+            timeoutInProgress.current = false;
+          }, 600);
+          setActiveIndex(0);
 
-            timeoutInProgress.current = true;
+          return translateX;
+        } else {
+          setActiveIndex((prev) => (prev += 1));
 
-            setTimeout(() => {
-              console.log('timeout called');
-              setSkipTransition(true);
-              setTranslateXValue(lastAllowedUnclonedPoster);
-              timeoutInProgress.current = false;
-            }, 600);
-
-            return translateX;
-          } else {
-            return translateX;
-          }
-        });
-
-        if (activeIndex > 0) {
-          // active index is for the little indicators at the top right
-          setActiveIndex((prev) => (prev -= 1));
+          return translateX;
         }
+      });
+    } else {
+      //  for going back
+      setTranslateXValue((prevState) => {
+        let translateX = prevState + posterWidth * visiblePosterCount;
+
+        if (translateX > initial) {
+          timeoutInProgress.current = true;
+
+          setTimeout(() => {
+            console.log('timeout called');
+            setSkipTransition(true);
+            setTranslateXValue(lastAllowedUnclonedPoster);
+            timeoutInProgress.current = false;
+          }, 600);
+
+          return translateX;
+        } else {
+          return translateX;
+        }
+      });
+
+      if (activeIndex > 0) {
+        // active index is for the little indicators at the top right
+        setActiveIndex((prev) => (prev -= 1));
       }
-    },
-    [
-      activeIndex,
-      maxScrollPosition,
-      posterWidth,
-      rowIndex,
-      unclonedMoviesCount,
-      visiblePosterCount,
-    ]
-  );
-
-  // useEffect(() => {
-  //   const onTransitionEnd = () => {
-  //     console.log('TRANSITIONEND RUNNING');
-
-  //     const initial = -posterWidth * visiblePosterCount;
-  //     const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
-  //     const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
-
-  //     let translateXPositive =
-  //       translateXValue - posterWidth * visiblePosterCount;
-
-  //     console.log({
-  //       translateXValue,
-  //       initial,
-  //       lastAllowedPoster,
-  //       translateXPositive,
-  //       lastAllowedUnclonedPoster,
-  //     });
-
-  //     if (
-  //       translateXPositive === lastAllowedUnclonedPoster &&
-  //       translateXValue !== -0 &&
-  //       isClickingButton
-  //     ) {
-  //       console.log('SKIPPING TRANSITION!!');
-
-  //       setSkipTransition(true);
-
-  //       setTranslateXValue(initial);
-
-  //       return;
-  //     }
-
-  //     let translateXNegative =
-  //       translateXValue + posterWidth * visiblePosterCount;
-
-  //     if (translateXNegative > initial) {
-  //       // return lastAllowedUnclonedPoster;
-  //       setSkipTransition(true);
-  //       return;
-  //     }
-  //   };
-
-  //   postersRef.current.addEventListener('transitionend', () => {
-  //     if (isClickingButton === false) return;
-  //     onTransitionEnd();
-
-  //     setTimeout(() => setClick(false), 300);
-  //   });
-
-  //   return () => {
-  //     postersRef.current.removeEventListener('transitioned', onTransitionEnd);
-  //   };
-  // }, [
-  //   isClickingButton,
-  //   posterWidth,
-  //   translateXValue,
-  //   unclonedMoviesCount,
-  //   visiblePosterCount,
-  //   onNavigate,
-  // ]);
+    }
+  };
 
   const CARDS =
     movies.length > 0 ? (
