@@ -149,51 +149,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     const initial = -posterWidth * visiblePosterCount;
     const actualLast = unclonedMoviesCount * -posterWidth;
     const lastAllowedPoster = actualLast + initial;
-    // const elementToScroll = rowRef.current.querySelector('.row__posters');
-    // const allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
-    // let currentScrollPosition = elementToScroll.scrollLeft;
-    // let availableWidth = document.body.clientWidth;
-    // let posterWidth = allPosters[0].clientWidth;
-    // let visibleRange = currentScrollPosition + availableWidth;
 
-    // let lastVisiblePoster;
-    // let index = 0;
-
-    // for (index; index < allPosters.length; index++) {
-    //   if (allPosters[index].offsetLeft + posterWidth >= visibleRange) {
-    //     lastVisiblePoster = allPosters[index];
-    //     break;
-    //   }
-    // }
-
-    // if (!lastVisiblePoster && allPosters.length > 0) {
-    //   lastVisiblePoster = allPosters[allPosters.length - 1];
-    // }
-
-    // if (lastVisiblePoster) {
-    //   let scrollDistance =
-    //     direction === 'forward'
-    //       ? lastVisiblePoster.offsetLeft - elementToScroll.scrollLeft
-    //       : lastVisiblePoster.offsetLeft +
-    //         posterWidth -
-    //         elementToScroll.scrollLeft; // this won't make the last visible element the first visible element on next scroll
-
-    // elementToScroll.scrollTo({
-    //   top: 0,
-    //   left:
-    //     direction === 'forward'
-    //       ? elementToScroll.scrollLeft + scrollDistance - 30 // -30 so last element is visible and looks a bit cut off by the arrow.
-    //       : elementToScroll.scrollLeft - scrollDistance,
-    //   behavior: 'smooth',
-    // });
-
-    // elementToScroll.scrollBy({
-    //   top: 0,
-    //   left: direction === 'forward' ? +scrollDistance : -scrollDistance,
-    //   behavior: 'smooth',
-    // });
-
-    setCanScrollPrev(rowIndex);
+    setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
 
     if (direction === 'forward') {
       setTranslateXValue((prevState) => {
