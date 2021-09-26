@@ -29,26 +29,24 @@ const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
-  const [movies, setMovies] = useState([]);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [indicators, setIndicators] = useState([]);
-  const [moviesLength, setMoviesLength] = useState(0);
-  const [translateXValue, setTranslateXValue] = useState(0);
-  const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0);
-  const [maxScrollPosition, setMaxScrollPosition] = useState(0);
-
-  const [visiblePosterCount, setVisiblePosterCount] = useState(0);
-
-  const [skipTransition, setSkipTransition] = useState(false);
-  const [posterWidth, setPosterWidth] = useState(0);
-  const [moviesUpdated, setMoviesUpdated] = useState(false);
+  const [movies, setMovies] = useState([]); // the array of the movies in the row
+  const [canScrollPrev, setCanScrollPrev] = useState(false); // a boolean for if a user can click back.
+  const [activeIndex, setActiveIndex] = useState(0); // the current active indicator index
+  const [indicators, setIndicators] = useState([]); // array of indicators
+  const [moviesLength, setMoviesLength] = useState(0); // the count of original movies
+  const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
+  const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0); // count of original movies that aren't cloned
+  const [maxScrollPosition, setMaxScrollPosition] = useState(0); // the max indicator amount
+  const [visiblePosterCount, setVisiblePosterCount] = useState(0); // number of amount of movies a user can see, changes on resize
+  const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
+  const [posterWidth, setPosterWidth] = useState(0); /// width of one poster
+  const [moviesUpdated, setMoviesUpdated] = useState(false); // boolean to be set when the dom finished painting and movies got cloned
   const { currentProfile } = useContext(ProfilesStateContext);
-  const [moviesLoaded, setMoviesLoaded] = useState(false);
+  const [moviesLoaded, setMoviesLoaded] = useState(false); // state for if movies got loaded
 
-  const postersRef = useRef(null);
-  const rowRef = useRef(null);
-  let timeoutInProgress = useRef(false);
+  const postersRef = useRef(null); // reference for the container of all movies in the row.
+  const rowRef = useRef(null); // reference for the row parent container.
+  let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
   const createIndicators = useCallback(() => {
     if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
@@ -71,7 +69,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     );
 
     setPosterWidth(posterWideness);
-  }, []);
+  }, [postersRef]);
+
+  const getVisiblePosterAmount = useCallback(() => {
+    let visiblePosterAmount = Math.round(
+      rowRef?.current?.clientWidth / posterWidth
+    );
+
+    setVisiblePosterCount(visiblePosterAmount);
+  }, [posterWidth]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,8 +86,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         Boolean(backdrop_path)
       );
 
-      setUnclonedMoviesCount(moviesThatHaveImage.length);
-
+      setUnclonedMoviesCount(moviesThatHaveImage.length); // set the original uncloned movies count.
       setMovies(moviesThatHaveImage);
       setMoviesLoaded(true);
     };
@@ -95,6 +100,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
+      // get poster width
       let posterWideness = Math.round(
         postersRef?.current
           ?.querySelector('.row__poster')
@@ -103,18 +109,19 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
       setPosterWidth(posterWideness);
 
+      // get visible poster amount
       let visiblePosterAmount = Math.round(
         rowRef?.current?.clientWidth / posterWideness
       );
 
       setVisiblePosterCount(visiblePosterAmount);
 
-      //  add to end of array
+      //  add new cloned movies to end of array
       for (let i = 0; i < visiblePosterAmount; i++) {
         newMoviesState.push(previousMoviesState[i]);
       }
 
-      // add to beginning of array
+      // add new cloned movies to beginning of array
       for (
         let i = previousMoviesState.length - 1;
         i > previousMoviesState.length - 1 - visiblePosterAmount;
@@ -124,10 +131,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       }
 
       setMoviesLength(newMoviesState.length * posterWideness);
-      setTranslateXValue(-visiblePosterAmount * posterWideness);
-      setMoviesUpdated(true);
+      setTranslateXValue(-visiblePosterAmount * posterWideness); // set the initial translateX css
       setMovies(newMoviesState);
+      setMoviesUpdated(true);
     }
+    // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [moviesLoaded]);
 
   useEffect(() => {
@@ -151,15 +159,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [moviesUpdated, changeMaxScrollPosition]);
 
   useResize(getPosterWidth);
+  useResize(getVisiblePosterAmount);
   useResize(changeMaxScrollPosition);
-
-  useResize(() => {
-    let visiblePosterAmount = Math.round(
-      rowRef?.current?.clientWidth / posterWidth
-    );
-
-    setVisiblePosterCount(visiblePosterAmount);
-  });
 
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
