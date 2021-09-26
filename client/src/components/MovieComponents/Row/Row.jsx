@@ -23,6 +23,7 @@ import { StyledRow } from './row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
+import useBoundingBox from './../../../hooks/useBoundingBox';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -98,7 +99,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           ?.querySelector('.row__poster')
           ?.getBoundingClientRect()?.width
       );
-      console.log({ posterWideness });
+      console.log({ posterWideness }); // prev: 250
 
       setPosterWidth(posterWideness);
 
