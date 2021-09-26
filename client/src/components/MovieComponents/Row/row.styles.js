@@ -151,7 +151,10 @@ export const StyledRow = styled.div`
     box-sizing: border-box;
     display: flex;
     overflow-y: hidden;
-    transition: transform 0.75s ease-in-out;
+    transition: ${({ skipTransition }) =>
+      skipTransition
+        ? 'none'
+        : 'transform 0.75s ease-in-out'}; // this is for when it jumps back to beginning of slide when you press forward or backwards on last poster
     transform: ${({ translateXValue }) => `translateX(${translateXValue}px)`};
     padding: 20px;
     position: relative;

@@ -8,6 +8,7 @@ import {
   useLayoutEffect,
 } from 'react';
 import useResize from '../../../hooks/useResize';
+import useBoundingBox from './../../../hooks/useBoundingBox';
 
 // services and utils
 import { getAllMovies } from '../../../services/movies';
@@ -23,7 +24,6 @@ import { StyledRow } from './row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
-import useBoundingBox from './../../../hooks/useBoundingBox';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -41,12 +41,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   );
   const [visiblePosterCount, setVisiblePosterCount] = useState(0);
 
+  const [skipTransition, setSkipTransition] = useState(false);
+  const [isClickingButton, setIsClickingButton] = useState(false);
   const [posterWidth, setPosterWidth] = useState(0);
   const [moviesUpdated, setMoviesUpdated] = useState(false);
   const { currentProfile } = useContext(ProfilesStateContext);
 
   const postersRef = useRef(null);
   const rowRef = useRef(null);
+  let timeoutInProgress = useRef(false);
 
   const changeMaxScrollPosition = useCallback(() => {
     let allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
@@ -91,8 +94,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     let result = movies?.length === unclonedMoviesCount;
 
     if (result && result !== 0) {
-      const copy = [...movies];
-      const newMovies = [...movies];
+      const previousMoviesState = [...movies];
+      const newMoviesState = [...movies];
 
       let posterWideness = Math.round(
         postersRef?.current
@@ -109,26 +112,40 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       console.log({ visiblePosterAmount });
       setVisiblePosterCount(visiblePosterAmount);
 
+      //  add to end of array
       for (let i = 0; i < visiblePosterAmount; i++) {
-        newMovies.push(copy[i]);
+        newMoviesState.push(previousMoviesState[i]);
       }
 
+      // add to beginning of array
       for (
-        let i = copy.length - 1;
-        i > copy.length - 1 - visiblePosterAmount;
+        let i = previousMoviesState.length - 1;
+        i > previousMoviesState.length - 1 - visiblePosterAmount;
         i--
       ) {
-        newMovies.unshift(copy[i]);
+        newMoviesState.unshift(previousMoviesState[i]);
       }
 
-      setMoviesLength(newMovies.length * posterWideness);
+      setMoviesLength(newMoviesState.length * posterWideness);
       setTranslateXValue(-visiblePosterAmount * posterWideness);
       setMoviesUpdated(true);
-      setMovies(newMovies);
+      setMovies(newMoviesState);
 
       console.log('UPDATED!');
     }
   });
+
+  useEffect(() => {
+    if (skipTransition) {
+      setTimeout(() => {
+        // this.animating = false;
+
+        setSkipTransition(false);
+      }, 10);
+    }
+  });
+
+  console.log({ timeoutInProgress });
 
   useEffect(() => {
     changeMaxScrollPosition();
@@ -146,42 +163,150 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   useResize(changeMaxScrollPosition);
   useResize(getPosterWidth);
 
-  const onNavigate = (direction) => {
-    const initial = -posterWidth * visiblePosterCount;
-    const actualLast = unclonedMoviesCount * -posterWidth;
-    const lastAllowedPoster = actualLast + initial;
+  useResize(() => {
+    let visiblePosterAmount = Math.round(
+      rowRef?.current?.clientWidth / posterWidth
+    );
+    console.log({ visiblePosterAmount });
+    setVisiblePosterCount(visiblePosterAmount);
+  });
 
-    setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
+  useEffect(() => console.log({ translateXValue }), [translateXValue]);
 
-    if (direction === 'forward') {
-      setTranslateXValue((prevState) => {
-        let translateX = prevState - posterWidth * visiblePosterCount;
-        if (translateX < lastAllowedPoster) {
-          return initial;
-        } else {
-          return translateX;
+  const onNavigate = useCallback(
+    async (direction) => {
+      if (timeoutInProgress.current) return;
+
+      const initial = -posterWidth * visiblePosterCount;
+      const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
+      const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
+
+      setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
+
+      if (direction === 'forward') {
+        // for going forward
+        setTranslateXValue((prevState) => {
+          let translateX = prevState - posterWidth * visiblePosterCount;
+          if (translateX < lastAllowedUnclonedPoster) {
+            console.log('SKIPPING TRANSITION');
+
+            timeoutInProgress.current = true;
+
+            setTimeout(() => {
+              console.log('timeout called');
+              setSkipTransition(true);
+              setTranslateXValue(initial);
+              timeoutInProgress.current = false;
+            }, 600);
+            setActiveIndex(0);
+
+            return translateX;
+          } else {
+            setActiveIndex((prev) => (prev += 1));
+
+            return translateX;
+          }
+        });
+      } else {
+        //  for going back
+        setTranslateXValue((prevState) => {
+          let translateX = prevState + posterWidth * visiblePosterCount;
+
+          if (translateX > initial) {
+            setSkipTransition(true);
+
+            timeoutInProgress.current = true;
+
+            setTimeout(() => {
+              console.log('timeout called');
+              setSkipTransition(true);
+              setTranslateXValue(lastAllowedUnclonedPoster);
+              timeoutInProgress.current = false;
+            }, 600);
+
+            return translateX;
+          } else {
+            return translateX;
+          }
+        });
+
+        if (activeIndex > 0) {
+          // active index is for the little indicators at the top right
+          setActiveIndex((prev) => (prev -= 1));
         }
-      });
-
-      // the active index lines have to be refactored for this infinite scroll
-      if (activeIndex === maxScrollPosition) return;
-      setActiveIndex((prev) => (prev += 1));
-    } else {
-      setTranslateXValue((prevState) => {
-        let translateX = prevState + posterWidth * visiblePosterCount;
-        if (translateX > initial) {
-          return actualLast;
-        } else {
-          return translateX;
-        }
-      });
-
-      if (activeIndex > 0) {
-        // active index is for the little indicators at the top right
-        setActiveIndex((prev) => (prev -= 1));
       }
-    }
-  };
+    },
+    [
+      activeIndex,
+      maxScrollPosition,
+      posterWidth,
+      rowIndex,
+      unclonedMoviesCount,
+      visiblePosterCount,
+    ]
+  );
+
+  // useEffect(() => {
+  //   const onTransitionEnd = () => {
+  //     console.log('TRANSITIONEND RUNNING');
+
+  //     const initial = -posterWidth * visiblePosterCount;
+  //     const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
+  //     const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
+
+  //     let translateXPositive =
+  //       translateXValue - posterWidth * visiblePosterCount;
+
+  //     console.log({
+  //       translateXValue,
+  //       initial,
+  //       lastAllowedPoster,
+  //       translateXPositive,
+  //       lastAllowedUnclonedPoster,
+  //     });
+
+  //     if (
+  //       translateXPositive === lastAllowedUnclonedPoster &&
+  //       translateXValue !== -0 &&
+  //       isClickingButton
+  //     ) {
+  //       console.log('SKIPPING TRANSITION!!');
+
+  //       setSkipTransition(true);
+
+  //       setTranslateXValue(initial);
+
+  //       return;
+  //     }
+
+  //     let translateXNegative =
+  //       translateXValue + posterWidth * visiblePosterCount;
+
+  //     if (translateXNegative > initial) {
+  //       // return lastAllowedUnclonedPoster;
+  //       setSkipTransition(true);
+  //       return;
+  //     }
+  //   };
+
+  //   postersRef.current.addEventListener('transitionend', () => {
+  //     if (isClickingButton === false) return;
+  //     onTransitionEnd();
+
+  //     setTimeout(() => setClick(false), 300);
+  //   });
+
+  //   return () => {
+  //     postersRef.current.removeEventListener('transitioned', onTransitionEnd);
+  //   };
+  // }, [
+  //   isClickingButton,
+  //   posterWidth,
+  //   translateXValue,
+  //   unclonedMoviesCount,
+  //   visiblePosterCount,
+  //   onNavigate,
+  // ]);
 
   const CARDS =
     movies.length > 0 ? (
@@ -230,6 +355,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       ref={rowRef}
       moviesLength={moviesLength}
       translateXValue={translateXValue}
+      skipTransition={skipTransition}
     >
       <div className="row__headerContainer">
         <h2 className="row__title">{title}</h2>
