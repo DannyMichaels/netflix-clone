@@ -60,17 +60,19 @@ export const StyledRow = styled.div`
     transition: all 0.2s ease-in;
     visibility: hidden;
     outline: none;
-    top: 15px;
+    top: ${({ isLargeRow }) => (isLargeRow ? '12%' : '22%')};
     z-index: 3;
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    background: rgba(20, 20, 20, 0.5);
+    height: ${({ isLargeRow }) => (isLargeRow ? '85%' : '69%')};
+    background: rgba(20, 20, 20, 0.6);
+    border-radius: 15px;
+    backdrop-filter: blur(8px);
 
     &:hover {
-      background: rgba(20, 20, 20, 0.7);
+      background: rgba(20, 20, 20, 0.9);
 
       .icon {
         /* font-size: 1.8rem; */

@@ -36,9 +36,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [moviesLength, setMoviesLength] = useState(0);
   const [translateXValue, setTranslateXValue] = useState(0);
   const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0);
-  const [maxScrollPosition, setMaxScrollPosition] = useState(
-    Math.round(document.body.clientWidth / 200)
-  );
+  const [maxScrollPosition, setMaxScrollPosition] = useState(0);
+
   const [visiblePosterCount, setVisiblePosterCount] = useState(0);
 
   const [skipTransition, setSkipTransition] = useState(false);
@@ -51,20 +50,18 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const rowRef = useRef(null);
   let timeoutInProgress = useRef(false);
 
-  const changeMaxScrollPosition = useCallback(() => {
-    let allPosters = rowRef.current.querySelectorAll('.movie__card--parent');
-    setMaxScrollPosition(
-      Math.round(
-        allPosters.length / (document.body.clientWidth / posterWidth) + 1
-      )
-    );
-  }, [posterWidth]);
-
   const createIndicators = useCallback(() => {
-    if (maxScrollPosition) {
+    if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
       setIndicators([...new Array(maxScrollPosition).keys()]);
     }
   }, [maxScrollPosition]);
+
+  const changeMaxScrollPosition = useCallback(() => {
+    let result = Math.floor(unclonedMoviesCount / visiblePosterCount);
+    setMaxScrollPosition(Number(result));
+
+    createIndicators();
+  }, [visiblePosterCount, createIndicators, unclonedMoviesCount]);
 
   const getPosterWidth = useCallback(() => {
     let posterWideness = Math.round(
@@ -144,26 +141,23 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   });
 
   useEffect(() => {
-    changeMaxScrollPosition();
-    createIndicators();
-  }, [changeMaxScrollPosition, createIndicators]);
+    if (moviesUpdated) {
+      // getPosterWidth();
 
-  useEffect(() => {
-    if (movies.length) {
-      getPosterWidth();
-      changeMaxScrollPosition();
-      createIndicators();
+      setTimeout(() => {
+        changeMaxScrollPosition();
+      }, 300);
     }
-  }, [movies, changeMaxScrollPosition, createIndicators, getPosterWidth]);
+  }, [moviesUpdated, changeMaxScrollPosition]);
 
-  useResize(changeMaxScrollPosition);
   useResize(getPosterWidth);
+  useResize(changeMaxScrollPosition);
 
   useResize(() => {
     let visiblePosterAmount = Math.round(
       rowRef?.current?.clientWidth / posterWidth
     );
-    console.log({ visiblePosterAmount });
+
     setVisiblePosterCount(visiblePosterAmount);
   });
 
@@ -191,6 +185,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             setTranslateXValue(initial);
             timeoutInProgress.current = false;
           }, 750);
+
           setActiveIndex(0);
 
           return translateX;
@@ -272,6 +267,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   return (
     <StyledRow
       aria-label="movies row"
+      isLargeRow={isLargeRow}
       ref={rowRef}
       moviesLength={moviesLength}
       translateXValue={translateXValue}
