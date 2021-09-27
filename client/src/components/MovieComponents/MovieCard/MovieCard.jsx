@@ -6,17 +6,18 @@ const MovieCard = ({ src, alt, className, movie, isLargeRow, index }) => {
 
   return (
     <>
-      <div
+      {/* <div
         className={`movie__card--parent${isLargeRow ? ' large' : ''}`}
         aria-label={`card ${index + 1} displaying: ${movie.name}`}
-      >
-        <img
-          src={src}
-          alt={alt}
-          className={className ?? 'movie-card'}
-          onClick={() => setIsModalOpen(movie?.id)}
-        />
-      </div>
+      > */}
+      <img
+        src={src}
+        alt={alt}
+        aria-label={`card ${index + 1} displaying: ${movie.name}`}
+        className={className ?? 'movie-card'}
+        onClick={() => setIsModalOpen(movie?.id)}
+      />
+      {/* </div> */}
 
       <MovieInfoModal
         open={isModalOpen === movie?.id}
