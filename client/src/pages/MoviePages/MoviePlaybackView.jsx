@@ -15,7 +15,7 @@ export default function MoviePlaybackView({ location: { state } }) {
   const [isArrowHovered, setIsArrowHovered] = useState(false);
 
   const params = useParams();
-  const { goBack } = useHistory();
+  const { goBack, push } = useHistory();
 
   const { allMovies } = useContext(MoviesStateContext);
 
@@ -37,9 +37,14 @@ export default function MoviePlaybackView({ location: { state } }) {
           movie: foundMovie,
           trailerUrl: params.trailerUrl,
         });
+      } else {
+        push('/browse');
+        return;
       }
     };
     getMovie();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allMovies, params, state]);
 
   const { movie, trailerUrl } = videoData;

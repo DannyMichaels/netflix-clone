@@ -45,15 +45,18 @@ const MoviesContextProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     const getMovies = async () => {
-      movieRows.map(async ({ fetchUrl }) => {
-        const movieData = await getAllMovies(fetchUrl, currentProfile?.isKid);
-        dispatch({
-          type: FETCH_MOVIES,
-          payload: movieData,
-          moviesAreLoading: false,
-        });
-      });
+      const response = await Promise.all(
+        movieRows.map(
+          async ({ fetchUrl }) =>
+            await getAllMovies(fetchUrl, currentProfile?.isKid)
+        )
+      );
+
+      let moviesData = response.flat();
+
+      dispatch({ type: FETCH_MOVIES, payload: moviesData });
     };
+
     getMovies();
 
     // eslint-disable-next-line
