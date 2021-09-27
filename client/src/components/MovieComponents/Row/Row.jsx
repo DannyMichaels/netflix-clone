@@ -28,10 +28,18 @@ import { ProfilesStateContext } from '../../../context/profiles/profilesContext'
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
 
+const ROW_TRANSITION_MS = 750;
+
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [movies, setMovies] = useState([]); // the array of the movies in the row
   const [canScrollPrev, setCanScrollPrev] = useState(false); // a boolean for if a user can click back.
-  const [activeIndex, setActiveIndex] = useState(0); // the current active indicator index
+
+  const [activeIndicatorNumber, rawSetActiveIndicatorNumber] = useState(0); // the current active indicator index
+  const setActiveIndicatorNumber = (...args) => {
+    //  a timeout to wait for the animation to end before changing the active indicator number.
+    setTimeout(() => rawSetActiveIndicatorNumber(...args), ROW_TRANSITION_MS);
+  };
+
   const [indicators, setIndicators] = useState([]); // array of indicators
   const [moviesLength, setMoviesLength] = useState(0); // the count of original movies
   const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
@@ -164,7 +172,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       getPosterWidth();
       getVisiblePosterCount();
       setTranslateXValue(-visiblePosterCount * posterWidth);
-      setActiveIndex(0);
+      setActiveIndicatorNumber(0);
       changeMaxScrollPosition();
     }
   });
@@ -194,11 +202,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             timeoutInProgress.current = false;
           }, 750);
 
-          setActiveIndex(0);
+          setActiveIndicatorNumber(0);
 
           return translateX;
         } else {
-          setActiveIndex((prev) => (prev += 1));
+          setActiveIndicatorNumber((prev) => (prev += 1));
 
           return translateX;
         }
@@ -218,10 +226,10 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
             timeoutInProgress.current = false;
           }, 750);
 
-          setActiveIndex(indicators.length - 1);
+          setActiveIndicatorNumber(indicators.length - 1);
           return translateX;
         } else {
-          setActiveIndex((prev) => (prev -= 1));
+          setActiveIndicatorNumber((prev) => (prev -= 1));
           return translateX;
         }
       });
@@ -286,7 +294,9 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           {indicators.map((_, idx) => (
             <li
               key={idx}
-              className={`indicator${idx === activeIndex ? ' active' : ''}`}
+              className={`indicator${
+                idx === activeIndicatorNumber ? ' active' : ''
+              }`}
             />
           ))}
         </ul>
