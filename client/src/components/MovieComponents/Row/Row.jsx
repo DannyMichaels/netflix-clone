@@ -61,7 +61,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     createIndicators();
   }, [visiblePosterCount, createIndicators, unclonedMoviesCount]);
 
-  const getPosterWidth = useCallback(() => {
+  const getPosterWidth = useCallback(async () => {
     let posterWideness = Math.round(
       postersRef?.current
         ?.querySelector('.row__poster')
@@ -71,7 +71,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     setPosterWidth(posterWideness);
   }, [postersRef]);
 
-  const getVisiblePosterAmount = useCallback(() => {
+  const getVisiblePosterCount = useCallback(() => {
     let visiblePosterAmount = Math.round(
       rowRef?.current?.clientWidth / posterWidth
     );
@@ -88,15 +88,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
       setUnclonedMoviesCount(moviesThatHaveImage.length); // set the original uncloned movies count.
       setMovies(moviesThatHaveImage);
-      setMoviesLoaded(true);
+      setMoviesLoaded(rowIndex);
     };
     fetchData();
-  }, [fetchUrl, currentProfile?.isKid]);
+  }, [fetchUrl, currentProfile?.isKid, rowIndex]);
 
   useLayoutEffect(() => {
     // create clones of movies after dom has painted
     // check if movies loaded
-    if (moviesLoaded) {
+    if (moviesLoaded === rowIndex) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
@@ -158,9 +158,14 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     }
   }, [moviesUpdated, changeMaxScrollPosition]);
 
-  useResize(getPosterWidth);
-  useResize(getVisiblePosterAmount);
-  useResize(changeMaxScrollPosition);
+  // change these when user resizes
+  useResize(() => {
+    getPosterWidth();
+    getVisiblePosterCount();
+    setTranslateXValue(-visiblePosterCount * posterWidth);
+    setActiveIndex(0);
+    changeMaxScrollPosition();
+  });
 
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
@@ -285,11 +290,13 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       </div>
       {canScrollPrev === rowIndex && (
         <button
+          style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
+          disabled={timeoutInProgress.current}
           className="slider__nav prev"
           onClick={() => onNavigate('backward')}
         >
           <span className="icon">
-            <ArrowBackIcon />
+            <ArrowBackIcon fontSize="large" />
           </span>
         </button>
       )}
@@ -297,11 +304,13 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         {CARDS}
       </div>
       <button
+        style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
+        disabled={timeoutInProgress.current}
         className="slider__nav next"
         onClick={() => onNavigate('forward')}
       >
         <span className="icon">
-          <ArrowForwardIcon />
+          <ArrowForwardIcon fontSize="large" />
         </span>
       </button>
     </StyledRow>

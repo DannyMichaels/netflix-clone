@@ -66,10 +66,10 @@ export const StyledRow = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: ${({ isLargeRow }) => (isLargeRow ? '85%' : '69%')};
+    height: ${({ isLargeRow }) => (isLargeRow ? '85%' : '70%')};
     background: rgba(20, 20, 20, 0.6);
-    border-radius: 15px;
-    backdrop-filter: blur(8px);
+    border-radius: 2px;
+    backdrop-filter: blur(2px);
 
     &:hover {
       background: rgba(20, 20, 20, 0.9);
