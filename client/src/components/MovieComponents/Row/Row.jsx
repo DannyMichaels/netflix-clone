@@ -40,7 +40,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [visiblePosterCount, setVisiblePosterCount] = useState(0); // number of amount of movies a user can see, changes on resize
   const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
   const [posterWidth, setPosterWidth] = useState(0); /// width of one poster
-  const [moviesUpdated, setMoviesUpdated] = useState(false); // boolean to be set when the dom finished painting and movies got cloned
+  const [moviesUpdated, setMoviesUpdated] = useState(false); // value to be set when the dom finished painting and movies got cloned in the row
   const { currentProfile } = useContext(ProfilesStateContext);
   const [moviesLoaded, setMoviesLoaded] = useState(false); // state for if movies got loaded
 
@@ -133,7 +133,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setMoviesLength(newMoviesState.length * posterWideness);
       setTranslateXValue(-visiblePosterAmount * posterWideness); // set the initial translateX css
       setMovies(newMoviesState);
-      setMoviesUpdated(true);
+      setMoviesUpdated(rowIndex);
     }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [moviesLoaded]);
@@ -149,18 +149,18 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   });
 
   useEffect(() => {
-    if (moviesUpdated) {
+    if (moviesUpdated === rowIndex) {
       // getPosterWidth();
 
       setTimeout(() => {
         changeMaxScrollPosition();
       }, 300);
     }
-  }, [moviesUpdated, changeMaxScrollPosition]);
+  }, [moviesUpdated, changeMaxScrollPosition, rowIndex]);
 
   // change these when user resizes
   useResize(() => {
-    if (moviesUpdated) {
+    if (moviesUpdated === rowIndex) {
       getPosterWidth();
       getVisiblePosterCount();
       setTranslateXValue(-visiblePosterCount * posterWidth);
@@ -281,6 +281,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       <div className="row__headerContainer">
         <h2 className="row__title">{title}</h2>
 
+        {/* indicators */}
         <ul className="row__pagination">
           {indicators.map((_, idx) => (
             <li
@@ -290,6 +291,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           ))}
         </ul>
       </div>
+
+      {/* back btn */}
       {canScrollPrev === rowIndex && (
         <button
           style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
@@ -302,19 +305,25 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           </span>
         </button>
       )}
+
+      {/* movie posters */}
       <div className="row__posters" ref={postersRef}>
         {CARDS}
       </div>
-      <button
-        style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
-        disabled={timeoutInProgress.current}
-        className="slider__nav next"
-        onClick={() => onNavigate('forward')}
-      >
-        <span className="icon">
-          <ArrowForwardIcon fontSize="large" />
-        </span>
-      </button>
+
+      {/* next btn */}
+      {moviesUpdated === rowIndex && (
+        <button
+          style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
+          disabled={timeoutInProgress.current}
+          className="slider__nav next"
+          onClick={() => onNavigate('forward')}
+        >
+          <span className="icon">
+            <ArrowForwardIcon fontSize="large" />
+          </span>
+        </button>
+      )}
     </StyledRow>
   );
 }

@@ -19,16 +19,8 @@ export const StyledRow = styled.div`
     align-items: center;
     justify-content: space-between;
     .row__pagination {
-      /* display: flex; */
-      /* align-items: center;
-      align-self: center;
-      margin: -24px 0 12px 0;
-      padding: 0;
-      list-style-type: none;
-      position: absolute;
-      top: 0;
-      right: 4%; */
-      /* display: none; */
+      visibility: hidden;
+      transition: all 250ms ease-in-out;
       padding: 0;
       list-style-type: none;
 
@@ -51,7 +43,8 @@ export const StyledRow = styled.div`
   }
 
   &:hover {
-    .slider__nav {
+    .slider__nav,
+    .row__pagination {
       visibility: visible;
     }
   }
