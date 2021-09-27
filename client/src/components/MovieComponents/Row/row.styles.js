@@ -151,6 +151,7 @@ export const StyledRow = styled.div`
 
   .row__posters {
     box-sizing: border-box;
+    overflow-x: visible;
     display: flex;
     overflow-y: hidden;
     transition: ${({ skipTransition }) =>

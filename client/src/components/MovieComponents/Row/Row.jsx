@@ -160,11 +160,13 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   // change these when user resizes
   useResize(() => {
-    getPosterWidth();
-    getVisiblePosterCount();
-    setTranslateXValue(-visiblePosterCount * posterWidth);
-    setActiveIndex(0);
-    changeMaxScrollPosition();
+    if (moviesUpdated) {
+      getPosterWidth();
+      getVisiblePosterCount();
+      setTranslateXValue(-visiblePosterCount * posterWidth);
+      setActiveIndex(0);
+      changeMaxScrollPosition();
+    }
   });
 
   const onNavigate = (direction) => {
