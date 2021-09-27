@@ -150,24 +150,21 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [moviesLoaded]);
 
   useEffect(() => {
-    if (skipTransition) {
-      setTimeout(() => {
-        // this.animating = false;
-
-        setSkipTransition(false);
-      }, 1);
-    }
-  });
-
-  useEffect(() => {
     if (moviesUpdated === rowIndex) {
-      // getPosterWidth();
-
       setTimeout(() => {
         changeMaxScrollPosition();
       }, 300);
     }
   }, [moviesUpdated, changeMaxScrollPosition, rowIndex]);
+
+  useEffect(() => {
+    if (skipTransition) {
+      setTimeout(() => {
+        setIsAnimating(false);
+        setSkipTransition(false);
+      }, 1);
+    }
+  }, [skipTransition]);
 
   // change these when user resizes
   useResize(() => {
@@ -203,16 +200,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
         setTimeout(() => {
           devLog('timeout called');
-          setIsAnimating(false);
           setSkipTransition(true);
           setTranslateXValue(initialTranslateXValue);
           timeoutInProgress.current = false;
-        }, 750);
+        }, ROW_TRANSITION_MS);
 
         setTranslateXValue(translateXNext);
       } else {
         setActiveIndicatorNumber((prev) => (prev += 1));
-        setTimeout(() => setIsAnimating(false), 750);
+        setTimeout(() => setIsAnimating(false), ROW_TRANSITION_MS);
 
         setTranslateXValue(translateXNext);
       }
@@ -229,16 +225,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
         setTimeout(() => {
           devLog('timeout called');
-          setIsAnimating(false);
           setSkipTransition(true);
           setTranslateXValue(lastAllowedUnclonedPoster);
           timeoutInProgress.current = false;
-        }, 750);
+        }, ROW_TRANSITION_MS);
 
         setTranslateXValue(translateXBack);
       } else {
         setActiveIndicatorNumber((prev) => (prev -= 1));
-        setTimeout(() => setIsAnimating(false), 750);
+        setTimeout(() => setIsAnimating(false), ROW_TRANSITION_MS);
 
         setTranslateXValue(translateXBack);
       }
