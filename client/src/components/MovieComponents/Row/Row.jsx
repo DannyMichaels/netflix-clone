@@ -144,7 +144,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         // this.animating = false;
 
         setSkipTransition(false);
-      }, 10);
+      }, 1);
     }
   });
 
