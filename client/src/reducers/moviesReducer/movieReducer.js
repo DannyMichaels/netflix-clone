@@ -13,6 +13,7 @@ export const movieReducer = (state, action) => {
       return {
         ...state,
         allGenres: action.payload,
+        genresAreLoading: false,
       };
 
     default:

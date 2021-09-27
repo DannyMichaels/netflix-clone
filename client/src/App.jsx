@@ -5,9 +5,9 @@ import NetflixLoading from './components/shared/Loading/NetflixLoading';
 import AppRouter from './router/AppRouter';
 
 const App = () => {
-  const { moviesAreLoading } = useContext(MoviesStateContext);
+  const { moviesAreLoading, genresAreLoading } = useContext(MoviesStateContext);
 
-  if (moviesAreLoading) {
+  if (moviesAreLoading || genresAreLoading) {
     return <NetflixLoading />;
   }
 

@@ -10,6 +10,7 @@ import {
 import { getAllMovies } from '../../services/movies';
 import { getAllGenres } from '../../services/genres';
 import { movieRows } from '../../utils/movieRequests';
+import devLog from './../../utils/devLog';
 
 // reducer
 import { movieReducer } from '../../reducers/moviesReducer/movieReducer';
@@ -27,6 +28,7 @@ const MoviesContextProvider = ({ children }) => {
     allMovies: [],
     allGenres: [],
     moviesAreLoading: true,
+    genresAreLoading: true,
   };
 
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);
@@ -53,6 +55,8 @@ const MoviesContextProvider = ({ children }) => {
       );
 
       let moviesData = response.flat();
+
+      devLog('fethced all movies', moviesData);
 
       dispatch({ type: FETCH_MOVIES, payload: moviesData });
     };
