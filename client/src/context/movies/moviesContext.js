@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 // utils / services
-import { getAllMovies } from '../../services/movies';
+import { getRowMovies } from '../../services/movies';
 import { getAllGenres } from '../../services/genres';
 import { movieRows } from '../../utils/movieRequests';
 import devLog from './../../utils/devLog';
@@ -50,7 +50,7 @@ const MoviesContextProvider = ({ children }) => {
       const response = await Promise.all(
         movieRows.map(
           async ({ fetchUrl }) =>
-            await getAllMovies(fetchUrl, currentProfile?.isKid)
+            await getRowMovies(fetchUrl, currentProfile?.isKid)
         )
       );
 

@@ -1,7 +1,7 @@
 import { MOVIE_REQUESTS as REQUESTS } from '../utils/movieRequests';
 import { TMDB_API as api } from './apiConfig';
 
-export const getAllMovies = async (fetchUrl, isUserAKid = false) => {
+export const getRowMovies = async (fetchUrl, isUserAKid = false) => {
   try {
     const { data } = await api.get(`${fetchUrl}&include_adult=${isUserAKid}`);
     return data.results;

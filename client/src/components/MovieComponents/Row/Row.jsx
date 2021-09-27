@@ -10,7 +10,7 @@ import {
 import useResize from '../../../hooks/useResize';
 
 // services and utils
-import { getAllMovies } from '../../../services/movies';
+import { getRowMovies } from '../../../services/movies';
 import { baseImgUrl } from '../../../utils/generalUtils';
 import devLog from './../../../utils/devLog'; // developer environment console logs
 
@@ -92,7 +92,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const movieData = await getAllMovies(fetchUrl, currentProfile?.isKid);
+      const movieData = await getRowMovies(fetchUrl, currentProfile?.isKid);
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
