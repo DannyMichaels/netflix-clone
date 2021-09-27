@@ -158,7 +158,7 @@ export const StyledRow = styled.div`
     z-index: 2;
     padding-left: 4%;
     padding-right: 4%;
-    width: ${({ moviesLength }) => `${moviesLength}px`};
+    width: ${({ containerWidth }) => `${containerWidth}px`};
   }
 
   .row__posters::-webkit-scrollbar {

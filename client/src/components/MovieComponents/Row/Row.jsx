@@ -41,7 +41,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   };
 
   const [indicators, setIndicators] = useState([]); // array of indicators
-  const [moviesLength, setMoviesLength] = useState(0); // the count of original movies
+  const [containerWidth, setContainerWidth] = useState(0); // the width for .row__posters
   const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
   const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0); // count of original movies that aren't cloned
   const [maxScrollPosition, setMaxScrollPosition] = useState(0); // the max indicator amount
@@ -55,6 +55,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const postersRef = useRef(null); // reference for the container of all movies in the row.
   const rowRef = useRef(null); // reference for the row parent container.
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
+  let [isAnimating, setIsAnimating] = useState(false);
 
   const createIndicators = useCallback(() => {
     if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
@@ -69,7 +70,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     createIndicators();
   }, [visiblePosterCount, createIndicators, unclonedMoviesCount]);
 
-  const getPosterWidth = useCallback(async () => {
+  const getPosterWidth = useCallback(() => {
     let posterWideness = Math.round(
       postersRef?.current
         ?.querySelector('.row__poster')
@@ -77,6 +78,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     );
 
     setPosterWidth(posterWideness);
+
+    return posterWideness;
   }, [postersRef]);
 
   const getVisiblePosterCount = useCallback(() => {
@@ -138,7 +141,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         newMoviesState.unshift(previousMoviesState[i]);
       }
 
-      setMoviesLength(newMoviesState.length * posterWideness);
+      setContainerWidth(newMoviesState.length * posterWideness);
       setTranslateXValue(-visiblePosterAmount * posterWideness); // set the initial translateX css
       setMovies(newMoviesState);
       setMoviesUpdated(rowIndex);
@@ -179,60 +182,66 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
+    if (isAnimating === rowIndex) return;
 
-    const initial = -posterWidth * visiblePosterCount;
+    const initialTranslateXValue = -posterWidth * visiblePosterCount;
     const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
-    // const lastAllowedPoster = lastAllowedUnclonedPoster + initial;
+    // const lastAllowedPoster = lastAllowedUnclonedPoster + initialTranslateXValue;
 
     setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
+    setIsAnimating(rowIndex);
 
     if (direction === 'forward') {
       // for going forward
-      setTranslateXValue((prevState) => {
-        let translateX = prevState - posterWidth * visiblePosterCount;
-        if (translateX < lastAllowedUnclonedPoster) {
-          devLog('SKIPPING TRANSITION');
+      let translateXNext = translateXValue - posterWidth * visiblePosterCount; // newState = prevState - posterWidth * visiblePosterCount
 
-          timeoutInProgress.current = true;
+      if (translateXNext < lastAllowedUnclonedPoster) {
+        devLog('SKIPPING TRANSITION');
+        timeoutInProgress.current = true;
 
-          setTimeout(() => {
-            devLog('timeout called');
-            setSkipTransition(true);
-            setTranslateXValue(initial);
-            timeoutInProgress.current = false;
-          }, 750);
+        setActiveIndicatorNumber(0);
 
-          setActiveIndicatorNumber(0);
+        setTimeout(() => {
+          devLog('timeout called');
+          setIsAnimating(false);
+          setSkipTransition(true);
+          setTranslateXValue(initialTranslateXValue);
+          timeoutInProgress.current = false;
+        }, 750);
 
-          return translateX;
-        } else {
-          setActiveIndicatorNumber((prev) => (prev += 1));
+        setTranslateXValue(translateXNext);
+      } else {
+        setActiveIndicatorNumber((prev) => (prev += 1));
+        setTimeout(() => setIsAnimating(false), 750);
 
-          return translateX;
-        }
-      });
+        setTranslateXValue(translateXNext);
+      }
     } else {
-      //  for going back
-      setTranslateXValue((prevState) => {
-        let translateX = prevState + posterWidth * visiblePosterCount;
+      //  if clicking back
+      let translateXBack = translateXValue + posterWidth * visiblePosterCount; // newState = prevState + posterWidth * visiblePosterCount
 
-        if (translateX > initial) {
-          timeoutInProgress.current = true;
+      if (translateXBack > initialTranslateXValue) {
+        devLog('SKIPPING TRANSITION');
 
-          setTimeout(() => {
-            devLog('timeout called');
-            setSkipTransition(true);
-            setTranslateXValue(lastAllowedUnclonedPoster);
-            timeoutInProgress.current = false;
-          }, 750);
+        timeoutInProgress.current = true;
 
-          setActiveIndicatorNumber(indicators.length - 1);
-          return translateX;
-        } else {
-          setActiveIndicatorNumber((prev) => (prev -= 1));
-          return translateX;
-        }
-      });
+        setActiveIndicatorNumber(indicators.length - 1);
+
+        setTimeout(() => {
+          devLog('timeout called');
+          setIsAnimating(false);
+          setSkipTransition(true);
+          setTranslateXValue(lastAllowedUnclonedPoster);
+          timeoutInProgress.current = false;
+        }, 750);
+
+        setTranslateXValue(translateXBack);
+      } else {
+        setActiveIndicatorNumber((prev) => (prev -= 1));
+        setTimeout(() => setIsAnimating(false), 750);
+
+        setTranslateXValue(translateXBack);
+      }
     }
   };
 
@@ -282,7 +291,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       aria-label="movies row"
       isLargeRow={isLargeRow}
       ref={rowRef}
-      moviesLength={moviesLength}
+      containerWidth={containerWidth}
       translateXValue={translateXValue}
       skipTransition={skipTransition}
     >
