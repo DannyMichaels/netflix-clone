@@ -218,7 +218,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           setSkipTransition(true);
           setTranslateXValue(initialTranslateXValue);
           timeoutInProgress.current = false;
-        }, ROW_TRANSITION_MS + 10); // the timeout that once ends will go back to initial translateX value, can be snappy and ugly if doesn't work
+        }, ROW_TRANSITION_MS); // the timeout that once ends will go back to initial translateX value, can be snappy and ugly if doesn't work
 
         setTranslateXValue(translateXNext);
       } else {
@@ -243,7 +243,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           setSkipTransition(true);
           setTranslateXValue(lastAllowedUnclonedPoster);
           timeoutInProgress.current = false;
-        }, ROW_TRANSITION_MS + 10);
+        }, ROW_TRANSITION_MS);
 
         setTranslateXValue(translateXBack);
       } else {
