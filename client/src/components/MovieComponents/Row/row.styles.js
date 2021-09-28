@@ -59,7 +59,7 @@ export const StyledRow = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: ${({ isLargeRow }) => (isLargeRow ? '85%' : '70%')};
     background: rgba(20, 20, 20, 0.6);
     border-radius: 2px;
     backdrop-filter: blur(2px);
@@ -169,13 +169,17 @@ export const StyledRow = styled.div`
     object-fit: cover;
     transition: transform 450ms;
     width: 250px;
-    max-width: 25vw;
+    max-width: 250px;
     max-height: 140px;
     box-sizing: border-box;
     z-index: 1;
     padding: 0 2px;
     border-radius: 4px;
     cursor: pointer;
+
+    @media screen and (min-width: 600px) {
+      max-width: 25vw;
+    }
 
     &:hover:not(.row__posterLarge) {
       transform: scale(1.08);
@@ -198,62 +202,5 @@ export const StyledRow = styled.div`
       max-height: 400px;
       max-width: 25vw;
     }
-  }
-
-  .movie__card--parent {
-    transition: transform 450ms;
-    &:hover {
-      transform: scale(1.08);
-      opacity: 1;
-      z-index: 3;
-    }
-
-    .movie__card--extraInfo {
-      background: #999;
-      border-radius: 0 0 4px 4px;
-      height: 2em;
-      z-index: 999;
-      margin: 0;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      visibility: inherit;
-      opacity: 1;
-      transition: 0.2s all ease-in;
-    }
-
-    .movie__card--extraInfo.inactive {
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.2s ease-in;
-    }
-  }
-
-  .movie__card--parent.large {
-    .movie__card--extraInfo {
-      background: #999;
-      border-radius: 0 0 4px 4px;
-      height: 6em;
-      z-index: 6;
-      margin: 0;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      visibility: inherit;
-      opacity: 1;
-      transition: 0.2s all ease-in;
-    }
-
-    .movie__card--extraInfo.inactive {
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.2s ease-in;
-    }
-  }
-
-  .movie__card--parent.large:hover {
-    transform: scale(1.09);
-    opacity: 1;
-    z-index: 3;
   }
 `;
