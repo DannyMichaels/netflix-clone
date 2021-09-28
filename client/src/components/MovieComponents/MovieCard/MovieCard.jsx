@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
-const MovieCard = ({ src, alt, className, movie, isLargeRow, index }) => {
+const MovieCard = ({ src, alt, className, movie, index }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

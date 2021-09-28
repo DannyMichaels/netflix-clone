@@ -30,33 +30,35 @@ const FALLBACK_POSTER_IMG =
 const ROW_TRANSITION_MS = 750;
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
+  const { currentProfile } = useContext(ProfilesStateContext); // current user profile
+
   const [movies, setMovies] = useState([]); // the array of the movies in the row
-  const [canScrollPrev, setCanScrollPrev] = useState(false); // a boolean for if a user can click back.
+  const [moviesLoaded, setMoviesLoaded] = useState(false); // state for if movies got loaded
+  const [moviesUpdated, setMoviesUpdated] = useState(false); // value to be set when the dom finished painting and movies got cloned in the row
+  const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0); // count of original movies that aren't cloned
 
   const [activeIndicatorNumber, rawSetActiveIndicatorNumber] = useState(0); // the current active indicator index
   const setActiveIndicatorNumber = (...args) => {
     //  a timeout to wait for the animation to end before changing the active indicator number.
     setTimeout(() => rawSetActiveIndicatorNumber(...args), ROW_TRANSITION_MS);
   };
-
   const [indicators, setIndicators] = useState([]); // array of indicators
+  const [maxScrollPosition, setMaxScrollPosition] = useState(0); // the max indicator amount
+  const [canScrollPrev, setCanScrollPrev] = useState(false); // a boolean for if a user can click back.
+
   const [containerWidth, setContainerWidth] = useState(0); // the width for .row__posters
   const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
-  const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0); // count of original movies that aren't cloned
-  const [maxScrollPosition, setMaxScrollPosition] = useState(0); // the max indicator amount
   const [visiblePosterCount, setVisiblePosterCount] = useState(0); // number of amount of movies a user can see, changes on resize
   const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
   const [posterWidth, setPosterWidth] = useState(0); /// width of one poster
-  const [moviesUpdated, setMoviesUpdated] = useState(false); // value to be set when the dom finished painting and movies got cloned in the row
-  const { currentProfile } = useContext(ProfilesStateContext);
-  const [moviesLoaded, setMoviesLoaded] = useState(false); // state for if movies got loaded
+  const [isAnimating, setIsAnimating] = useState(false); // state for when the row transition css is in action, used to stop user from spam clicking next.
 
   const postersRef = useRef(null); // reference for the container of all movies in the row.
   const rowRef = useRef(null); // reference for the row parent container.
+  const nextButtonRef = useRef(null); // reference for the next button.
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
-  let [isAnimating, setIsAnimating] = useState(false);
 
-  const createIndicators = useCallback(
+  const createPaginationIndicators = useCallback(
     (num) => {
       if (num) return setIndicators([...new Array(num).keys()]);
       if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
@@ -66,13 +68,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     },
     [maxScrollPosition]
   );
-
-  const changeMaxScrollPosition = useCallback(() => {
-    let result = Math.floor(unclonedMoviesCount / visiblePosterCount);
-    setMaxScrollPosition(Number(result));
-
-    createIndicators();
-  }, [visiblePosterCount, createIndicators, unclonedMoviesCount]);
 
   const getPosterWidth = useCallback(() => {
     let posterWideness = Math.round(
@@ -87,8 +82,9 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [postersRef]);
 
   const getVisiblePosterCount = useCallback(() => {
+    const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
     let visiblePosterAmount = Math.round(
-      rowRef?.current?.clientWidth / posterWidth
+      (rowRef?.current?.clientWidth - 2 * sliderButtonWidth) / posterWidth
     );
 
     setVisiblePosterCount(visiblePosterAmount);
@@ -126,9 +122,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
       setPosterWidth(posterWideness);
 
+      let sliderButtonWidth = nextButtonRef?.current?.clientWidth;
+
       // get visible poster amount
       let visiblePosterAmount = Math.round(
-        rowRef?.current?.clientWidth / posterWideness
+        (rowRef?.current?.clientWidth - 2 * sliderButtonWidth) / posterWideness
       );
 
       setVisiblePosterCount(visiblePosterAmount);
@@ -136,7 +134,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       // create pagination indicators
       let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterAmount);
       setMaxScrollPosition(Number(maxScrollPos));
-      createIndicators(maxScrollPos);
+      createPaginationIndicators(maxScrollPos);
 
       //  add new cloned movies to end of array
       for (let i = 0; i < visiblePosterAmount; i++) {
@@ -188,7 +186,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       // create pagination indicators
       let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
       setMaxScrollPosition(Number(maxScrollPos));
-      createIndicators(maxScrollPos);
+      createPaginationIndicators(maxScrollPos);
     }
   });
 
@@ -201,7 +199,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     // const lastAllowedPoster = lastAllowedUnclonedPoster + initialTranslateXValue;
 
     setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
-    setIsAnimating(rowIndex);
+    setIsAnimating(rowIndex); // stops user from spam clicking next or prev button
 
     if (direction === 'forward') {
       // for going forward
@@ -343,6 +341,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       {/* next btn */}
       {moviesUpdated === rowIndex && (
         <button
+          ref={nextButtonRef}
           style={{ cursor: timeoutInProgress.current ? 'inherit' : 'pointer' }}
           disabled={timeoutInProgress.current}
           className="slider__nav next"
