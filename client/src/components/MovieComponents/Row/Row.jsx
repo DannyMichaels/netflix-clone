@@ -5,7 +5,6 @@ import {
   useEffect,
   useCallback,
   useContext,
-  useLayoutEffect,
 } from 'react';
 import useResize from '../../../hooks/useResize';
 
@@ -57,11 +56,16 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
   let [isAnimating, setIsAnimating] = useState(false);
 
-  const createIndicators = useCallback(() => {
-    if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
-      setIndicators([...new Array(maxScrollPosition).keys()]);
-    }
-  }, [maxScrollPosition]);
+  const createIndicators = useCallback(
+    (num) => {
+      if (num) return setIndicators([...new Array(num).keys()]);
+      if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
+        setIndicators([...new Array(maxScrollPosition).keys()]);
+        return;
+      }
+    },
+    [maxScrollPosition]
+  );
 
   const changeMaxScrollPosition = useCallback(() => {
     let result = Math.floor(unclonedMoviesCount / visiblePosterCount);
@@ -104,10 +108,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     fetchData();
   }, [fetchUrl, currentProfile?.isKid, rowIndex]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // create clones of movies after dom has painted
     // check if movies loaded
-    if (moviesLoaded === rowIndex) {
+    let result = movies?.length === unclonedMoviesCount;
+
+    if (result && result !== 0) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
@@ -126,6 +132,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       );
 
       setVisiblePosterCount(visiblePosterAmount);
+
+      // create pagination indicators
+      let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterAmount);
+      setMaxScrollPosition(Number(maxScrollPos));
+      createIndicators(maxScrollPos);
 
       //  add new cloned movies to end of array
       for (let i = 0; i < visiblePosterAmount; i++) {
@@ -146,34 +157,38 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setMovies(newMoviesState);
       setMoviesUpdated(rowIndex);
     }
-    // eslint-disable-next-line  react-hooks/exhaustive-deps
-  }, [moviesLoaded]);
 
-  useEffect(() => {
-    if (moviesUpdated === rowIndex) {
-      setTimeout(() => {
-        changeMaxScrollPosition();
-      }, 300);
-    }
-  }, [moviesUpdated, changeMaxScrollPosition, rowIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  });
 
   useEffect(() => {
     if (skipTransition) {
       setTimeout(() => {
         setIsAnimating(false);
         setSkipTransition(false);
-      }, 1);
+      }, 10);
     }
   }, [skipTransition]);
 
   // change these when user resizes
   useResize(() => {
     if (moviesUpdated === rowIndex) {
+      const initialTranslateXValue = -posterWidth * visiblePosterCount;
+
       getPosterWidth();
       getVisiblePosterCount();
-      setTranslateXValue(-visiblePosterCount * posterWidth);
+      setTranslateXValue((prevState) => {
+        // this is so when user resizes but on different indicator number, reset to 0, reset translateX to initial.
+        // maybe there's a more elegant solution to keep it where it is without losing indicator number
+        if (prevState === initialTranslateXValue) return prevState;
+        return initialTranslateXValue;
+      });
       setActiveIndicatorNumber(0);
-      changeMaxScrollPosition();
+
+      // create pagination indicators
+      let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
+      setMaxScrollPosition(Number(maxScrollPos));
+      createIndicators(maxScrollPos);
     }
   });
 
@@ -203,7 +218,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           setSkipTransition(true);
           setTranslateXValue(initialTranslateXValue);
           timeoutInProgress.current = false;
-        }, ROW_TRANSITION_MS);
+        }, ROW_TRANSITION_MS + 10); // the timeout that once ends will go back to initial translateX value, can be snappy and ugly if doesn't work
 
         setTranslateXValue(translateXNext);
       } else {
@@ -228,7 +243,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
           setSkipTransition(true);
           setTranslateXValue(lastAllowedUnclonedPoster);
           timeoutInProgress.current = false;
-        }, ROW_TRANSITION_MS);
+        }, ROW_TRANSITION_MS + 10);
 
         setTranslateXValue(translateXBack);
       } else {
