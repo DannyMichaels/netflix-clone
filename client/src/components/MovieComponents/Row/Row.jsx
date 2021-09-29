@@ -8,7 +8,7 @@ import {
   useLayoutEffect,
   useMemo,
 } from 'react';
-import useResize from '../../../hooks/useResize';
+import useBoundingBox from '../../../hooks/useBoundingBox';
 
 // services and utils
 import { getRowMovies } from '../../../services/movies';
@@ -25,8 +25,6 @@ import { StyledRow } from './Row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
-import useBoundingBox from '../../../hooks/useBoundingBox';
-// import useBoundingBox2 from '../../../hooks/useGetElementWidth';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -37,7 +35,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const { currentProfile } = useContext(ProfilesStateContext); // current user profile
 
   const [movies, setMovies] = useState([]); // the array of the movies in the row
-  const [moviesLoaded, setMoviesLoaded] = useState(false); // state for if movies got loaded
   const [moviesUpdated, setMoviesUpdated] = useState(false); // value to be set when the dom finished painting and movies got cloned in the row
   const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0); // count of original movies that aren't cloned
 
@@ -102,11 +99,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
       setUnclonedMoviesCount(moviesThatHaveImage.length); // set the original uncloned movies count.
       setMovies(moviesThatHaveImage);
-      setMoviesLoaded(rowIndex);
     };
     fetchData();
   }, [fetchUrl, currentProfile?.isKid, rowIndex]);
 
+  // eslint-disable-next-line
   useLayoutEffect(() => {
     // create clones of movies after dom has painted
     // check if movies loaded
@@ -117,33 +114,31 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       const newMoviesState = [...movies];
 
       // get visible poster amount
-      let visiblePosterAmount = Math.round(
-        (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
-      );
 
       // create pagination indicators
-      let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterAmount);
+      let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
       setMaxScrollPosition(Number(maxScrollPos));
       createPaginationIndicators(maxScrollPos);
 
       //  add new cloned movies to end of array
-      for (let i = 0; i < visiblePosterAmount; i++) {
+      for (let i = 0; i < visiblePosterCount; i++) {
         newMoviesState.push(previousMoviesState[i]);
       }
 
       // add new cloned movies to beginning of array
       for (
         let i = previousMoviesState.length - 1;
-        i > previousMoviesState.length - 1 - visiblePosterAmount;
+        i > previousMoviesState.length - 1 - visiblePosterCount;
         i--
       ) {
         newMoviesState.unshift(previousMoviesState[i]);
       }
 
       setContainerWidth(newMoviesState.length * posterWidth);
-      setTranslateXValue(-visiblePosterAmount * posterWidth); // set the initial translateX css
+      setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
       setMovies(newMoviesState);
       setMoviesUpdated(rowIndex);
+      devLog('movies updated!');
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,9 +169,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [posterWidth, visiblePosterCount]);
 
   useEffect(() => {
-    devLog('setting container width', movies.length * posterWidth);
-    setContainerWidth(movies.length * posterWidth);
-  }, [movies.length, posterWidth]);
+    if (moviesUpdated === rowIndex) {
+      devLog('setting container width', movies.length * posterWidth);
+      setContainerWidth(movies.length * posterWidth);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moviesUpdated, posterWidth]);
 
   useEffect(() => {
     devLog('setting indicators on resize');
