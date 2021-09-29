@@ -6,13 +6,17 @@ const MovieCard = ({ src, alt, className, movie, index }) => {
 
   return (
     <>
-      <img
-        src={src}
-        alt={alt}
-        aria-label={`card ${index + 1} displaying: ${movie.name}`}
-        className={className ?? 'movie-card'}
+      <div
+        className="movie__card--parent"
         onClick={() => setIsModalOpen(movie?.id)}
-      />
+      >
+        <img
+          src={src}
+          alt={alt}
+          aria-label={`card ${index + 1} displaying: ${movie.name}`}
+          className={className ?? 'movie-card'}
+        />
+      </div>
 
       <MovieInfoModal
         open={isModalOpen === movie?.id}

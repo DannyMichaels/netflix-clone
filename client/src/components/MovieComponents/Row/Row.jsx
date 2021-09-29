@@ -146,7 +146,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     // fake loading to not let the user see the akwardness of cloning the elements.
     if (rowIndex === 7 && moviesUpdated === 7) {
       setTimeout(() => {
-        dispatch({ type: MOVIES_PAINTED });
+        dispatch({ type: MOVIES_PAINTED, payload: true });
       }, 500);
     }
 

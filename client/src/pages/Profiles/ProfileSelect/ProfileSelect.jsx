@@ -4,6 +4,8 @@ import { useContext, useState, useMemo } from 'react';
 import Nav from '../../../components/shared/Layout/Navbar/Nav';
 
 // context
+import { MoviesDispatchContext } from './../../../context/movies/moviesContext';
+import { MOVIES_PAINTED } from '../../../reducers/moviesReducer/movieReducerTypes';
 import {
   ProfilesDispatchContext,
   ProfilesStateContext,
@@ -27,7 +29,8 @@ export default function ProfileSelect({ location: { state } }) {
   });
 
   const { profiles, maxProfileLength } = useContext(ProfilesStateContext);
-  const dispatch = useContext(ProfilesDispatchContext);
+  const dispatchProfiles = useContext(ProfilesDispatchContext);
+  const dispatchMovies = useContext(MoviesDispatchContext);
 
   const { push } = useHistory();
 
@@ -41,7 +44,8 @@ export default function ProfileSelect({ location: { state } }) {
       });
     }
 
-    dispatch({ type: SELECT_PROFILE, payload: user });
+    dispatchProfiles({ type: SELECT_PROFILE, payload: user });
+    dispatchMovies({ type: MOVIES_PAINTED, payload: false });
     push(ROUTES.BROWSE_ALL);
   };
 

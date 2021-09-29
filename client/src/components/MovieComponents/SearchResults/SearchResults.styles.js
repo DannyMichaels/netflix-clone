@@ -30,32 +30,11 @@ export const InnerColumn = styled.div`
       padding-left: 0;
     }
 
-    .movie__card--extraInfo {
-      background: #999;
-      border-radius: 0 0 4px 4px;
-      height: 5em;
-      z-index: 6;
-      margin: 0 auto;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      visibility: inherit;
-      opacity: 1;
-      transition: 0.2s all ease-in;
-    }
-
-    .movie__card--extraInfo.inactive {
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.2s ease-in;
-    }
-
     .movie__card--parent {
       position: relative;
       max-width: 300px;
       margin: 0 auto;
       transition: transform 450ms;
-
       &:hover {
         transition: transform 450ms;
         transform: scale(1.08);
@@ -63,17 +42,14 @@ export const InnerColumn = styled.div`
         z-index: 3;
         cursor: pointer;
       }
-
       @media screen and (max-width: 340px) {
         width: 75vw;
         margin: 0 0;
       }
-
       img {
         width: 100%;
         height: auto;
         object-fit: contain;
-
         padding: 0 2px;
         border-radius: 4px;
       }

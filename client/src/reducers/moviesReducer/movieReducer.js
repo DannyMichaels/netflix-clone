@@ -23,7 +23,7 @@ export const movieReducer = (state, action) => {
     case MOVIES_PAINTED:
       return {
         ...state,
-        moviesPaintedOnVirtualDOM: true,
+        moviesPaintedOnVirtualDOM: action.payload,
       };
 
     default:
