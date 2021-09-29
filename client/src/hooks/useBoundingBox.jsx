@@ -25,14 +25,14 @@ const useBoundingBox = (querySelectedElement, dependencies = []) => {
 
   const setBoundingBox = (elementRef) => {
     if (!querySelectedElement) {
-      rawSetBoundingBox(elementRef.current.getBoundingClientRect());
+      rawSetBoundingBox(elementRef.current?.getBoundingClientRect());
       return;
     }
 
     rawSetBoundingBox(
       elementRef.current
         ?.querySelector(querySelectedElement)
-        .getBoundingClientRect()
+        ?.getBoundingClientRect()
     );
   };
 

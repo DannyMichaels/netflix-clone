@@ -179,13 +179,27 @@ export const StyledRow = styled.div`
     padding: 0 2px;
     border-radius: 4px;
     cursor: pointer;
+
+    &:hover:not(.row__posterLarge) {
+      transform: scale(1.08);
+      opacity: 1;
+      z-index: 3;
+    }
   }
+
   .row__posterLarge {
     max-height: 200px;
     max-width: 25vw;
     top: 0;
     left: 0;
     transition: transform 450ms;
+
+    &:hover {
+      transform: scale(1.09);
+      opacity: 1;
+      z-index: 3;
+    }
+
     @media screen and (min-width: 600px) {
       max-height: 400px;
       max-width: 25vw;

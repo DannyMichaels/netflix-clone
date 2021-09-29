@@ -16,9 +16,9 @@ const App = () => {
 
   useEffect(() => {
     if (!moviesPaintedOnVirtualDOM) {
-      document.body.overflowY = 'hidden';
+      document.body.style.overflowY = 'hidden';
     } else {
-      document.body.overflowY = 'inherit';
+      document.body.style.overflowY = 'inherit';
     }
   }, [moviesPaintedOnVirtualDOM]);
 
