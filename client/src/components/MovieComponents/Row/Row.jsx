@@ -24,6 +24,9 @@ import { StyledRow } from './Row.styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
+import useBoundingBox from '../../../hooks/useBoundingBox';
+import useBoundingBox2 from '../../../hooks/useBoundingBox2';
+import { debounce } from './../../../hooks/useBoundingBox';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -51,13 +54,14 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
   const [visiblePosterCount, setVisiblePosterCount] = useState(0); // number of amount of movies a user can see, changes on resize
   const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
-  const [posterWidth, setPosterWidth] = useState(0); /// width of one poster
   const [isAnimating, setIsAnimating] = useState(false); // state for when the row transition css is in action, used to stop user from spam clicking next.
 
-  const postersRef = useRef(null); // reference for the container of all movies in the row.
-  const rowRef = useRef(null); // reference for the row parent container.
+  const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
+
   const nextButtonRef = useRef(null); // reference for the next button.
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
+
+  const [postersRef, posterWidth] = useBoundingBox2();
 
   const createPaginationIndicators = useCallback(
     (num) => {
@@ -70,26 +74,14 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     [maxScrollPosition]
   );
 
-  const getPosterWidth = useCallback(() => {
-    let posterWideness = Math.round(
-      postersRef?.current
-        ?.querySelector('.row__poster')
-        ?.getBoundingClientRect()?.width
-    );
-
-    setPosterWidth(posterWideness);
-
-    return posterWideness;
-  }, [postersRef]);
-
   const getVisiblePosterCount = useCallback(() => {
     const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
     let visiblePosterAmount = Math.round(
-      (rowRef?.current?.clientWidth - 2 * sliderButtonWidth) / posterWidth
+      (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
     );
 
     setVisiblePosterCount(visiblePosterAmount);
-  }, [posterWidth]);
+  }, [posterWidth, rowDimensions?.width]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,14 +106,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
-      // get poster width
-      let posterWideness = Math.round(
-        postersRef?.current
-          ?.querySelector('.row__poster')
-          ?.getBoundingClientRect()?.width
-      );
-
-      setPosterWidth(posterWideness);
+      const posterWideness = posterWidth;
 
       let sliderButtonWidth = nextButtonRef?.current?.clientWidth;
 
@@ -170,26 +155,36 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [skipTransition]);
 
   // change these when user resizes
-  useResize(() => {
-    if (moviesUpdated === rowIndex) {
-      const initialTranslateXValue = -posterWidth * visiblePosterCount;
 
-      getPosterWidth();
-      getVisiblePosterCount();
-      setTranslateXValue((prevState) => {
-        // this is so when user resizes but on different indicator number, reset to 0, reset translateX to initial.
-        // maybe there's a more elegant solution to keep it where it is without losing indicator number
-        if (prevState === initialTranslateXValue) return prevState;
-        return initialTranslateXValue;
-      });
-      setActiveIndicatorNumber(0);
+  useEffect(() => {
+    const initialTranslateXValue = -posterWidth * visiblePosterCount;
 
-      // create pagination indicators
-      let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
-      setMaxScrollPosition(Number(maxScrollPos));
-      createPaginationIndicators(maxScrollPos);
-    }
-  });
+    console.log('setting tx value on resize');
+    setTranslateXValue((prevState) => {
+      // this is so when user resizes but on different indicator number, reset to 0, reset translateX to initial.
+      // maybe there's a more elegant solution to keep it where it is without losing indicator number
+      if (prevState === initialTranslateXValue) return prevState;
+      return initialTranslateXValue;
+    });
+    setActiveIndicatorNumber(0);
+  }, [posterWidth, visiblePosterCount]);
+
+  useEffect(() => {
+    const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
+
+    let visiblePosterAmount = Math.round(
+      (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
+    );
+
+    setVisiblePosterCount(visiblePosterAmount);
+  }, [posterWidth, rowDimensions?.width]);
+
+  useEffect(() => {
+    console.log('setting indicators on resize');
+    let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
+    setMaxScrollPosition(Number(maxScrollPos));
+    createPaginationIndicators(maxScrollPos);
+  }, [posterWidth, unclonedMoviesCount, visiblePosterCount]);
 
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
