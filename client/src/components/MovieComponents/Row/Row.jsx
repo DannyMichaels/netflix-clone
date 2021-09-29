@@ -8,7 +8,7 @@ import {
   useLayoutEffect,
   useMemo,
 } from 'react';
-import useBoundingBox from '../../../hooks/useBoundingBox';
+import useBoundingBox from '../../../hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
 
 // services and utils
 import { getRowMovies } from '../../../services/movies';
