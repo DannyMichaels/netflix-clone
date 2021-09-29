@@ -48,20 +48,18 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   const [containerWidth, setContainerWidth] = useState(0); // the width for .row__posters
   const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
+
   const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
   const [isAnimating, setIsAnimating] = useState(false); // state for when the row transition css is in action, used to stop user from spam clicking next.
-
-  const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
-
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
+  const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
+  const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
 
   const posterWidth = useMemo(() => posterDimensions?.width ?? 0, [
     posterDimensions?.width,
   ]);
-
-  const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
 
   const sliderButtonWidth = useMemo(() => sliderButtonDimensions?.width ?? 0, [
     sliderButtonDimensions?.width,
