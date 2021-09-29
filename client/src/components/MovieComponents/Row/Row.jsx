@@ -148,37 +148,36 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     }
   }, [skipTransition]);
 
-  // change these when user resizes
-
   useEffect(() => {
-    const initialTranslateXValue = -posterWidth * visiblePosterCount;
+    // when posterWidth changes (useBoundingBox takes care of resize), change these.
 
-    console.log('setting tx value on resize');
+    const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
+
+    devLog('getting new visiblePosterCount');
+
+    let visiblePosterAmount = Math.round(
+      (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
+    );
+    setVisiblePosterCount(visiblePosterAmount);
+
+    devLog('resetting translateX value');
+    const initialTranslateXValue = -posterWidth * visiblePosterAmount;
+
     setTranslateXValue((prevState) => {
       // this is so when user resizes but on different indicator number, reset to 0, reset translateX to initial.
       // maybe there's a more elegant solution to keep it where it is without losing indicator number
       if (prevState === initialTranslateXValue) return prevState;
       return initialTranslateXValue;
     });
+
     setActiveIndicatorNumber(0);
-  }, [posterWidth, visiblePosterCount]);
 
-  useEffect(() => {
-    const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
-
-    let visiblePosterAmount = Math.round(
-      (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
-    );
-
-    setVisiblePosterCount(visiblePosterAmount);
-  }, [posterWidth, rowDimensions?.width]);
-
-  useEffect(() => {
-    console.log('setting indicators on resize');
     let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
     setMaxScrollPosition(Number(maxScrollPos));
     createPaginationIndicators(maxScrollPos);
-  }, [posterWidth, unclonedMoviesCount, visiblePosterCount]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [posterWidth, unclonedMoviesCount, rowDimensions?.width]);
 
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
