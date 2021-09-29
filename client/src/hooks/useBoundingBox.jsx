@@ -14,21 +14,34 @@ export const debounce = (callback, wait, timeoutId = null) => {
   return debounceFn;
 };
 
-const useBoundingBox = (dependencies = []) => {
+const useBoundingBox = (querySelectedElement, dependencies = []) => {
   // Our `ref` is needed to be passed to the component's `ref` attribute.
   // $FlowFixMe
   const ref = useRef(null);
 
   // We're using `useRef` for our boundingBox just as an instance variable.
   // Some bit of mutable state that doesn't require re-renders.
-  const [boundingBox, setBoundingBox] = useState(null);
+  const [boundingBox, rawSetBoundingBox] = useState(null);
+
+  const setBoundingBox = (elementRef) => {
+    if (!querySelectedElement) {
+      rawSetBoundingBox(elementRef.current.getBoundingClientRect());
+      return;
+    }
+
+    rawSetBoundingBox(
+      elementRef.current
+        ?.querySelector(querySelectedElement)
+        .getBoundingClientRect()
+    );
+  };
 
   useEffect(() => {
     if (!ref.current) {
       return;
     }
 
-    setBoundingBox(ref.current.getBoundingClientRect());
+    setBoundingBox(ref);
   }, dependencies); // eslint-disable-line
 
   // We want to re-capture the bounding box whenever the user scrolls or
@@ -40,7 +53,7 @@ const useBoundingBox = (dependencies = []) => {
 
     const recalculate = debounce(() => {
       if (ref.current) {
-        setBoundingBox(ref.current.getBoundingClientRect());
+        setBoundingBox(ref);
       }
     }, 250);
 
@@ -51,6 +64,8 @@ const useBoundingBox = (dependencies = []) => {
       window.removeEventListener('scroll', recalculate);
       window.removeEventListener('resize', recalculate);
     };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return [ref, boundingBox];

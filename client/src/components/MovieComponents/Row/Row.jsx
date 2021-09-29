@@ -6,6 +6,7 @@ import {
   useCallback,
   useContext,
   useLayoutEffect,
+  useMemo,
 } from 'react';
 import useResize from '../../../hooks/useResize';
 
@@ -25,8 +26,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
 import useBoundingBox from '../../../hooks/useBoundingBox';
-import useBoundingBox2 from '../../../hooks/useBoundingBox2';
-import { debounce } from './../../../hooks/useBoundingBox';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -61,7 +60,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const nextButtonRef = useRef(null); // reference for the next button.
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
-  const [postersRef, posterWidth] = useBoundingBox2();
+  const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
+
+  const posterWidth = useMemo(() => posterDimensions?.width ?? 0, [
+    posterDimensions?.width,
+  ]);
 
   const createPaginationIndicators = useCallback(
     (num) => {
@@ -73,15 +76,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     },
     [maxScrollPosition]
   );
-
-  const getVisiblePosterCount = useCallback(() => {
-    const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
-    let visiblePosterAmount = Math.round(
-      (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
-    );
-
-    setVisiblePosterCount(visiblePosterAmount);
-  }, [posterWidth, rowDimensions?.width]);
 
   useEffect(() => {
     const fetchData = async () => {
