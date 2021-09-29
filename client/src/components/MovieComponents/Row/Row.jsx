@@ -159,7 +159,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [skipTransition]);
 
   // change these when user resizes
-
   useEffect(() => {
     const initialTranslateXValue = -posterWidth * visiblePosterCount;
 
@@ -175,8 +174,9 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   }, [posterWidth, visiblePosterCount]);
 
   useEffect(() => {
-    window.getPosterCount = () => console.log({ visiblePosterCount });
-  }, [visiblePosterCount]);
+    devLog('setting container width', movies.length * posterWidth);
+    setContainerWidth(movies.length * posterWidth);
+  }, [movies.length, posterWidth]);
 
   useEffect(() => {
     devLog('setting indicators on resize');
@@ -187,6 +187,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [posterWidth, unclonedMoviesCount, visiblePosterCount]);
 
+  // onNavigate, function runs when user clicks slider next or prev button
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
     if (isAnimating === rowIndex) return;
