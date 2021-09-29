@@ -13,7 +13,6 @@ import useBoundingBox from '../../../hooks/useBoundingBox';
 // services and utils
 import { getRowMovies } from '../../../services/movies';
 import { baseImgUrl } from '../../../utils/generalUtils';
-import devLog from './../../../utils/devLog'; // developer environment console logs
 
 // components
 import MovieCard from '../MovieCard/MovieCard';
@@ -138,7 +137,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
       setMovies(newMoviesState);
       setMoviesUpdated(rowIndex);
-      devLog('movies updated!');
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,8 +155,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   useEffect(() => {
     const initialTranslateXValue = -posterWidth * visiblePosterCount;
 
-    devLog('setting tx value on resize');
-
     setTranslateXValue((prevState) => {
       // this is so when user resizes but on different indicator number, reset to 0, reset translateX to initial.
       // maybe there's a more elegant solution to keep it where it is without losing indicator number
@@ -170,14 +166,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   useEffect(() => {
     if (moviesUpdated === rowIndex) {
-      devLog('setting container width', movies.length * posterWidth);
       setContainerWidth(movies.length * posterWidth);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [moviesUpdated, posterWidth]);
 
   useEffect(() => {
-    devLog('setting indicators on resize');
     let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
     setMaxScrollPosition(Number(maxScrollPos));
     createPaginationIndicators(maxScrollPos);
@@ -202,13 +196,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       let translateXNext = translateXValue - posterWidth * visiblePosterCount; // newState = prevState - posterWidth * visiblePosterCount
 
       if (translateXNext < lastAllowedUnclonedPoster) {
-        devLog('SKIPPING TRANSITION');
         timeoutInProgress.current = true;
 
         setActiveIndicatorNumber(0);
 
         setTimeout(() => {
-          devLog('timeout called');
           setSkipTransition(true);
           setTranslateXValue(initialTranslateXValue);
           timeoutInProgress.current = false;
@@ -226,14 +218,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       let translateXBack = translateXValue + posterWidth * visiblePosterCount; // newState = prevState + posterWidth * visiblePosterCount
 
       if (translateXBack > initialTranslateXValue) {
-        devLog('SKIPPING TRANSITION');
-
         timeoutInProgress.current = true;
 
         setActiveIndicatorNumber(indicators.length - 1);
 
         setTimeout(() => {
-          devLog('timeout called');
           setSkipTransition(true);
           setTranslateXValue(lastAllowedUnclonedPoster);
           timeoutInProgress.current = false;
