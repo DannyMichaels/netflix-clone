@@ -68,7 +68,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   const createPaginationIndicators = useCallback(
     (num) => {
-      if (num) return setIndicators([...new Array(num).keys()]);
+      if (num) return setIndicators([...new Array(num <= 10 ? num : 4).keys()]);
       if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
         setIndicators([...new Array(maxScrollPosition).keys()]);
         return;
