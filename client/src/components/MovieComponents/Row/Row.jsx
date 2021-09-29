@@ -5,6 +5,7 @@ import {
   useEffect,
   useCallback,
   useContext,
+  useLayoutEffect,
 } from 'react';
 import useResize from '../../../hooks/useResize';
 
@@ -17,7 +18,7 @@ import devLog from './../../../utils/devLog'; // developer environment console l
 import MovieCard from '../MovieCard/MovieCard';
 
 // styles
-import { StyledRow } from './row.styles';
+import { StyledRow } from './Row.styles';
 
 // icons
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
@@ -104,7 +105,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     fetchData();
   }, [fetchUrl, currentProfile?.isKid, rowIndex]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // create clones of movies after dom has painted
     // check if movies loaded
     let result = movies?.length === unclonedMoviesCount;

@@ -181,6 +181,10 @@ export const StyledRow = styled.div`
       max-width: 25vw;
     }
 
+    @media screen and (min-width: 800px) {
+      max-width: 50vw;
+    }
+
     &:hover:not(.row__posterLarge) {
       transform: scale(1.08);
       opacity: 1;
@@ -201,6 +205,11 @@ export const StyledRow = styled.div`
     @media screen and (min-width: 600px) {
       max-height: 400px;
       max-width: 25vw;
+    }
+
+    @media screen and (min-width: 800px) {
+      width: 100vw;
+      max-width: 100vw;
     }
   }
 `;
