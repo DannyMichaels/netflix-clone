@@ -13,7 +13,9 @@ import useBoundingBox from '../../../hooks/useBoundingBox'; // hook to help get 
 // services and utils
 import { getRowMovies } from '../../../services/movies';
 import { baseImgUrl } from '../../../utils/generalUtils';
-
+import { MOVIES_PAINTED } from './../../../reducers/moviesReducer/movieReducerTypes';
+import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
+import { MoviesDispatchContext } from '../../../context/movies/moviesContext';
 // components
 import MovieCard from '../MovieCard/MovieCard';
 
@@ -23,7 +25,6 @@ import { StyledRow } from './Row.styles';
 // icons
 import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
-import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -32,6 +33,7 @@ const ROW_TRANSITION_MS = 750;
 
 export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const { currentProfile } = useContext(ProfilesStateContext); // current user profile
+  const dispatch = useContext(MoviesDispatchContext);
 
   const [movies, setMovies] = useState([]); // the array of the movies in the row
   const [moviesUpdated, setMoviesUpdated] = useState(false); // value to be set when the dom finished painting and movies got cloned in the row
@@ -139,6 +141,17 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
+
+  useEffect(() => {
+    // fake loading to not let the user see the akwardness of cloning the elements.
+    if (rowIndex === 7 && moviesUpdated === 7) {
+      setTimeout(() => {
+        dispatch({ type: MOVIES_PAINTED });
+      }, 500);
+    }
+
+    // eslint-disable-next-line
+  }, [moviesUpdated]);
 
   useEffect(() => {
     if (skipTransition) {

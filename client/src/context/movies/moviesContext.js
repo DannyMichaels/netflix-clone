@@ -28,6 +28,7 @@ const MoviesContextProvider = ({ children }) => {
     allGenres: [],
     moviesAreLoading: true,
     genresAreLoading: true,
+    moviesPaintedOnVirtualDOM: false,
   };
 
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);

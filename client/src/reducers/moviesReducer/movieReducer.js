@@ -1,4 +1,8 @@
-import { FETCH_MOVIES, FETCH_GENRES } from './movieReducerTypes';
+import {
+  FETCH_MOVIES,
+  FETCH_GENRES,
+  MOVIES_PAINTED,
+} from './movieReducerTypes';
 
 export const movieReducer = (state, action) => {
   switch (action.type) {
@@ -14,6 +18,12 @@ export const movieReducer = (state, action) => {
         ...state,
         allGenres: action.payload,
         genresAreLoading: false,
+      };
+
+    case MOVIES_PAINTED:
+      return {
+        ...state,
+        moviesPaintedOnVirtualDOM: true,
       };
 
     default:
