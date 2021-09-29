@@ -26,6 +26,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBackIos';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardIos';
 import { ProfilesStateContext } from '../../../context/profiles/profilesContext';
 import useBoundingBox from '../../../hooks/useBoundingBox';
+// import useBoundingBox2 from '../../../hooks/useGetElementWidth';
 
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
@@ -51,13 +52,11 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
   const [containerWidth, setContainerWidth] = useState(0); // the width for .row__posters
   const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
-  const [visiblePosterCount, setVisiblePosterCount] = useState(0); // number of amount of movies a user can see, changes on resize
   const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
   const [isAnimating, setIsAnimating] = useState(false); // state for when the row transition css is in action, used to stop user from spam clicking next.
 
   const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
 
-  const nextButtonRef = useRef(null); // reference for the next button.
   let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
@@ -66,9 +65,26 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     posterDimensions?.width,
   ]);
 
+  const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
+
+  const sliderButtonWidth = useMemo(() => sliderButtonDimensions?.width ?? 0, [
+    sliderButtonDimensions?.width,
+  ]);
+
+  let visiblePosterCount = useMemo(
+    // number of amount of movies a user can see, changes on resize
+    () =>
+      Math.round(
+        (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
+      ) ?? 0,
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [posterDimensions, sliderButtonDimensions, rowDimensions]
+  );
+
   const createPaginationIndicators = useCallback(
     (num) => {
-      if (num) return setIndicators([...new Array(num <= 10 ? num : 4).keys()]);
+      if (num) return setIndicators([...new Array(num).keys()]);
       if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
         setIndicators([...new Array(maxScrollPosition).keys()]);
         return;
@@ -100,16 +116,10 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
 
-      const posterWideness = posterWidth;
-
-      let sliderButtonWidth = nextButtonRef?.current?.clientWidth;
-
       // get visible poster amount
       let visiblePosterAmount = Math.round(
-        (rowRef?.current?.clientWidth - 2 * sliderButtonWidth) / posterWideness
+        (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
       );
-
-      setVisiblePosterCount(visiblePosterAmount);
 
       // create pagination indicators
       let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterAmount);
@@ -130,8 +140,8 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
         newMoviesState.unshift(previousMoviesState[i]);
       }
 
-      setContainerWidth(newMoviesState.length * posterWideness);
-      setTranslateXValue(-visiblePosterAmount * posterWideness); // set the initial translateX css
+      setContainerWidth(newMoviesState.length * posterWidth);
+      setTranslateXValue(-visiblePosterAmount * posterWidth); // set the initial translateX css
       setMovies(newMoviesState);
       setMoviesUpdated(rowIndex);
     }
@@ -148,20 +158,12 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     }
   }, [skipTransition]);
 
+  // change these when user resizes
+
   useEffect(() => {
-    // when posterWidth changes (useBoundingBox takes care of resize), change these.
+    const initialTranslateXValue = -posterWidth * visiblePosterCount;
 
-    const sliderButtonWidth = nextButtonRef?.current?.clientWidth ?? 0;
-
-    devLog('getting new visiblePosterCount');
-
-    let visiblePosterAmount = Math.round(
-      (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
-    );
-    setVisiblePosterCount(visiblePosterAmount);
-
-    devLog('resetting translateX value');
-    const initialTranslateXValue = -posterWidth * visiblePosterAmount;
+    devLog('setting tx value on resize');
 
     setTranslateXValue((prevState) => {
       // this is so when user resizes but on different indicator number, reset to 0, reset translateX to initial.
@@ -169,16 +171,21 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       if (prevState === initialTranslateXValue) return prevState;
       return initialTranslateXValue;
     });
-
     setActiveIndicatorNumber(0);
+  }, [posterWidth, visiblePosterCount]);
 
-    devLog('creating indicators on posterWidth change');
+  useEffect(() => {
+    window.getPosterCount = () => console.log({ visiblePosterCount });
+  }, [visiblePosterCount]);
+
+  useEffect(() => {
+    devLog('setting indicators on resize');
     let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
     setMaxScrollPosition(Number(maxScrollPos));
     createPaginationIndicators(maxScrollPos);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [posterWidth, unclonedMoviesCount, rowDimensions?.width]);
+  }, [posterWidth, unclonedMoviesCount, visiblePosterCount]);
 
   const onNavigate = (direction) => {
     if (timeoutInProgress.current) return;
