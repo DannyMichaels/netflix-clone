@@ -172,6 +172,7 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
 
     setActiveIndicatorNumber(0);
 
+    devLog('creating indicators on posterWidth change');
     let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
     setMaxScrollPosition(Number(maxScrollPos));
     createPaginationIndicators(maxScrollPos);
