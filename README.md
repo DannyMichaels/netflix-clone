@@ -15,6 +15,6 @@ Url: https://dan-netflix-clone.netlify.app/
 
 # POST MVP 
 - Be able to add and remove movies to/from "My list" ✓
-- Add infinite scroll for the rows (W.I.P).
-- make the indicators/pagination for the movies (W.I.P).
+- Add infinite scroll for the rows ✓
+- make the indicators/pagination for the movies row ✓
 - Be able to search movies by actor name or genre ✓.
