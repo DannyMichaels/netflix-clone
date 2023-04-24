@@ -11,6 +11,7 @@ import {
   Input,
   InputAdornment,
 } from '@material-ui/core';
+import NetflixLogo from '@/assets/netflix-logo.png';
 
 // icons
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
@@ -117,7 +118,7 @@ export default function Nav({ logoOnly }) {
             <img
               onClick={() => push(ROUTES.BROWSE_ALL)}
               className="nav__logo"
-              src="@/assets/netflix-logo.png"
+              src={NetflixLogo}
               alt="Netflix Logo"
             />
 
@@ -181,7 +182,7 @@ export default function Nav({ logoOnly }) {
                   </div>
                 </ClickAwayListener>
                 <Box mx={2}>
-                  <BellIcon fontSize="default" className="nav__icon bell" />
+                  <BellIcon fontSize="medium" className="nav__icon bell" />
                 </Box>
 
                 <div

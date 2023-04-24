@@ -1,6 +1,6 @@
 import React from 'react';
 import { CircularProgressLoading } from './CircularProgressLoading';
-
+import NetflixLogo from '@/assets/netflix-logo.png';
 import styled from 'styled-components';
 import { COLORS } from '../../../utils/generalUtils';
 
@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 export default function NetflixLoading() {
   return (
     <Wrapper className="centered">
-      <img src="@/assets/netflix-logo.png" alt="netflix-logo" />
+      <img src={NetflixLogo} alt="netflix-logo" />
       <CircularProgressLoading thickness={1} size={'10vw'} />
     </Wrapper>
   );

@@ -47,14 +47,12 @@ const MoviesContextProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     const getMovies = async () => {
-      const response = await Promise.all(
-        movieRows.map(
+      const moviesData = await Promise.all(
+        movieRows.flatMap(
           async ({ fetchUrl }) =>
             await getRowMovies(fetchUrl, currentProfile?.isKid)
         )
       );
-
-      let moviesData = response.flat();
 
       dispatch({ type: FETCH_MOVIES, payload: moviesData });
     };
