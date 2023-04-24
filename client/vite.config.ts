@@ -22,5 +22,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [million.vite(), react(), viteTsconfigPaths(), svgrPlugin()],
+  plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
 });
