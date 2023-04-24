@@ -53,9 +53,8 @@ export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
   const [genres, setGenres] = useState([]);
   const [cast, setCast] = useState([]);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
-  const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] = useState(
-    false
-  );
+  const [showMoreRecommendedMovies, setShowMoreRecommendedMovies] =
+    useState(false);
   const [isMovieLoaded, setIsMovieLoaded] = useState(false);
 
   const { currentProfile } = useContext(ProfilesStateContext);
@@ -220,7 +219,7 @@ export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
                 <div className="metaData__firstLine">
                   <div className="movie__scoreContainer">
                     <span className="movie__score">
-                      {movieToPlay?.vote_average * 10}% match
+                      {Math.round(movieToPlay?.vote_average * 10)}% match
                     </span>
                   </div>
                 </div>
