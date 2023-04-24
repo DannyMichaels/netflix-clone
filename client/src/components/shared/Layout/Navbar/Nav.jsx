@@ -42,9 +42,8 @@ export default function Nav({ logoOnly }) {
 
   const { pathname } = useLocation();
 
-  const { search, setSearch, handleSearch, browseName } = useContext(
-    SearchContext
-  );
+  const { search, setSearch, handleSearch, browseName } =
+    useContext(SearchContext);
 
   const { profiles, currentProfile } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
@@ -119,7 +118,7 @@ export default function Nav({ logoOnly }) {
             <img
               onClick={() => push(ROUTES.BROWSE_ALL)}
               className="nav__logo"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/1280px-Netflix_2015_logo.svg.png"
+              src="@/assets/netflix-logo.png"
               alt="Netflix Logo"
             />
 

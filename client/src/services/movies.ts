@@ -1,7 +1,7 @@
 import { MOVIE_REQUESTS as REQUESTS } from '../utils/movieRequests';
 import { TMDB_API as api } from './apiConfig';
 
-export const getRowMovies = async (fetchUrl, isUserAKid = false) => {
+export const getRowMovies = async (fetchUrl: string, isUserAKid = false) => {
   try {
     const { data } = await api.get(`${fetchUrl}&include_adult=${isUserAKid}`);
     return data.results;
@@ -10,10 +10,12 @@ export const getRowMovies = async (fetchUrl, isUserAKid = false) => {
   }
 };
 
-export const getSearchedMovies = async (search, isUserAKid = false) => {
+export const getSearchedMovies = async (search: string, isUserAKid = false) => {
   // if user/selected profile is a kid then adult movies won't be included "&include_adult={isUserAKid ? false : true}"
 
-  const searchUrl = `/search/movie?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&page=1&include_adult=${isUserAKid}
+  const searchUrl = `/search/movie?api_key=${
+    import.meta.env.VITE_TMDB_API_KEY
+  }&language=en-US&page=1&include_adult=${isUserAKid}
     &query=${search}`;
 
   const { data } = await api.get(searchUrl);
@@ -32,11 +34,13 @@ export const getOneRandomMovie = async () => {
   }
 };
 
-export const getYoutubeVideo = async (mediaType, id) => {
+export const getYoutubeVideo = async (mediaType: string, id: string) => {
   try {
     if (mediaType) {
       const { data } = await api.get(
-        `/${mediaType}/${id}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&append_to_response=videos`
+        `/${mediaType}/${id}?api_key=${
+          import.meta.env.VITE_TMDB_API_KEY
+        }&append_to_response=videos`
       );
       return data?.videos?.results[0]?.key;
     }
@@ -45,10 +49,12 @@ export const getYoutubeVideo = async (mediaType, id) => {
   }
 };
 
-export const getCastByMovieId = async (movieId) => {
+export const getCastByMovieId = async (movieId: string) => {
   try {
     const resp = await api.get(
-      `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+      `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${
+        import.meta.env.VITE_TMDB_API_KEY
+      }&language=en-US`
     );
     return resp.data.cast;
   } catch (error) {
@@ -56,12 +62,15 @@ export const getCastByMovieId = async (movieId) => {
   }
 };
 
-export const getMoviesByGenreId = async (genreId, isUserAKid) => {
+export const getMoviesByGenreId = async (
+  genreId: number,
+  isUserAKid: boolean
+) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
       `/discover/movie?api_key=${
-        process.env.REACT_APP_TMDB_API_KEY
+        import.meta.env.VITE_TMDB_API_KEY
       }&language=en-US&sort_by=popularity.desc&include_adult=${!isUserAKid}&include_video=true&page=1&with_genres=${genreId}`
     );
     return data.results;
@@ -70,12 +79,15 @@ export const getMoviesByGenreId = async (genreId, isUserAKid) => {
   }
 };
 
-export const getMoviesByPersonId = async (personId, isUserAKid) => {
+export const getMoviesByPersonId = async (
+  personId: number,
+  isUserAKid: boolean
+) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
       `/discover/movie?api_key=${
-        process.env.REACT_APP_TMDB_API_KEY
+        import.meta.env.VITE_TMDB_API_KEY
       }&language=en-US&sort_by=popularity.desc&include_adult=${!isUserAKid}&include_video=true&page=1&with_people=${personId}`
     );
     return data.results;

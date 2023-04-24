@@ -6,11 +6,8 @@ import AppRouter from './router/AppRouter';
 import { useLocation } from 'react-router';
 
 const App = () => {
-  const {
-    moviesAreLoading,
-    genresAreLoading,
-    moviesPaintedOnVirtualDOM,
-  } = useContext(MoviesStateContext);
+  const { moviesAreLoading, genresAreLoading, moviesPaintedOnVirtualDOM } =
+    useContext(MoviesStateContext);
 
   const { pathname } = useLocation();
 

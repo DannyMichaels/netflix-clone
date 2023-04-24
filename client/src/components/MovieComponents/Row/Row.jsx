@@ -9,6 +9,7 @@ import {
   useMemo,
 } from 'react';
 import useBoundingBox from '../../../hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
+// import { block } from 'million';
 
 // services and utils
 import { getRowMovies } from '../../../services/movies';
@@ -31,7 +32,7 @@ const FALLBACK_POSTER_IMG =
 
 const ROW_TRANSITION_MS = 750;
 
-export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
+function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const { currentProfile } = useContext(ProfilesStateContext); // current user profile
   const dispatch = useContext(MoviesDispatchContext);
 
@@ -59,13 +60,15 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
   const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
 
-  const posterWidth = useMemo(() => posterDimensions?.width ?? 0, [
-    posterDimensions?.width,
-  ]);
+  const posterWidth = useMemo(
+    () => posterDimensions?.width ?? 0,
+    [posterDimensions?.width]
+  );
 
-  const sliderButtonWidth = useMemo(() => sliderButtonDimensions?.width ?? 0, [
-    sliderButtonDimensions?.width,
-  ]);
+  const sliderButtonWidth = useMemo(
+    () => sliderButtonDimensions?.width ?? 0,
+    [sliderButtonDimensions?.width]
+  );
 
   let visiblePosterCount = useMemo(
     // number of amount of movies a user can see, changes on resize
@@ -351,3 +354,6 @@ export default function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     </StyledRow>
   );
 }
+
+// export default block(Row);
+export default Row;
