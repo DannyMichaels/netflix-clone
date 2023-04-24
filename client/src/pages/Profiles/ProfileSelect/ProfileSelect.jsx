@@ -1,20 +1,20 @@
 import { useContext, useState, useMemo } from 'react';
 
 // components
-import Nav from '../../../components/shared/Layout/Navbar/Nav';
+import Nav from '@/components/shared/Layout/Navbar/Nav';
 
 // context
-import { MoviesDispatchContext } from './../../../context/movies/moviesContext';
-import { MOVIES_PAINTED } from '../../../reducers/moviesReducer/movieReducerTypes';
+import { MoviesDispatchContext } from '@/context/movies/moviesContext';
+import { MOVIES_PAINTED } from '@/reducers/moviesReducer/movieReducerTypes';
 import {
   ProfilesDispatchContext,
   ProfilesStateContext,
-} from '../../../context/profiles/profilesContext';
-import { SELECT_PROFILE } from '../../../reducers/ProfilesReducer/profilesReducerTypes';
+} from '@/context/profiles/profilesContext';
+import { SELECT_PROFILE } from '@/reducers/ProfilesReducer/profilesReducerTypes';
 
 // utils
-import { ROUTES } from '../../../utils/navigation';
-import { useHistory } from 'react-router';
+import { ROUTES } from '@/utils/navigation';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // icons
 import PencilIcon from '@material-ui/icons/Create';
@@ -23,7 +23,8 @@ import PlusIcon from '@material-ui/icons/AddCircleSharp';
 // styles
 import { UserIcon, Wrapper } from './ProfileSelect.styles';
 
-export default function ProfileSelect({ location: { state } }) {
+export default function ProfileSelect() {
+  const { state } = useLocation();
   const [manageMode, setManageMode] = useState(() => {
     return state?.manageModeProps ? true : false;
   });
@@ -32,12 +33,11 @@ export default function ProfileSelect({ location: { state } }) {
   const dispatchProfiles = useContext(ProfilesDispatchContext);
   const dispatchMovies = useContext(MoviesDispatchContext);
 
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const onSelect = (user) => {
     if (manageMode) {
-      return push({
-        pathname: ROUTES.MANAGE_PROFILE,
+      return navigate(ROUTES.MANAGE_PROFILE, {
         state: {
           profile: user,
         },
@@ -46,11 +46,11 @@ export default function ProfileSelect({ location: { state } }) {
 
     dispatchProfiles({ type: SELECT_PROFILE, payload: user });
     dispatchMovies({ type: MOVIES_PAINTED, payload: false });
-    push(ROUTES.BROWSE_ALL);
+    navigate(ROUTES.BROWSE_ALL);
   };
 
   const onRedirectCreateMode = () => {
-    push(ROUTES.CREATE_PROFILE);
+    navigate(ROUTES.CREATE_PROFILE);
   };
 
   const remainingProfileSlots = useMemo(

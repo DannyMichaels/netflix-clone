@@ -5,9 +5,9 @@ import NetflixLoading from '@/components/shared/Loading/NetflixLoading';
 import AppRouter from '@/router/AppRouter';
 import { useLocation } from 'react-router';
 
-const App = () => {
+const App = (): JSX.Element => {
   const { moviesAreLoading, genresAreLoading, moviesPaintedOnVirtualDOM } =
-    useContext(MoviesStateContext);
+    useContext(MoviesStateContext) as any;
 
   const { pathname } = useLocation();
 
@@ -19,24 +19,24 @@ const App = () => {
     }
   }, [moviesPaintedOnVirtualDOM]);
 
-  const loadingJSX = (
+  const loadingJSX: JSX.Element = (
     <div className="loading__mask">
       <NetflixLoading />
     </div>
   );
 
-  if (moviesAreLoading || genresAreLoading) {
-    return loadingJSX;
-  }
+  // if (moviesAreLoading || genresAreLoading) {
+  //   return loadingJSX;
+  // }
 
   return (
     <div className="App">
       {/*   loading at browse page to not let the user see the akwardness of cloning the elements
         of row movies, used as a mask to still allow Row.jsx access the ref of the elements (they still exist)
       */}
-      {pathname.includes('/browse') && !moviesPaintedOnVirtualDOM
+      {/* {pathname.includes('/browse') && !moviesPaintedOnVirtualDOM
         ? loadingJSX
-        : null}
+        : null} */}
       <AppRouter />
     </div>
   );

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 // context/reducer
 import {
@@ -16,7 +16,7 @@ import { ROUTES } from '../../../utils/navigation';
 export default function EditProfileForm({ stateProps }) {
   const { profiles } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const {
     profileFormData,
@@ -47,7 +47,7 @@ export default function EditProfileForm({ stateProps }) {
       payload: updatedProfile,
     });
 
-    push(ROUTES.SELECT_PROFILE);
+    navigate(ROUTES.SELECT_PROFILE);
   };
 
   return (
@@ -124,7 +124,7 @@ export default function EditProfileForm({ stateProps }) {
         </button>
         <button
           className="profile__button"
-          onClick={() => push(ROUTES.SELECT_PROFILE)}
+          onClick={() => navigate(ROUTES.SELECT_PROFILE)}
         >
           CANCEL
         </button>

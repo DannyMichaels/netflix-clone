@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { getYoutubeVideo } from '../services/movies';
 
 const getType = (movie) => {
@@ -18,20 +18,19 @@ export const useMovieSelect = () => {
 
   const canRedirect = useRef(false);
 
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (trailerUrl && selectedMovie && canRedirect.current) {
-      // push to MoviePlayBackView.jsx if playMovie ran.
-      push({
-        pathname: `/watch/${selectedMovie.id}/${trailerUrl}`,
+      // navigate to MoviePlayBackView.jsx if playMovie ran.
+      navigate(`/watch/${selectedMovie.id}/${trailerUrl}`, {
         state: {
           movie: selectedMovie,
           trailerUrl: trailerUrl,
         },
       });
     }
-  }, [trailerUrl, selectedMovie, push]);
+  }, [trailerUrl, selectedMovie, navigate]);
 
   const onSelectMovie = useCallback(async (movie) => {
     const mediaType = await getType(movie);

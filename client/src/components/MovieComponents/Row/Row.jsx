@@ -9,7 +9,6 @@ import {
   useMemo,
 } from 'react';
 import useBoundingBox from '../../../hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
-// import { block } from 'million';
 
 // services and utils
 import { getRowMovies } from '../../../services/movies';
@@ -355,5 +354,4 @@ function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   );
 }
 
-// export default block(Row);
 export default Row;

@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router';
+import { Routes, Route } from 'react-router-dom';
 
 // utils
 import { ROUTES } from '../utils/navigation';
@@ -14,19 +14,54 @@ import ProfileCreate from '../pages/Profiles/ProfileCreate/ProfileCreate';
 import MyList from '../pages/Browse/MyList/MyList';
 
 const AppRouter = () => (
-  <Switch>
-    <Route exact path={ROUTES.SELECT_PROFILE} component={ProfileSelect} />
-    <Route exact path={ROUTES.MANAGE_PROFILE} component={ProfileManage} />
-    <Route exact path={ROUTES.CREATE_PROFILE} component={ProfileCreate} />
+  <Routes>
+    <Route exact path={ROUTES.SELECT_PROFILE} element={<ProfileSelect />} />
+    <Route exact path={ROUTES.MANAGE_PROFILE} element={<ProfileManage />} />
+    <Route exact path={ROUTES.CREATE_PROFILE} element={<ProfileCreate />} />
 
-    <PrivateRoute exact path={ROUTES.BROWSE_ALL} component={Home} />
-    <PrivateRoute
-      path={[ROUTES.BROWSE_BY_GENRE, ROUTES.BROWSE_BY_PERSON]}
-      component={BrowseByCategoryAndId}
+    <Route
+      exact
+      path={ROUTES.BROWSE_ALL}
+      element={
+        <PrivateRoute>
+          <Home />
+        </PrivateRoute>
+      }
     />
-    <PrivateRoute exact path={ROUTES.MY_LIST} component={MyList} />
-    <PrivateRoute path={ROUTES.MOVIE_PLAYBACK} component={MoviePlaybackView} />
-  </Switch>
+    <Route
+      path={ROUTES.BROWSE_BY_GENRE}
+      element={
+        <PrivateRoute>
+          <BrowseByCategoryAndId />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path={ROUTES.BROWSE_BY_PERSON}
+      element={
+        <PrivateRoute>
+          <BrowseByCategoryAndId />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path={ROUTES.MY_LIST}
+      element={
+        <PrivateRoute>
+          <MyList />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path={ROUTES.MOVIE_PLAYBACK}
+      element={
+        <PrivateRoute>
+          <MoviePlaybackView />
+        </PrivateRoute>
+      }
+    />
+  </Routes>
 );
 
 export default AppRouter;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // utils
 import { ROUTES } from '../../../../utils/navigation';
@@ -48,7 +48,7 @@ export default function Nav({ logoOnly }) {
   const { profiles, currentProfile } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
 
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const onScroll = () => {
     if (window.scrollY > 100) {
@@ -92,12 +92,11 @@ export default function Nav({ logoOnly }) {
   const onSignOut = async (text) => {
     if (!text.includes('Sign out of Netflix')) return;
     dispatch({ type: SIGN_OUT });
-    push(ROUTES.SELECT_PROFILE);
+    navigate(ROUTES.SELECT_PROFILE);
   };
 
   const onRedirectToManageProfile = () => {
-    push({
-      pathname: ROUTES.SELECT_PROFILE,
+    navigate(ROUTES.SELECT_PROFILE, {
       state: {
         manageModeProps: true,
       },
@@ -116,7 +115,7 @@ export default function Nav({ logoOnly }) {
         <div className="nav__innerColumn">
           <div className="nav__left">
             <img
-              onClick={() => push(ROUTES.BROWSE_ALL)}
+              onClick={() => navigate(ROUTES.BROWSE_ALL)}
               className="nav__logo"
               src={NetflixLogo}
               alt="Netflix Logo"
@@ -192,8 +191,8 @@ export default function Nav({ logoOnly }) {
                 >
                   <img
                     className="nav__avatar"
-                    src={currentProfile.imgUrl}
-                    alt={`${currentProfile.name}'s avatar`}
+                    src={currentProfile?.imgUrl}
+                    alt={`${currentProfile?.name}'s avatar`}
                   />
 
                   <Box mx={1}>
@@ -219,8 +218,8 @@ export default function Nav({ logoOnly }) {
                             >
                               <img
                                 className="nav__avatar"
-                                src={user.imgUrl}
-                                alt={user.name}
+                                src={user?.imgUrl}
+                                alt={user?.name}
                               />
 
                               <span>{user.name}</span>

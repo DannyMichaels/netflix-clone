@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 // reducer/context
 import {
@@ -17,11 +17,11 @@ export default function DeleteProfile({ stateProps }) {
   const dispatch = useContext(ProfilesDispatchContext);
   const { profiles } = useContext(ProfilesStateContext);
 
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const onDelete = async () => {
     dispatch({ type: REMOVE_PROFILE, payload: profile });
-    push(ROUTES.SELECT_PROFILE);
+    navigate(ROUTES.SELECT_PROFILE);
   };
 
   return (

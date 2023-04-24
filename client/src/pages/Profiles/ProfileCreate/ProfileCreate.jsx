@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { Redirect, useHistory } from 'react-router';
+import { useContext, useEffect, useState } from 'react';
+import { redirect, useNavigate } from 'react-router-dom';
 
 // components
 import Nav from '../../../components/shared/Layout/Navbar/Nav';
@@ -45,7 +45,7 @@ export default function ProfileCreate() {
     imgUrl: getImage(),
   });
 
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   const handleInputChange = ({ target: { name, value } }) => {
     setUserToCreate((prevState) => ({
@@ -74,12 +74,14 @@ export default function ProfileCreate() {
     };
 
     await dispatch({ type: ADD_PROFILE, payload: createdUser });
-    push(ROUTES.SELECT_PROFILE);
+    navigate(ROUTES.SELECT_PROFILE);
   };
 
-  if (maxProfileLength === profiles?.length) {
-    return <Redirect to={ROUTES.SELECT_PROFILE} />;
-  }
+  useEffect(() => {
+    if (maxProfileLength === profiles?.length) {
+      return redirect(ROUTES.SELECT_PROFILE);
+    }
+  }, [maxProfileLength, profiles?.length]);
 
   return (
     <>
@@ -151,7 +153,7 @@ export default function ProfileCreate() {
             </button>
             <button
               className="profile__button"
-              onClick={() => push(ROUTES.SELECT_PROFILE)}
+              onClick={() => navigate(ROUTES.SELECT_PROFILE)}
             >
               CANCEL
             </button>

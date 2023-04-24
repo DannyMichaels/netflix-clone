@@ -1,8 +1,7 @@
-import React from 'react';
 import { CircularProgressLoading } from './CircularProgressLoading';
 import NetflixLogo from '@/assets/netflix-logo.png';
 import styled from 'styled-components';
-import { COLORS } from '../../../utils/generalUtils';
+import { COLORS } from '@/utils/generalUtils';
 
 const Wrapper = styled.div`
   background: ${COLORS.BLACK};

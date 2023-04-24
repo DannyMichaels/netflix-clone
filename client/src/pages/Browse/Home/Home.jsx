@@ -28,13 +28,14 @@ export default function Home() {
 
   const ROWS = Children.toArray(
     movieRows.map(({ title, fetchUrl }, idx) => (
-      <Row
-        rowIndex={idx}
-        title={title}
-        fetchUrl={fetchUrl}
-        isLargeRow={title.match(/^netflix originals$/i)}
-        isSearching={search}
-      />
+      <>Row</>
+      // <Row
+      //   rowIndex={idx}
+      //   title={title}
+      //   fetchUrl={fetchUrl}
+      //   isLargeRow={title.match(/^netflix originals$/i)}
+      //   isSearching={search}
+      // />
     ))
   );
 

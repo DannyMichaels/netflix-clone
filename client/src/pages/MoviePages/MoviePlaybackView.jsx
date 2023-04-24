@@ -5,17 +5,18 @@ import { MoviesStateContext } from '../../context/movies/moviesContext';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 // utils
-import { useHistory, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 // styles
 import { StyledVideo } from './moviePlaybackView.styles';
 
-export default function MoviePlaybackView({ location: { state } }) {
+export default function MoviePlaybackView() {
+  const { state } = useLocation();
   const [videoData, setVideoData] = useState({});
   const [isArrowHovered, setIsArrowHovered] = useState(false);
 
   const params = useParams();
-  const { goBack, push } = useHistory();
+  const navigate = useNavigate();
 
   const { allMovies } = useContext(MoviesStateContext);
 
@@ -38,7 +39,7 @@ export default function MoviePlaybackView({ location: { state } }) {
           trailerUrl: params.trailerUrl,
         });
       } else {
-        push('/browse');
+        navigate('/browse');
         return;
       }
     };
@@ -60,7 +61,7 @@ export default function MoviePlaybackView({ location: { state } }) {
           className="video__arrowIcon"
           onMouseEnter={toggleArrowHovered}
           onMouseLeave={toggleArrowHovered}
-          onClick={goBack}
+          onClick={() => navigate(-1)} // go back
         />
         &nbsp;
         <p className="video__backText">Back to Browse</p>

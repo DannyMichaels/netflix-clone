@@ -60,7 +60,9 @@ export const profilesReducer = (state, action) => {
       return { ...state, profiles: filteredProfiles };
 
     case SELECT_PROFILE:
-      return { ...state, currentProfile: payload };
+      const newSelectedState = { ...state, currentProfile: payload };
+      localStorage.setItem('profiles', JSON.stringify(newSelectedState));
+      return newSelectedState;
 
     case SIGN_OUT:
       return { ...state, currentProfile: null };
