@@ -1,12 +1,12 @@
 import React, { createContext, useReducer, useRef, useEffect } from 'react';
 
 // utils
-import { getRandomId } from '../../utils/generateId';
+import { getRandomId } from '@/utils/generateId';
 
 // reducer
-import { profilesReducer } from '../../reducers/ProfilesReducer/profilesReducer';
-import { FETCH_PROFILES } from '../../reducers/ProfilesReducer/profilesReducerTypes';
-import { IMAGES } from '../../utils/generalUtils';
+import { profilesReducer } from '@/reducers/ProfilesReducer/profilesReducer';
+import { FETCH_PROFILES } from '@/reducers/ProfilesReducer/profilesReducerTypes';
+import { IMAGES } from '@/utils/generalUtils';
 import { merge } from 'lodash';
 
 export const ProfilesStateContext = createContext();

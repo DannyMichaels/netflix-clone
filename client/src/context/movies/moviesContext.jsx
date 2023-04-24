@@ -7,16 +7,16 @@ import {
 } from 'react';
 
 // utils / services
-import { getRowMovies } from '../../services/movies';
-import { getAllGenres } from '../../services/genres';
-import { movieRows } from '../../utils/movieRequests';
+import { getRowMovies } from '@/services/movies';
+import { getAllGenres } from '@/services/genres';
+import { movieRows } from '@/utils/movieRequests';
 
 // reducer
-import { movieReducer } from '../../reducers/moviesReducer/movieReducer';
+import { movieReducer } from '@/reducers/moviesReducer/movieReducer';
 import {
   FETCH_GENRES,
   FETCH_MOVIES,
-} from '../../reducers/moviesReducer/movieReducerTypes';
+} from '@/reducers/moviesReducer/movieReducerTypes';
 import { ProfilesStateContext } from '../profiles/profilesContext';
 
 export const MoviesStateContext = createContext();

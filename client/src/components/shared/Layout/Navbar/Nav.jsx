@@ -42,8 +42,7 @@ export default function Nav({ logoOnly }) {
 
   const { pathname } = useLocation();
 
-  const { search, setSearch, handleSearch, browseName } =
-    useContext(SearchContext);
+  const { search, setSearch, onSearch, browseName } = useContext(SearchContext);
 
   const { profiles, currentProfile } = useContext(ProfilesStateContext);
   const dispatch = useContext(ProfilesDispatchContext);
@@ -153,7 +152,7 @@ export default function Nav({ logoOnly }) {
                       />
                     )}
                     <Input
-                      onChange={handleSearch}
+                      onChange={onSearch}
                       value={search}
                       placeholder="Titles, people, genres"
                       className="nav__searchInput"

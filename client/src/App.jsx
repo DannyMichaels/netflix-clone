@@ -1,8 +1,8 @@
 import './App.css';
 import { useContext, useEffect } from 'react';
-import { MoviesStateContext } from './context/movies/moviesContext';
-import NetflixLoading from './components/shared/Loading/NetflixLoading';
-import AppRouter from './router/AppRouter';
+import { MoviesStateContext } from '@/context/movies/moviesContext';
+import NetflixLoading from '@/components/shared/Loading/NetflixLoading';
+import AppRouter from '@/router/AppRouter';
 import { useLocation } from 'react-router';
 
 const App = () => {

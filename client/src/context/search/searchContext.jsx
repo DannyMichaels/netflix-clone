@@ -1,7 +1,8 @@
 import Levenshtein from 'levenshtein';
 import React, { useState, createContext, useContext } from 'react';
-import { getSearchedMovies } from '../../services/movies';
+import { getSearchedMovies } from '@/services/movies';
 import { ProfilesStateContext } from '../profiles/profilesContext';
+import { debounce } from '@/utils/debounce';
 
 export const SearchContext = createContext();
 
@@ -12,9 +13,12 @@ export default function SearchContextProvider({ children }) {
 
   const { currentProfile } = useContext(ProfilesStateContext);
 
-  const handleSearch = async ({ target: { value: userInput } }) => {
-    setSearch(userInput);
+  const onSearch = (e) => {
+    setSearch(e.target.value);
+    handleSearch(e);
+  };
 
+  const handleSearch = debounce(async (e) => {
     const searchedMovies = await getSearchedMovies(
       search,
       currentProfile.isKid
@@ -29,7 +33,7 @@ export default function SearchContextProvider({ children }) {
       });
 
     setQueriedMovies(newQueriedMovies);
-  };
+  }, 1000);
 
   return (
     <SearchContext.Provider
@@ -37,7 +41,7 @@ export default function SearchContextProvider({ children }) {
         search,
         setSearch,
         queriedMovies,
-        handleSearch,
+        onSearch,
         browseName,
         setBrowseName,
       }}

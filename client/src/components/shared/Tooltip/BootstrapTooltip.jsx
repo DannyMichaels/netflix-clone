@@ -1,5 +1,5 @@
 import { makeStyles, Tooltip } from '@material-ui/core';
-import { COLORS } from '../../../utils/generalUtils';
+import { COLORS } from '@/utils/generalUtils';
 
 const useStylesBootstrap = makeStyles((theme) => ({
   arrow: {
