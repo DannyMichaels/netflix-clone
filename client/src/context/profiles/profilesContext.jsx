@@ -51,7 +51,6 @@ export default function ProfilesContextProvider({ children }) {
           JSON.stringify(defaultState.current.profiles)
         );
 
-        // @ts-ignore
         return dispatch({
           type: FETCH_PROFILES,
           payload: defaultState.current.profiles,
