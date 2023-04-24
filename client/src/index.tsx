@@ -5,9 +5,7 @@ import App from './App';
 import { ContextProvidersNest } from './context/ContextProvidersNest';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const root = createRoot(document.getElementById('root') as any);
-
-root.render(
+createRoot(document.getElementById('root')).render(
   <Router>
     <ContextProvidersNest>
       <App />

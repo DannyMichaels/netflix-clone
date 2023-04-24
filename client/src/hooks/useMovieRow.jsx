@@ -234,6 +234,7 @@ export default function useMovieRow(fetchUrl, rowIndex) {
       }
     },
     [
+      indicators,
       translateXValue,
       posterWidth,
       visiblePosterCount,
@@ -261,5 +262,6 @@ export default function useMovieRow(fetchUrl, rowIndex) {
     translateXValue,
     timeoutInProgress,
     isAnimating,
+    skipTransition,
   };
 }

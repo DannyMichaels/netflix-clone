@@ -5,7 +5,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { fileURLToPath, URL } from 'node:url';
 import dotenv from 'dotenv';
 import million from 'million/compiler';
-import eslintPlugin from 'vite-plugin-eslint';
 
 dotenv.config(); // load env vars from .env
 
@@ -23,15 +22,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [
-    eslintPlugin({
-      cache: false,
-      include: ['./src/**/*.js', './src/**/*.jsx', './src/**/*.tsx'],
-      exclude: [],
-    }),
-    million.vite(),
-    react(),
-    viteTsconfigPaths(),
-    svgrPlugin(),
-  ],
+  plugins: [million.vite(), react(), viteTsconfigPaths(), svgrPlugin()],
 });

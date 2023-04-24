@@ -1,3 +1,5 @@
+import React from 'react';
+
 // services and utils
 import { baseImgUrl } from '../../../utils/generalUtils';
 
@@ -19,26 +21,23 @@ function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
   const {
     indicators,
     visiblePosterCount,
-    sliderButtonWidth,
-    posterWidth,
     rowRef,
     postersRef,
     nextButtonRef,
     containerWidth,
     canScrollPrev,
     activeIndicatorNumber,
-    unclonedMoviesCount,
     moviesUpdated,
     movies,
     onNavigate,
     translateXValue,
     timeoutInProgress,
-    isAnimating,
+    skipTransition,
   } = useMovieRow(fetchUrl, rowIndex);
 
   const CARDS =
     movies.length > 0 ? (
-      Children.toArray(
+      React.Children.toArray(
         movies?.map(
           (movie, idx) =>
             movie && (
