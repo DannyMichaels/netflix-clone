@@ -16,6 +16,8 @@ import { MoviesDispatchContext } from '@/context/movies/moviesContext';
 const ROW_TRANSITION_MS = 750;
 
 export default function useMovieRow(fetchUrl, rowIndex) {
+  const savedFetchUrl = useRef(fetchUrl);
+  const savedRowIndex = useRef(rowIndex);
   const { currentProfile } = useContext(ProfilesStateContext); // current user profile
   const dispatch = useContext(MoviesDispatchContext);
 
@@ -42,6 +44,14 @@ export default function useMovieRow(fetchUrl, rowIndex) {
   const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
   const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
+
+  useEffect(() => {
+    savedRowIndex.current = rowIndex;
+  }, [rowIndex]);
+
+  useEffect(() => {
+    savedFetchUrl.current = fetchUrl;
+  }, [fetchUrl]);
 
   const posterWidth = useMemo(
     () => posterDimensions?.width ?? 0,
@@ -77,7 +87,10 @@ export default function useMovieRow(fetchUrl, rowIndex) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const movieData = await getRowMovies(fetchUrl, currentProfile?.isKid);
+      const movieData = await getRowMovies(
+        savedFetchUrl.current,
+        currentProfile?.isKid
+      );
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
@@ -86,7 +99,7 @@ export default function useMovieRow(fetchUrl, rowIndex) {
       setMovies(moviesThatHaveImage);
     };
     fetchData();
-  }, [fetchUrl, currentProfile?.isKid, rowIndex]);
+  }, [currentProfile?.isKid]);
 
   // eslint-disable-next-line
   useLayoutEffect(() => {
@@ -122,13 +135,13 @@ export default function useMovieRow(fetchUrl, rowIndex) {
       setContainerWidth(newMoviesState.length * posterWidth);
       setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
       setMovies(newMoviesState);
-      setMoviesUpdated(rowIndex);
+      setMoviesUpdated(savedRowIndex.current);
     }
   }, [visiblePosterCount, unclonedMoviesCount]);
 
   useEffect(() => {
     // fake loading to not let the user see the akwardness of cloning the elements.
-    if (rowIndex === 7 && moviesUpdated === 7) {
+    if (savedRowIndex.current === 7 && moviesUpdated === 7) {
       setTimeout(() => {
         dispatch({ type: MOVIES_PAINTED, payload: true });
       }, 500);
@@ -160,7 +173,7 @@ export default function useMovieRow(fetchUrl, rowIndex) {
   }, [posterWidth, visiblePosterCount]);
 
   useEffect(() => {
-    if (moviesUpdated === rowIndex) {
+    if (moviesUpdated === savedRowIndex.current) {
       setContainerWidth(movies.length * posterWidth);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,14 +191,14 @@ export default function useMovieRow(fetchUrl, rowIndex) {
   const onNavigate = useCallback(
     (direction) => {
       if (timeoutInProgress.current) return;
-      if (isAnimating === rowIndex) return;
+      if (isAnimating === savedRowIndex.current) return;
 
       const initialTranslateXValue = -posterWidth * visiblePosterCount;
       const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
       // const lastAllowedPoster = lastAllowedUnclonedPoster + initialTranslateXValue;
 
-      setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
-      setIsAnimating(rowIndex); // stops user from spam clicking next or prev button
+      setCanScrollPrev(savedRowIndex.current); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
+      setIsAnimating(savedRowIndex.current); // stops user from spam clicking next or prev button
 
       if (direction === 'forward') {
         // for going forward
@@ -240,7 +253,6 @@ export default function useMovieRow(fetchUrl, rowIndex) {
       visiblePosterCount,
       unclonedMoviesCount,
       isAnimating,
-      rowIndex,
     ]
   );
 
