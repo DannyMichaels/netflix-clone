@@ -27,16 +27,18 @@ export default function Home() {
   }, [setBrowseName]);
 
   const ROWS = Children.toArray(
-    movieRows.map(({ title, fetchUrl }, idx) => (
-      <>Row</>
-      // <Row
-      //   rowIndex={idx}
-      //   title={title}
-      //   fetchUrl={fetchUrl}
-      //   isLargeRow={title.match(/^netflix originals$/i)}
-      //   isSearching={search}
-      // />
-    ))
+    movieRows.map(
+      ({ title, fetchUrl }, idx) =>
+        title && (
+          <Row
+            rowIndex={idx}
+            title={title}
+            fetchUrl={fetchUrl}
+            isLargeRow={title.match(/^netflix originals$/i)}
+            isSearching={search}
+          />
+        )
+    )
   );
 
   const RESULTS = <SearchResultsView />;

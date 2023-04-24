@@ -140,9 +140,7 @@ function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
       setMovies(newMoviesState);
       setMoviesUpdated(rowIndex);
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, [visiblePosterCount, unclonedMoviesCount]);
 
   useEffect(() => {
     // fake loading to not let the user see the akwardness of cloning the elements.
