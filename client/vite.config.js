@@ -1,12 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import { fileURLToPath, URL } from 'node:url';
-import dotenv from 'dotenv';
-import million from 'million/compiler';
-
-dotenv.config(); // load env vars from .env
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -22,5 +17,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
+  plugins: [react(), svgrPlugin()],
 });

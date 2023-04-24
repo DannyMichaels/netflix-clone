@@ -1,7 +1,7 @@
 import { MOVIE_REQUESTS as REQUESTS } from '../utils/movieRequests';
 import { TMDB_API as api } from './apiConfig';
 
-export const getRowMovies = async (fetchUrl: string, isUserAKid = false) => {
+export const getRowMovies = async (fetchUrl, isUserAKid = false) => {
   try {
     const { data } = await api.get(`${fetchUrl}&include_adult=${isUserAKid}`);
     return data.results;
@@ -10,7 +10,7 @@ export const getRowMovies = async (fetchUrl: string, isUserAKid = false) => {
   }
 };
 
-export const getSearchedMovies = async (search: string, isUserAKid = false) => {
+export const getSearchedMovies = async (search, isUserAKid = false) => {
   // if user/selected profile is a kid then adult movies won't be included "&include_adult={isUserAKid ? false : true}"
 
   const searchUrl = `/search/movie?api_key=${
@@ -34,7 +34,7 @@ export const getOneRandomMovie = async () => {
   }
 };
 
-export const getYoutubeVideo = async (mediaType: string, id: string) => {
+export const getYoutubeVideo = async (mediaType, id) => {
   try {
     if (mediaType) {
       const { data } = await api.get(
@@ -49,7 +49,7 @@ export const getYoutubeVideo = async (mediaType: string, id: string) => {
   }
 };
 
-export const getCastByMovieId = async (movieId: string) => {
+export const getCastByMovieId = async (movieId) => {
   try {
     const resp = await api.get(
       `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${
@@ -62,10 +62,7 @@ export const getCastByMovieId = async (movieId: string) => {
   }
 };
 
-export const getMoviesByGenreId = async (
-  genreId: number,
-  isUserAKid: boolean
-) => {
+export const getMoviesByGenreId = async (genreId, isUserAKid) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.
@@ -79,10 +76,7 @@ export const getMoviesByGenreId = async (
   }
 };
 
-export const getMoviesByPersonId = async (
-  personId: number,
-  isUserAKid: boolean
-) => {
+export const getMoviesByPersonId = async (personId, isUserAKid) => {
   try {
     const { data } = await api.get(
       // TODO: terenary for user age in include adult.

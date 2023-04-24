@@ -1,4 +1,3 @@
-import { Profile, ProfilesState } from '../../types/profile';
 import {
   ADD_PROFILE,
   FETCH_PROFILES,
@@ -8,20 +7,9 @@ import {
   SIGN_OUT,
 } from './profilesReducerTypes';
 
-interface Action {
-  type:
-    | typeof ADD_PROFILE
-    | typeof FETCH_PROFILES
-    | typeof REMOVE_PROFILE
-    | typeof UPDATE_PROFILE
-    | typeof SELECT_PROFILE
-    | typeof SIGN_OUT;
-  payload: any;
-}
-
-const getCurrentProfile = (state: ProfilesState) => {
+const getCurrentProfile = (state) => {
   const selectedProfile = localStorage.getItem('currentProfile');
-  const parsedProfile: Profile = selectedProfile && JSON.parse(selectedProfile);
+  const parsedProfile = selectedProfile && JSON.parse(selectedProfile);
 
   if (parsedProfile !== null) {
     return parsedProfile;
@@ -32,7 +20,7 @@ const getCurrentProfile = (state: ProfilesState) => {
   return defaultProfile;
 };
 
-export const profilesReducer = (state: ProfilesState, action: Action) => {
+export const profilesReducer = (state, action) => {
   const { type, payload } = action;
 
   switch (type) {

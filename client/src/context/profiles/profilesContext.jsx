@@ -8,9 +8,8 @@ import { profilesReducer } from '@/reducers/ProfilesReducer/profilesReducer';
 import { FETCH_PROFILES } from '@/reducers/ProfilesReducer/profilesReducerTypes';
 import { IMAGES } from '@/utils/generalUtils';
 import { merge } from 'lodash';
-import { Profile, ProfilesState } from '../../types/profile';
 
-const initialProfilesState: ProfilesState = {
+const initialProfilesState = {
   profiles: [
     {
       id: getRandomId(100),
@@ -26,17 +25,10 @@ const initialProfilesState: ProfilesState = {
   profilesAreLoading: true,
 };
 
-export const ProfilesStateContext =
-  createContext<ProfilesState>(initialProfilesState);
-
-// @ts-ignore
+export const ProfilesStateContext = createContext(initialProfilesState);
 export const ProfilesDispatchContext = createContext();
 
-export default function ProfilesContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ProfilesContextProvider({ children }) {
   const [state, dispatch] = useReducer(profilesReducer, initialProfilesState);
 
   const defaultState = useRef(initialProfilesState);
@@ -75,7 +67,7 @@ export default function ProfilesContextProvider({
   }, [state]);
 
   return (
-    <ProfilesStateContext.Provider value={state as ProfilesState}>
+    <ProfilesStateContext.Provider value={state}>
       <ProfilesDispatchContext.Provider value={dispatch}>
         {children}
       </ProfilesDispatchContext.Provider>

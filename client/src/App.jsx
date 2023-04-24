@@ -5,9 +5,9 @@ import NetflixLoading from '@/components/shared/Loading/NetflixLoading';
 import AppRouter from '@/router/AppRouter';
 import { useLocation } from 'react-router';
 
-const App = (): JSX.Element => {
+const App = () => {
   const { moviesAreLoading, genresAreLoading, moviesPaintedOnVirtualDOM } =
-    useContext(MoviesStateContext) as any;
+    useContext(MoviesStateContext);
 
   const { pathname } = useLocation();
 
@@ -19,7 +19,7 @@ const App = (): JSX.Element => {
     }
   }, [moviesPaintedOnVirtualDOM]);
 
-  const loadingJSX: JSX.Element = (
+  const loadingJSX = (
     <div className="loading__mask">
       <NetflixLoading />
     </div>

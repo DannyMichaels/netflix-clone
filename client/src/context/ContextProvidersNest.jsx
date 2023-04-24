@@ -10,11 +10,7 @@ const providers = [
   <SearchContextProvider />,
 ];
 
-export const ContextProvidersNest = ({
-  children,
-}: {
-  children: React.ReactNode;
-}): JSX.Element =>
+export const ContextProvidersNest = ({ children }) =>
   providers.reduceRight(
     (out, element) => cloneElement(element, {}, out),
     <>{children}</>
