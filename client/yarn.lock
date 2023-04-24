@@ -4537,7 +4537,7 @@ micromatch@^4.0.2, micromatch@^4.0.4:
 
 million@^2.3.0:
   version "2.3.0"
-  resolved "https://registry.npmjs.org/million/-/million-2.3.0.tgz"
+  resolved "https://registry.yarnpkg.com/million/-/million-2.3.0.tgz#57effcb5695464318052403f02ed76c21e1aff89"
   integrity sha512-d1FDGudEbk59kcyKs5qjG8b+2yYXCzZ9/KoZoXC7fkGWV0UtikzSsMTJeAPc3iyh22h+E8P0tg5J0q9socVmpg==
   dependencies:
     "@babel/core" "^7.21.0"
