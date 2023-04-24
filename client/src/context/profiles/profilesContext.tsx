@@ -8,36 +8,46 @@ import { profilesReducer } from '@/reducers/ProfilesReducer/profilesReducer';
 import { FETCH_PROFILES } from '@/reducers/ProfilesReducer/profilesReducerTypes';
 import { IMAGES } from '@/utils/generalUtils';
 import { merge } from 'lodash';
+import { Profile, ProfilesState } from '../../types/profile';
 
-export const ProfilesStateContext = createContext();
+const initialProfilesState: ProfilesState = {
+  profiles: [
+    {
+      id: getRandomId(100),
+      name: 'Guest',
+      imgUrl: IMAGES.BLUE_AVATAR,
+      isKid: false,
+      language: 'English',
+      list: [],
+    },
+  ],
+  maxProfileLength: 5,
+  currentProfile: null,
+  profilesAreLoading: true,
+};
+
+export const ProfilesStateContext =
+  createContext<ProfilesState>(initialProfilesState);
+
+// @ts-ignore
 export const ProfilesDispatchContext = createContext();
 
-export default function ProfilesContextProvider({ children }) {
-  const initialProfilesState = {
-    profiles: [
-      {
-        id: getRandomId(100),
-        name: 'Guest',
-        imgUrl: IMAGES.BLUE_AVATAR,
-        isKid: false,
-        language: 'English',
-        list: [],
-      },
-    ],
-    maxProfileLength: 5,
-    currentProfile: null,
-    profilesAreLoading: true,
-  };
-
+export default function ProfilesContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [state, dispatch] = useReducer(profilesReducer, initialProfilesState);
 
   const defaultState = useRef(initialProfilesState);
 
   useEffect(() => {
     const loadState = async () => {
-      if (JSON.parse(localStorage.getItem('profiles') !== null)) {
+      const profiles = localStorage.getItem('profiles');
+
+      if (profiles && JSON.parse(profiles) !== null) {
         try {
-          merge(state, JSON.parse(localStorage.getItem('profiles')));
+          merge(state, JSON.parse(profiles));
         } catch (e) {
           console.error('ERROR:', e);
         }
@@ -49,6 +59,7 @@ export default function ProfilesContextProvider({ children }) {
           JSON.stringify(defaultState.current.profiles)
         );
 
+        // @ts-ignore
         return dispatch({
           type: FETCH_PROFILES,
           payload: defaultState.current.profiles,
@@ -64,7 +75,7 @@ export default function ProfilesContextProvider({ children }) {
   }, [state]);
 
   return (
-    <ProfilesStateContext.Provider value={state}>
+    <ProfilesStateContext.Provider value={state as ProfilesState}>
       <ProfilesDispatchContext.Provider value={dispatch}>
         {children}
       </ProfilesDispatchContext.Provider>

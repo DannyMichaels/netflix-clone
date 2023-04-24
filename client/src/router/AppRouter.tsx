@@ -15,12 +15,11 @@ import MyList from '../pages/Browse/MyList/MyList';
 
 const AppRouter = () => (
   <Routes>
-    <Route exact path={ROUTES.SELECT_PROFILE} element={<ProfileSelect />} />
-    <Route exact path={ROUTES.MANAGE_PROFILE} element={<ProfileManage />} />
-    <Route exact path={ROUTES.CREATE_PROFILE} element={<ProfileCreate />} />
+    <Route path={ROUTES.SELECT_PROFILE} element={<ProfileSelect />} />
+    <Route path={ROUTES.MANAGE_PROFILE} element={<ProfileManage />} />
+    <Route path={ROUTES.CREATE_PROFILE} element={<ProfileCreate />} />
 
     <Route
-      exact
       path={ROUTES.BROWSE_ALL}
       element={
         <PrivateRoute>
@@ -45,7 +44,6 @@ const AppRouter = () => (
       }
     />
     <Route
-      exact
       path={ROUTES.MY_LIST}
       element={
         <PrivateRoute>

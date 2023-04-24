@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function NetflixLoading() {
+export default function NetflixLoading(): JSX.Element {
   return (
     <Wrapper className="centered">
       <img src={NetflixLogo} alt="netflix-logo" />

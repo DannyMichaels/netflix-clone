@@ -1,3 +1,4 @@
+import { Profile, ProfilesState } from '../../types/profile';
 import {
   ADD_PROFILE,
   FETCH_PROFILES,
@@ -7,9 +8,20 @@ import {
   SIGN_OUT,
 } from './profilesReducerTypes';
 
-const getCurrentProfile = (state) => {
+interface Action {
+  type:
+    | typeof ADD_PROFILE
+    | typeof FETCH_PROFILES
+    | typeof REMOVE_PROFILE
+    | typeof UPDATE_PROFILE
+    | typeof SELECT_PROFILE
+    | typeof SIGN_OUT;
+  payload: any;
+}
+
+const getCurrentProfile = (state: ProfilesState) => {
   const selectedProfile = localStorage.getItem('currentProfile');
-  const parsedProfile = JSON.parse(selectedProfile);
+  const parsedProfile: Profile = selectedProfile && JSON.parse(selectedProfile);
 
   if (parsedProfile !== null) {
     return parsedProfile;
@@ -20,7 +32,7 @@ const getCurrentProfile = (state) => {
   return defaultProfile;
 };
 
-export const profilesReducer = (state, action) => {
+export const profilesReducer = (state: ProfilesState, action: Action) => {
   const { type, payload } = action;
 
   switch (type) {
@@ -40,7 +52,7 @@ export const profilesReducer = (state, action) => {
 
     case UPDATE_PROFILE:
       const updatedProfiles = state.profiles.map((user) =>
-        user.id === String(payload.id) ? payload : user
+        String(user.id) === String(payload.id) ? payload : user
       );
 
       if (payload?.id === state.currentProfile?.id) {
@@ -50,7 +62,7 @@ export const profilesReducer = (state, action) => {
 
     case REMOVE_PROFILE:
       const filteredProfiles = state.profiles.filter(
-        (user) => user.id !== String(payload.id)
+        (user) => String(user.id) !== String(payload.id)
       );
 
       if (payload?.id === state.currentProfile?.id) {

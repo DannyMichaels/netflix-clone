@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/levenshtein": "^1.0.1",
     "@vitejs/plugin-react": "^4.0.0",
     "axios": "^0.21.1",
     "axios-mock-adapter": "^1.19.0",
@@ -49,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/react-dom": "^18.0.11",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.26"
