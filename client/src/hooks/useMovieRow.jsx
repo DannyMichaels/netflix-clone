@@ -35,7 +35,6 @@ function movieRowReducer(state, action) {
 }
 
 export default function useMovieRow(fetchUrl, rowIndex) {
-  const savedFetchUrl = useRef(fetchUrl);
   const { currentProfile } = useContext(ProfilesStateContext); // current user profile
   const dispatchMovies = useContext(MoviesDispatchContext);
 
