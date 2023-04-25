@@ -3,7 +3,6 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useReducer,
 } from 'react';
 import useBoundingBox from '@/hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
@@ -72,40 +71,24 @@ export default function useMovieRow(initialMovies, rowIndex) {
 
   const transitionTime = width >= 1500 ? 150 : 750;
 
-  const posterWidth = useMemo(
-    () => posterDimensions?.width ?? 0,
-    [posterDimensions?.width]
-  );
+  const posterWidth = posterDimensions?.width ?? 0;
 
   const [containerWidth, setContainerWidth] = useStateWithLabel(
     () => initialMovies.length * posterWidth,
     'containerWidth'
   ); // the width for .row__posters
 
-  const sliderButtonWidth = useMemo(
-    () => sliderButtonDimensions?.width ?? 0,
-    [sliderButtonDimensions?.width]
+  const sliderButtonWidth = sliderButtonDimensions?.width ?? 0;
+
+  const visiblePosterCount = Math.round(
+    (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
   );
 
-  const visiblePosterCount = useMemo(
-    // number of amount of movies a user can see, changes on resize
-    () =>
-      Math.round(
-        (rowDimensions?.width - 2 * sliderButtonWidth) / posterWidth
-      ) ?? 0,
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [posterDimensions, sliderButtonDimensions, rowDimensions]
-  );
-
-  const indicators = useMemo(() => {
-    if (maxScrollPosition) return [...new Array(maxScrollPosition).keys()];
-    if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
-      return [...new Array(maxScrollPosition).keys()];
-    }
-
-    return [];
-  }, [maxScrollPosition]);
+  const indicators = maxScrollPosition
+    ? [...new Array(maxScrollPosition).keys()]
+    : maxScrollPosition > 0
+    ? [...new Array(maxScrollPosition).keys()]
+    : [];
 
   useEffect(() => {
     dispatchRowState({
@@ -115,6 +98,8 @@ export default function useMovieRow(initialMovies, rowIndex) {
         movies: initialMovies,
       },
     });
+
+    setTranslateXValue(-visiblePosterCount * posterWidth);
   }, []);
 
   // eslint-disable-next-line
@@ -137,7 +122,6 @@ export default function useMovieRow(initialMovies, rowIndex) {
     }
 
     setContainerWidth(newMoviesState.length * posterWidth);
-    setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
 
     dispatchRowState({
       type: 'MULTIPLE',
