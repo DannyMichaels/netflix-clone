@@ -7,10 +7,12 @@ import {
   useState,
   useRef,
   useReducer,
+  useDebugValue,
 } from 'react';
 import useBoundingBox from '@/hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
 import { MOVIES_PAINTED } from '@/reducers/moviesReducer/movieReducerTypes';
 import { MoviesDispatchContext } from '@/context/movies/moviesContext';
+import { useRefWithLabel, useStateWithLabel } from './useStateWithLabel';
 
 const ROW_TRANSITION_MS = 750;
 
@@ -41,20 +43,31 @@ export default function useMovieRow(initialMovies, rowIndex) {
   );
   const { movies, moviesUpdated, unclonedMoviesCount } = rowState;
 
-  const [activeIndicatorNumber, rawSetActiveIndicatorNumber] = useState(0); // the current active indicator index
+  const [activeIndicatorNumber, rawSetActiveIndicatorNumber] =
+    useStateWithLabel(0, 'activeIndicatorNumber'); // the current active indicator index
   const setActiveIndicatorNumber = (...args) => {
     //  a timeout to wait for the animation to end before changing the active indicator number.
     setTimeout(() => rawSetActiveIndicatorNumber(...args), ROW_TRANSITION_MS);
   };
-  const [maxScrollPosition, setMaxScrollPosition] = useState(0); // the max indicator amount
-  const [canScrollPrev, setCanScrollPrev] = useState(false); // a boolean for if a user can click back.
+  const [maxScrollPosition, setMaxScrollPosition] = useStateWithLabel(
+    0,
+    'maxScrollPosition'
+  ); // the max indicator amount
+  const [canScrollPrev, setCanScrollPrev] = useStateWithLabel(
+    false,
+    'canScrollPrev'
+  ); // a boolean for if a user can click back.
 
-  const [containerWidth, setContainerWidth] = useState(0); // the width for .row__posters
-  const [translateXValue, setTranslateXValue] = useState(0); // state for translateX css property
+  const [translateXValue, setTranslateXValue] = useStateWithLabel(
+    0,
+    'translateXValue'
+  ); // state for translateX css property
 
-  const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
-  const [isAnimating, setIsAnimating] = useState(false); // state for when the row transition css is in action, used to stop user from spam clicking next.
-  const timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
+  const [skipTransition, setSkipTransition] = useStateWithLabel(
+    false,
+    'skipTransition'
+  ); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
+  const timeoutInProgress = useRefWithLabel(false, 'timeoutInProgress'); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
   const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
@@ -64,6 +77,11 @@ export default function useMovieRow(initialMovies, rowIndex) {
     () => posterDimensions?.width ?? 0,
     [posterDimensions?.width]
   );
+
+  const [containerWidth, setContainerWidth] = useStateWithLabel(
+    () => initialMovies.length * posterWidth,
+    'containerWidth'
+  ); // the width for .row__posters
 
   const sliderButtonWidth = useMemo(
     () => sliderButtonDimensions?.width ?? 0,
@@ -102,39 +120,33 @@ export default function useMovieRow(initialMovies, rowIndex) {
 
   // eslint-disable-next-line
   useLayoutEffect(() => {
-    // create clones of movies after dom has painted
-    // check if movies loaded
-    let result = movies?.length === unclonedMoviesCount;
+    const previousMoviesState = [...initialMovies];
+    const newMoviesState = [...initialMovies];
 
-    if (result && result !== 0) {
-      const previousMoviesState = [...movies];
-      const newMoviesState = [...movies];
-
-      //  add new cloned movies to end of array
-      for (let i = 0; i < visiblePosterCount; i++) {
-        newMoviesState.push(previousMoviesState[i]);
-      }
-
-      // add new cloned movies to beginning of array
-      for (
-        let i = previousMoviesState.length - 1;
-        i > previousMoviesState.length - 1 - visiblePosterCount;
-        i--
-      ) {
-        newMoviesState.unshift(previousMoviesState[i]);
-      }
-
-      setContainerWidth(newMoviesState.length * posterWidth);
-      setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
-
-      dispatchRowState({
-        type: 'MULTIPLE',
-        payload: {
-          movies: newMoviesState,
-          moviesUpdated: rowIndex,
-        },
-      });
+    //  add new cloned movies to end of array
+    for (let i = 0; i < visiblePosterCount; i++) {
+      newMoviesState.push(previousMoviesState[i]);
     }
+
+    // add new cloned movies to beginning of array
+    for (
+      let i = previousMoviesState.length - 1;
+      i > previousMoviesState.length - 1 - visiblePosterCount;
+      i--
+    ) {
+      newMoviesState.unshift(previousMoviesState[i]);
+    }
+
+    setContainerWidth(newMoviesState.length * posterWidth);
+    setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
+
+    dispatchRowState({
+      type: 'MULTIPLE',
+      payload: {
+        movies: newMoviesState,
+        moviesUpdated: rowIndex,
+      },
+    });
   }, [visiblePosterCount, unclonedMoviesCount]);
 
   useEffect(() => {
@@ -151,7 +163,6 @@ export default function useMovieRow(initialMovies, rowIndex) {
   useEffect(() => {
     if (skipTransition) {
       setTimeout(() => {
-        setIsAnimating(false);
         setSkipTransition(false);
       }, 10);
     }
@@ -186,21 +197,21 @@ export default function useMovieRow(initialMovies, rowIndex) {
   const onNavigate = useCallback(
     (direction) => {
       if (timeoutInProgress.current) return;
-      if (isAnimating === rowIndex) return;
 
       const initialTranslateXValue = -posterWidth * visiblePosterCount;
       const lastAllowedUnclonedPoster = unclonedMoviesCount * -posterWidth;
       // const lastAllowedPoster = lastAllowedUnclonedPoster + initialTranslateXValue;
 
       setCanScrollPrev(rowIndex); // makes us able to scroll left after scrolling forward for the first time (just like netflix)
-      setIsAnimating(rowIndex); // stops user from spam clicking next or prev button
 
       if (direction === 'forward') {
         // for going forward
         const translateXNext =
           translateXValue - posterWidth * visiblePosterCount; // newState = prevState - posterWidth * visiblePosterCount
 
-        if (translateXNext < lastAllowedUnclonedPoster) {
+        const isOnEdgeForward = translateXNext < lastAllowedUnclonedPoster;
+
+        if (isOnEdgeForward) {
           timeoutInProgress.current = true;
 
           setActiveIndicatorNumber(0);
@@ -213,16 +224,18 @@ export default function useMovieRow(initialMovies, rowIndex) {
 
           setTranslateXValue(translateXNext);
         } else {
+          // if is not at edge
           setActiveIndicatorNumber((prev) => (prev += 1));
-          setTimeout(() => setIsAnimating(false), ROW_TRANSITION_MS);
 
           setTranslateXValue(translateXNext);
         }
       } else {
         //  if clicking back
-        let translateXBack = translateXValue + posterWidth * visiblePosterCount; // newState = prevState + posterWidth * visiblePosterCount
+        const translateXBack =
+          translateXValue + posterWidth * visiblePosterCount; // newState = prevState + posterWidth * visiblePosterCount
 
-        if (translateXBack > initialTranslateXValue) {
+        const isOnEdgeBack = translateXBack > initialTranslateXValue;
+        if (isOnEdgeBack) {
           timeoutInProgress.current = true;
 
           setActiveIndicatorNumber(indicators.length - 1);
@@ -235,8 +248,8 @@ export default function useMovieRow(initialMovies, rowIndex) {
 
           setTranslateXValue(translateXBack);
         } else {
+          // if is not at edge
           setActiveIndicatorNumber((prev) => (prev -= 1));
-          setTimeout(() => setIsAnimating(false), ROW_TRANSITION_MS);
 
           setTranslateXValue(translateXBack);
         }
@@ -248,7 +261,6 @@ export default function useMovieRow(initialMovies, rowIndex) {
       posterWidth,
       visiblePosterCount,
       unclonedMoviesCount,
-      isAnimating,
     ]
   );
 
@@ -269,7 +281,6 @@ export default function useMovieRow(initialMovies, rowIndex) {
     onNavigate,
     translateXValue,
     timeoutInProgress,
-    isAnimating,
     skipTransition,
   };
 }
