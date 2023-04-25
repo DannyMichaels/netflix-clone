@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
   useRef,
+  useReducer,
 } from 'react';
 import useBoundingBox from '@/hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
 import { getRowMovies } from '@/services/movies';
@@ -15,22 +16,41 @@ import { MoviesDispatchContext } from '@/context/movies/moviesContext';
 
 const ROW_TRANSITION_MS = 750;
 
+const initialState = {
+  movies: [],
+  moviesUpdated: false,
+  unclonedMoviesCount: 0,
+};
+
+function movieRowReducer(state, action) {
+  switch (action.type) {
+    case 'MULTIPLE':
+      return {
+        ...state,
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
 export default function useMovieRow(fetchUrl, rowIndex) {
   const savedFetchUrl = useRef(fetchUrl);
   const savedRowIndex = useRef(rowIndex);
   const { currentProfile } = useContext(ProfilesStateContext); // current user profile
-  const dispatch = useContext(MoviesDispatchContext);
+  const dispatchMovies = useContext(MoviesDispatchContext);
 
-  const [movies, setMovies] = useState([]); // the array of the movies in the row
-  const [moviesUpdated, setMoviesUpdated] = useState(false); // value to be set when the dom finished painting and movies got cloned in the row
-  const [unclonedMoviesCount, setUnclonedMoviesCount] = useState(0); // count of original movies that aren't cloned
+  const [rowState, dispatchRowState] = useReducer(
+    movieRowReducer,
+    initialState
+  );
+  const { movies, moviesUpdated, unclonedMoviesCount } = rowState;
 
   const [activeIndicatorNumber, rawSetActiveIndicatorNumber] = useState(0); // the current active indicator index
   const setActiveIndicatorNumber = (...args) => {
     //  a timeout to wait for the animation to end before changing the active indicator number.
     setTimeout(() => rawSetActiveIndicatorNumber(...args), ROW_TRANSITION_MS);
   };
-  const [indicators, setIndicators] = useState([]); // array of indicators
   const [maxScrollPosition, setMaxScrollPosition] = useState(0); // the max indicator amount
   const [canScrollPrev, setCanScrollPrev] = useState(false); // a boolean for if a user can click back.
 
@@ -39,7 +59,7 @@ export default function useMovieRow(fetchUrl, rowIndex) {
 
   const [skipTransition, setSkipTransition] = useState(false); // a boolean for when to have transition css set to null (to fix snappy transition on certain condition)
   const [isAnimating, setIsAnimating] = useState(false); // state for when the row transition css is in action, used to stop user from spam clicking next.
-  let timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
+  const timeoutInProgress = useRef(false); // a boolean for if timeout is im progress, used to stop user from spam clicking next or back in certain conditions
 
   const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
@@ -63,7 +83,7 @@ export default function useMovieRow(fetchUrl, rowIndex) {
     [sliderButtonDimensions?.width]
   );
 
-  let visiblePosterCount = useMemo(
+  const visiblePosterCount = useMemo(
     // number of amount of movies a user can see, changes on resize
     () =>
       Math.round(
@@ -74,16 +94,14 @@ export default function useMovieRow(fetchUrl, rowIndex) {
     [posterDimensions, sliderButtonDimensions, rowDimensions]
   );
 
-  const createPaginationIndicators = useCallback(
-    (num) => {
-      if (num) return setIndicators([...new Array(num).keys()]);
-      if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
-        setIndicators([...new Array(maxScrollPosition).keys()]);
-        return;
-      }
-    },
-    [maxScrollPosition]
-  );
+  const indicators = useMemo(() => {
+    if (maxScrollPosition) return [...new Array(maxScrollPosition).keys()];
+    if (!isNaN(maxScrollPosition) && maxScrollPosition > 0) {
+      return [...new Array(maxScrollPosition).keys()];
+    }
+
+    return [];
+  }, [maxScrollPosition]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,12 +109,18 @@ export default function useMovieRow(fetchUrl, rowIndex) {
         savedFetchUrl.current,
         currentProfile?.isKid
       );
+
       const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
         Boolean(backdrop_path)
       );
 
-      setUnclonedMoviesCount(moviesThatHaveImage.length); // set the original uncloned movies count.
-      setMovies(moviesThatHaveImage);
+      dispatchRowState({
+        type: 'MULTIPLE',
+        payload: {
+          unclonedMoviesCount: moviesThatHaveImage.length,
+          movies: moviesThatHaveImage,
+        },
+      });
     };
     fetchData();
   }, [currentProfile?.isKid]);
@@ -110,13 +134,6 @@ export default function useMovieRow(fetchUrl, rowIndex) {
     if (result && result !== 0) {
       const previousMoviesState = [...movies];
       const newMoviesState = [...movies];
-
-      // get visible poster amount
-
-      // create pagination indicators
-      let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
-      setMaxScrollPosition(Number(maxScrollPos));
-      createPaginationIndicators(maxScrollPos);
 
       //  add new cloned movies to end of array
       for (let i = 0; i < visiblePosterCount; i++) {
@@ -134,8 +151,14 @@ export default function useMovieRow(fetchUrl, rowIndex) {
 
       setContainerWidth(newMoviesState.length * posterWidth);
       setTranslateXValue(-visiblePosterCount * posterWidth); // set the initial translateX css
-      setMovies(newMoviesState);
-      setMoviesUpdated(savedRowIndex.current);
+
+      dispatchRowState({
+        type: 'MULTIPLE',
+        payload: {
+          movies: newMoviesState,
+          moviesUpdated: savedRowIndex.current,
+        },
+      });
     }
   }, [visiblePosterCount, unclonedMoviesCount]);
 
@@ -143,7 +166,7 @@ export default function useMovieRow(fetchUrl, rowIndex) {
     // fake loading to not let the user see the akwardness of cloning the elements.
     if (savedRowIndex.current === 7 && moviesUpdated === 7) {
       setTimeout(() => {
-        dispatch({ type: MOVIES_PAINTED, payload: true });
+        dispatchMovies({ type: MOVIES_PAINTED, payload: true });
       }, 500);
     }
 
@@ -180,11 +203,8 @@ export default function useMovieRow(fetchUrl, rowIndex) {
   }, [moviesUpdated, posterWidth]);
 
   useEffect(() => {
-    let maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
+    const maxScrollPos = Math.floor(unclonedMoviesCount / visiblePosterCount);
     setMaxScrollPosition(Number(maxScrollPos));
-    createPaginationIndicators(maxScrollPos);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [posterWidth, unclonedMoviesCount, visiblePosterCount]);
 
   // onNavigate, function runs when user clicks slider next or prev button
@@ -202,7 +222,8 @@ export default function useMovieRow(fetchUrl, rowIndex) {
 
       if (direction === 'forward') {
         // for going forward
-        let translateXNext = translateXValue - posterWidth * visiblePosterCount; // newState = prevState - posterWidth * visiblePosterCount
+        const translateXNext =
+          translateXValue - posterWidth * visiblePosterCount; // newState = prevState - posterWidth * visiblePosterCount
 
         if (translateXNext < lastAllowedUnclonedPoster) {
           timeoutInProgress.current = true;

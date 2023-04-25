@@ -1,18 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-
-export const debounce = (callback, wait, timeoutId = null) => {
-  const debounceFn = (...args) => {
-    window.clearTimeout(timeoutId);
-
-    timeoutId = setTimeout(() => {
-      callback.apply(null, args);
-    }, wait);
-  };
-
-  debounceFn.cancel = () => window.clearTimeout(timeoutId);
-
-  return debounceFn;
-};
+import { debounce } from '@/utils/debounce';
 
 const useBoundingBox = (querySelectedElement, dependencies = []) => {
   // Our `ref` is needed to be passed to the component's `ref` attribute.
