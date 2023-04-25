@@ -1,9 +1,10 @@
 import {
   createContext,
   useReducer,
-  useLayoutEffect,
   useEffect,
   useContext,
+  useRef,
+  useLayoutEffect,
 } from 'react';
 
 // utils / services
@@ -31,6 +32,7 @@ const MoviesContextProvider = ({ children }) => {
     moviesPaintedOnVirtualDOM: false,
   };
 
+  const isMounted = useRef(true);
   const [state, dispatch] = useReducer(movieReducer, initialMoviesState);
   const { currentProfile } = useContext(ProfilesStateContext);
 
@@ -45,22 +47,27 @@ const MoviesContextProvider = ({ children }) => {
     fetchGenres();
   }, []);
 
-  useLayoutEffect(() => {
-    const getMovies = async () => {
-      const moviesData = await Promise.all(
-        movieRows.flatMap(
-          async ({ fetchUrl }) =>
-            await getRowMovies(fetchUrl, currentProfile?.isKid)
-        )
-      );
+  useEffect(() => {
+    isMounted.current = true;
+    const moviesData = [];
 
+    const getMovies = async () => {
+      if (!isMounted.current) return;
+      for (const { fetchUrl } of movieRows) {
+        const rowMovies = await getRowMovies(fetchUrl, currentProfile?.isKid);
+        moviesData.push(...rowMovies);
+      }
+
+      console.log({ moviesData });
       dispatch({ type: FETCH_MOVIES, payload: moviesData });
     };
 
     getMovies();
 
-    // eslint-disable-next-line
-  }, []);
+    return () => {
+      isMounted.current = false;
+    };
+  }, [movieRows, currentProfile]);
 
   return (
     <MoviesStateContext.Provider value={state}>
