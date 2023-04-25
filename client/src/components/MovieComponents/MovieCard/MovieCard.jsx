@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import MovieInfoModal from '../MovieModals/MovieInfoModal';
 
 const MovieCard = ({ src, alt, className, movie, index }) => {
@@ -13,7 +13,7 @@ const MovieCard = ({ src, alt, className, movie, index }) => {
         <img
           src={src}
           alt={alt}
-          aria-label={`card ${index + 1} displaying: ${movie.name}`}
+          aria-label={`card ${index + 1} displaying: ${movie?.name}`}
           className={className ?? 'movie-card'}
         />
       </div>
@@ -27,4 +27,4 @@ const MovieCard = ({ src, alt, className, movie, index }) => {
   );
 };
 
-export default MovieCard;
+export default memo(MovieCard);

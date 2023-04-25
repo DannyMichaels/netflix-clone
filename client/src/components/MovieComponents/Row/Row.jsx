@@ -17,7 +17,7 @@ import useMovieRow from '../../../hooks/useMovieRow';
 const FALLBACK_POSTER_IMG =
   'https://image.tmdb.org/t/p/original/fl6S0hvaYvFeRYGniMm9KzNg3AN.jpg';
 
-function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
+function Row({ title, initialMoviesState, isLargeRow, rowIndex }) {
   const {
     indicators,
     visiblePosterCount,
@@ -28,12 +28,12 @@ function Row({ title, fetchUrl, isLargeRow, rowIndex }) {
     canScrollPrev,
     activeIndicatorNumber,
     moviesUpdated,
-    movies,
+    movies = initialMoviesState,
     onNavigate,
     translateXValue,
     timeoutInProgress,
     skipTransition,
-  } = useMovieRow(fetchUrl, rowIndex);
+  } = useMovieRow(initialMoviesState, rowIndex);
 
   const CARDS =
     movies.length > 0 ? (

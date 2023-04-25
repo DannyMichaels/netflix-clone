@@ -84,6 +84,7 @@ export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
 
   useEffect(() => {
     const getData = async () => {
+      if (!open) return;
       if (!movieToPlay) return;
 
       if (allGenres?.length) {
@@ -110,9 +111,11 @@ export default function MovieInfoModal({ movieToPlay, open, setOpen }) {
 
       setRecommendedMovies(newRecommendedMovies);
     };
+
     getData();
+
     // eslint-disable-next-line
-  }, []);
+  }, [open]);
 
   const VIDEO_PLAYER_OPTIONS = {
     height: '400',

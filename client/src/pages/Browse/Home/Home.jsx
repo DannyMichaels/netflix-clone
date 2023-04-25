@@ -11,9 +11,11 @@ import { movieRows } from '../../../utils/movieRequests';
 
 // context
 import { SearchContext } from '../../../context/search/searchContext';
+import { MoviesStateContext } from '../../../context/movies/moviesContext';
 
 export default function Home() {
   const { search, setBrowseName } = useContext(SearchContext);
+  const { rows } = useContext(MoviesStateContext);
 
   const isMounted = useRef(true);
 
@@ -26,20 +28,17 @@ export default function Home() {
     };
   }, [setBrowseName]);
 
-  const ROWS = Children.toArray(
-    movieRows.map(
-      ({ title, fetchUrl }, idx) =>
-        title && (
-          <Row
-            rowIndex={idx}
-            title={title}
-            fetchUrl={fetchUrl}
-            isLargeRow={title.match(/^netflix originals$/i)}
-            isSearching={search}
-          />
-        )
-    )
-  );
+  const ROWS = Object.entries(rows).map(([title, movies], idx) => {
+    return (
+      <Row
+        key={title}
+        initialMoviesState={movies}
+        rowIndex={idx}
+        title={title}
+        isLargeRow={title.match(/^netflix originals$/i)}
+      />
+    );
+  });
 
   const RESULTS = <SearchResultsView />;
 

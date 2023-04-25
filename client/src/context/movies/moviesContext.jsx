@@ -48,16 +48,26 @@ const MoviesContextProvider = ({ children }) => {
 
   useEffect(() => {
     isMounted.current = true;
-    const moviesData = [];
+    const allMovies = [];
+    const rows = {};
 
     const getMovies = async () => {
       if (!isMounted.current) return;
-      for (const { fetchUrl } of movieRows) {
+      for (const { title, fetchUrl } of movieRows) {
         const rowMovies = await getRowMovies(fetchUrl, currentProfile?.isKid);
-        moviesData.push(...rowMovies);
+        allMovies.push(...rowMovies);
+        rows[title] = rowMovies.filter(({ backdrop_path }) =>
+          Boolean(backdrop_path)
+        );
       }
 
-      dispatch({ type: FETCH_MOVIES, payload: moviesData });
+      dispatch({
+        type: FETCH_MOVIES,
+        payload: {
+          allMovies,
+          rows,
+        },
+      });
     };
 
     getMovies();

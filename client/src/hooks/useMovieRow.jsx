@@ -9,9 +9,7 @@ import {
   useReducer,
 } from 'react';
 import useBoundingBox from '@/hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
-import { getRowMovies } from '@/services/movies';
 import { MOVIES_PAINTED } from '@/reducers/moviesReducer/movieReducerTypes';
-import { ProfilesStateContext } from '@/context/profiles/profilesContext';
 import { MoviesDispatchContext } from '@/context/movies/moviesContext';
 
 const ROW_TRANSITION_MS = 750;
@@ -34,8 +32,7 @@ function movieRowReducer(state, action) {
   }
 }
 
-export default function useMovieRow(fetchUrl, rowIndex) {
-  const { currentProfile } = useContext(ProfilesStateContext); // current user profile
+export default function useMovieRow(initialMovies, rowIndex) {
   const dispatchMovies = useContext(MoviesDispatchContext);
 
   const [rowState, dispatchRowState] = useReducer(
@@ -94,23 +91,14 @@ export default function useMovieRow(fetchUrl, rowIndex) {
   }, [maxScrollPosition]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const movieData = await getRowMovies(fetchUrl, currentProfile?.isKid);
-
-      const moviesThatHaveImage = movieData.filter(({ backdrop_path }) =>
-        Boolean(backdrop_path)
-      );
-
-      dispatchRowState({
-        type: 'MULTIPLE',
-        payload: {
-          unclonedMoviesCount: moviesThatHaveImage.length,
-          movies: moviesThatHaveImage,
-        },
-      });
-    };
-    fetchData();
-  }, [currentProfile?.isKid]);
+    dispatchRowState({
+      type: 'MULTIPLE',
+      payload: {
+        unclonedMoviesCount: initialMovies.length,
+        movies: initialMovies,
+      },
+    });
+  }, []);
 
   // eslint-disable-next-line
   useLayoutEffect(() => {

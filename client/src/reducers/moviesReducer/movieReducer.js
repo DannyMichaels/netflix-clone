@@ -9,7 +9,8 @@ export const movieReducer = (state, action) => {
     case FETCH_MOVIES:
       return {
         ...state,
-        allMovies: action.payload,
+        allMovies: action.payload.allMovies,
+        rows: action.payload.rows,
         moviesAreLoading: false,
       };
 
@@ -23,7 +24,7 @@ export const movieReducer = (state, action) => {
     case MOVIES_PAINTED:
       return {
         ...state,
-        moviesPaintedOnVirtualDOM: action.payload,
+        moviesPaintedOnVirtualDOM: true,
       };
 
     default:

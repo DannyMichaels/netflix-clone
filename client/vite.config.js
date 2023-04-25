@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgrPlugin from 'vite-plugin-svgr';
 import { fileURLToPath, URL } from 'node:url';
+import million from 'million/compiler';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,5 +18,5 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  plugins: [react(), svgrPlugin()],
+  plugins: [million.vite(), react(), svgrPlugin()],
 });
