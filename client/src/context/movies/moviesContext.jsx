@@ -4,7 +4,6 @@ import {
   useEffect,
   useContext,
   useRef,
-  useLayoutEffect,
 } from 'react';
 
 // utils / services
@@ -58,7 +57,6 @@ const MoviesContextProvider = ({ children }) => {
         moviesData.push(...rowMovies);
       }
 
-      console.log({ moviesData });
       dispatch({ type: FETCH_MOVIES, payload: moviesData });
     };
 
