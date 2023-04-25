@@ -27,4 +27,3 @@ Url: https://dan-netflix-clone.netlify.app/
 ## 4-24-2023
 
 - Migrated to Vite from Create-React-App
-- Migrated some files to Typescript
