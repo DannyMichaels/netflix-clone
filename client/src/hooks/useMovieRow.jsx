@@ -70,7 +70,7 @@ export default function useMovieRow(initialMovies, rowIndex) {
   const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
   const { width } = useWindowDimensions();
 
-  const transitionTime = width > 1200 ? 150 : 750;
+  const transitionTime = width >= 1500 ? 150 : 750;
 
   const posterWidth = useMemo(
     () => posterDimensions?.width ?? 0,
