@@ -33,6 +33,7 @@ function Row({ title, initialMoviesState, isLargeRow, rowIndex }) {
     translateXValue,
     timeoutInProgress,
     skipTransition,
+    transitionTime,
   } = useMovieRow(initialMoviesState, rowIndex);
 
   const CARDS =
@@ -84,6 +85,7 @@ function Row({ title, initialMoviesState, isLargeRow, rowIndex }) {
       containerWidth={containerWidth}
       translateXValue={translateXValue}
       skipTransition={skipTransition}
+      transitionTime={transitionTime}
     >
       <div className="row__headerContainer">
         <h2 className="row__title">{title}</h2>

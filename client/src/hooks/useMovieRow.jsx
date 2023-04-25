@@ -4,17 +4,13 @@ import {
   useEffect,
   useLayoutEffect,
   useMemo,
-  useState,
-  useRef,
   useReducer,
-  useDebugValue,
 } from 'react';
 import useBoundingBox from '@/hooks/useBoundingBox'; // hook to help get dimensions of elements with react (listens on resize too)
 import { MOVIES_PAINTED } from '@/reducers/moviesReducer/movieReducerTypes';
 import { MoviesDispatchContext } from '@/context/movies/moviesContext';
 import { useRefWithLabel, useStateWithLabel } from './useStateWithLabel';
-
-const ROW_TRANSITION_MS = 750;
+import { useWindowDimensions } from './useWindowDimensions';
 
 const initialState = {
   movies: [],
@@ -47,7 +43,7 @@ export default function useMovieRow(initialMovies, rowIndex) {
     useStateWithLabel(0, 'activeIndicatorNumber'); // the current active indicator index
   const setActiveIndicatorNumber = (...args) => {
     //  a timeout to wait for the animation to end before changing the active indicator number.
-    setTimeout(() => rawSetActiveIndicatorNumber(...args), ROW_TRANSITION_MS);
+    setTimeout(() => rawSetActiveIndicatorNumber(...args), transitionTime);
   };
   const [maxScrollPosition, setMaxScrollPosition] = useStateWithLabel(
     0,
@@ -72,6 +68,9 @@ export default function useMovieRow(initialMovies, rowIndex) {
   const [rowRef, rowDimensions] = useBoundingBox(); // reference for the row parent container.
   const [postersRef, posterDimensions] = useBoundingBox('.row__poster');
   const [nextButtonRef, sliderButtonDimensions] = useBoundingBox(); // reference for the next button.
+  const { width } = useWindowDimensions();
+
+  const transitionTime = width > 1200 ? 150 : 750;
 
   const posterWidth = useMemo(
     () => posterDimensions?.width ?? 0,
@@ -216,13 +215,13 @@ export default function useMovieRow(initialMovies, rowIndex) {
 
           setActiveIndicatorNumber(0);
 
+          setTranslateXValue(translateXNext);
+
           setTimeout(() => {
             setSkipTransition(true);
             setTranslateXValue(initialTranslateXValue);
             timeoutInProgress.current = false;
-          }, ROW_TRANSITION_MS); // the timeout that once ends will go back to initial translateX value, can be snappy and ugly if doesn't work
-
-          setTranslateXValue(translateXNext);
+          }, transitionTime); // the timeout that once ends will go back to initial translateX value, can be snappy and ugly if doesn't work
         } else {
           // if is not at edge
           setActiveIndicatorNumber((prev) => (prev += 1));
@@ -244,7 +243,7 @@ export default function useMovieRow(initialMovies, rowIndex) {
             setSkipTransition(true);
             setTranslateXValue(lastAllowedUnclonedPoster);
             timeoutInProgress.current = false;
-          }, ROW_TRANSITION_MS);
+          }, transitionTime);
 
           setTranslateXValue(translateXBack);
         } else {
@@ -282,5 +281,6 @@ export default function useMovieRow(initialMovies, rowIndex) {
     translateXValue,
     timeoutInProgress,
     skipTransition,
+    transitionTime,
   };
 }
