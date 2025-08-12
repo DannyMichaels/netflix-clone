@@ -5,7 +5,7 @@ A clone of netflix using React.
 This app uses local storage to save the profiles and the data.
 It uses TMDB api to fetch the movies.
 
-Url: https://dan-netflix-clone.netlify.app/
+Url: https://dannymichaels-fakeflix-clone.netlify.app/
 
 # MVP:
 
